@@ -1,3 +1,5 @@
+package model;
+
 public class Intersection {
     private long id;
     private double longitude;
@@ -16,24 +18,13 @@ public class Intersection {
         return id;
     }
 
-    public void setId(long pId) {
-        this.id = pId;
-    }
-
     public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double pLongitude) {
-        this.longitude = pLongitude;
-    }
 
     public double getLatitude() {
         return latitude;
-    }
-
-    public void setLatitude(double pLatitude) {
-        this.latitude = pLatitude;
     }
 
     @Override
