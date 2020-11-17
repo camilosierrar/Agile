@@ -35,4 +35,9 @@ public class Intersection {
     public void setLatitude(double pLatitude) {
         this.latitude = pLatitude;
     }
+
+    @Override
+    public String toString() {
+        return "Intersection{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + '}';
+    }
 }
