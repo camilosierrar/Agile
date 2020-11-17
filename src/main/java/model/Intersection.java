@@ -12,7 +12,7 @@ public class Intersection {
         this.latitude = pLatitude;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -20,7 +20,7 @@ public class Intersection {
         this.id = pId;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -28,7 +28,7 @@ public class Intersection {
         this.longitude = pLongitude;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
