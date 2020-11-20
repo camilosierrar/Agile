@@ -1,13 +1,14 @@
 package model;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Plan {
     HashMap<Long, Intersection> intersections;
-    HashMap<Long, Segment> segments;
+    List<Segment> segments;
 
 
-    public Plan(HashMap<Long, Intersection> intersections, HashMap<Long, Segment> segments) {
+    public Plan(HashMap<Long, Intersection> intersections, List<Segment> segments) {
         this.intersections = intersections;
         this.segments = segments;
     }
@@ -16,7 +17,7 @@ public class Plan {
         return intersections;
     }
 
-    public HashMap<Long, Segment> getSegments() {
+    public List<Segment> getSegments() {
         return segments;
     }
 

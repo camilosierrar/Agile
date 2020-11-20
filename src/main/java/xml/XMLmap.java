@@ -1,62 +1,90 @@
 package xml;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
+import model.Intersection;
+import model.Request;
+import model.Segment;
+import model.Plan;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;  
-import org.w3c.dom.Node;  
-import org.w3c.dom.Element;
-
-import model.Plan;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 public class XMLmap {
 
     public static Plan readData() {
+        HashMap<Long, Intersection> intersectionsList = new HashMap<>();
+        List<Segment> segmentsList = new ArrayList<Segment>();
+
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose the file to load the map");
-        String fileName = scanner.next();
+        System.out.println("Choose the file to load the Plan");
+        String file = scanner.next();
         scanner.close();
 
-        File xmlMap = new File("../fichiersXML2020/" + fileName);
-        Plan carte;
-        /*if (xmlMap.isFile()) {
-            FileReader fr;
-            String documentString = "";
-            try {
-                fr = new FileReader(xmlMap);
-                int ch;
-                while ((ch = fr.read()) != -1)
-                    documentString += (char) ch;
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }*/
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db;
-        Document doc = null;
+
         try {
-            db = dbf.newDocumentBuilder();
-            doc = db.parse(xmlMap);
+
+            File fXmlFile = new File(file);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+            doc.getDocumentElement().normalize();
+
+            // READ INTERSECTIONS
+            NodeList intersections = doc.getElementsByTagName("intersection");
+
+            for (int temp = 0; temp < intersections.getLength(); temp++) {
+                Node intersection = intersections.item(temp);
+
+                if (intersection.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element elem = (Element) intersection;
+
+                    long id = Long.parseLong(elem.getAttribute("id"));
+                    double longitude = Double.parseDouble(elem.getAttribute("longitude"));
+                    double latitude = Double.parseDouble(elem.getAttribute("latitude"));
+
+                    Intersection intersectionObj = new Intersection(id, longitude, latitude);
+                    intersectionsList.put(intersectionObj.getId(), intersectionObj);
+
+                }
+            }
+
+
+            // READ SEGMENTS
+            NodeList segments = doc.getElementsByTagName("intersection");
+
+            for (int temp = 0; temp < segments.getLength(); temp++) {
+                Node intersection = segments.item(temp);
+
+                if (intersection.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element elem = (Element) segments;
+
+                    long destination = Long.parseLong(elem.getAttribute("destination"));
+                    double length = Double.parseDouble(elem.getAttribute("length"));
+                    String name = elem.getAttribute("name");
+                    long origin = Long.parseLong(elem.getAttribute("origin"));
+
+                    Intersection destinationObj = new Intersection(destination);
+                    Intersection originObj = new Intersection(origin);
+
+                    Segment segmentObj = new Segment(originObj, destinationObj, name, length);
+                    segmentsList.add(segmentObj);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        doc.getDocumentElement().normalize();  
 
-        NodeList intersections = doc.getElementsByTagName("intersection"); 
-        for (int i = 0; i < intersections.getLength(); i++){  
-            Node node = intersections.item(i);
-            System.out.println("\nNode Name :" + node.getNodeName());  
-            if (node.getNodeType() == Node.ELEMENT_NODE){  
-                Element intersection_i = (Element) node;
-                System.out.println("Student id: "+ intersection_i.getAttribute("id");    
-            }
-        }
-        return null;
+        Plan plan = new Plan(intersectionsList, segmentsList);
+        return plan;
     }
 }

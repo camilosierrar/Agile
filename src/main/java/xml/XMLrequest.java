@@ -1,7 +1,11 @@
 package xml;
 
+import model.Intersection;
+import model.Request;
 import model.Tour;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -10,7 +14,6 @@ import java.io.File;
 import java.util.Scanner;
 
 public class XMLrequest {
-
 
     public static Tour readData() {
         Scanner scanner = new Scanner(System.in);
@@ -29,7 +32,29 @@ public class XMLrequest {
             //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
             // TODO read the input
-            NodeList nList = doc.getElementsByTagName("staff");
+            NodeList requests = doc.getElementsByTagName("request");
+
+            for (int temp = 0; temp < requests.getLength(); temp++) {
+
+                Node request = requests.item(temp);
+
+                System.out.println("\nCurrent Element :" + request.getNodeName());
+
+                if (request.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element eElement = (Element) request;
+
+                    long pickupAddressId = Long.parseLong(eElement.getAttribute("pickupAddress"));
+                    long deliveryAddressId = Long.parseLong(eElement.getAttribute("deliveryAddress"));
+                    int pickupDuration = Integer.parseInt(eElement.getAttribute("pickupDuration"));
+                    int deliveryDuration = Integer.parseInt(eElement.getAttribute("deliveryDuration"));
+
+                    Intersection pickupIntersection = new Intersection(pickupAddressId);
+                    Intersection deliveryIntersection = new Intersection(deliveryAddressId);
+
+                    Request requestObj = new Request(pickupIntersection, deliveryIntersection, pickupDuration, deliveryDuration);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
