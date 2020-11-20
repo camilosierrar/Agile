@@ -85,8 +85,4 @@ public class XMLmap {
         Plan plan = new Plan(intersectionsList, segmentsList);
         return plan;
     }
-
-    public static void main(String[] args) {
-        readData();
-    }
 }

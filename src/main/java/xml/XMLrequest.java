@@ -77,8 +77,6 @@ public class XMLrequest {
                 departureDate.setMinutes(minutes);
                 departureDate.setSeconds(seconds);
 
-                String formatedDate = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(departureDate);
-                System.out.println(formatedDate);
                 tour = new Tour(departureIntersection, departureDate, requestsList);
             }
 
@@ -87,9 +85,5 @@ public class XMLrequest {
         }
 
         return tour;
-    }
-
-    public static void main(String[] args) {
-        readData();
     }
 }
