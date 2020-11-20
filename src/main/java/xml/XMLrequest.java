@@ -1,6 +1,7 @@
 package xml;
 
 import model.Intersection;
+import model.Plan;
 import model.Request;
 import model.Tour;
 import org.w3c.dom.Document;
@@ -65,7 +66,7 @@ public class XMLrequest {
                 Element depot = (Element) depotNode;
                 Long depotAdress = Long.parseLong(depot.getAttribute("address"));
                 String depotTime = depot.getAttribute("departureTime");
-                Intersection departureIntersection = new Intersection(depotAdress);
+                Intersection departureIntersection = Plan.getIntersection(depotAdress);
 
                 String[] parts = depotTime.split(":");
                 int hour = Integer.parseInt(parts[0]);
