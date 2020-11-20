@@ -16,11 +16,14 @@ public class CompleteGraph implements Graph {
 		cost = new int[nbVertices][nbVertices];
 		for (int i=0; i<nbVertices; i++){
 		    for (int j=0; j<nbVertices; j++){
-		        if (i == j) cost[i][j] = -1;
+				if (i == j) 
+					cost[i][j] = -1;
 		        else {
 		            int it = 16807 * (iseed % 127773) - 2836 * (iseed / 127773);
-		            if (it > 0)	iseed = it;
-		            else iseed = 2147483647 + it;
+					if (it > 0)	
+						iseed = it;
+					else 
+						iseed = 2147483647 + it;
 		            cost[i][j] = MIN_COST + iseed % (MAX_COST-MIN_COST+1);
 		        }
 		    }

@@ -29,16 +29,10 @@ public class XMLrequest {
             Document doc = dBuilder.parse(fXmlFile);
             doc.getDocumentElement().normalize();
 
-            //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-
-            // TODO read the input
             NodeList requests = doc.getElementsByTagName("request");
-
             for (int temp = 0; temp < requests.getLength(); temp++) {
 
                 Node request = requests.item(temp);
-
-                System.out.println("\nCurrent Element :" + request.getNodeName());
 
                 if (request.getNodeType() == Node.ELEMENT_NODE) {
 

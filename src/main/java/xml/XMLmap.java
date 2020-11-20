@@ -1,7 +1,6 @@
 package xml;
 
 import model.Intersection;
-import model.Request;
 import model.Segment;
 import model.Plan;
 import org.w3c.dom.Document;
