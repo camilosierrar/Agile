@@ -14,6 +14,11 @@ public class Intersection {
         this.latitude = pLatitude;
     }
 
+    public Intersection(long pId) {
+        // Constructor used in XMLrequest, because we dont recieve longitude and latitude in the file
+        this.id = pId;
+    }
+
     public long getId() {
         return id;
     }
