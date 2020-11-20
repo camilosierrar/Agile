@@ -37,7 +37,7 @@ public class XMLmap {
 
             //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
-            // TODO read the input
+            // READ INTERSECTIONS
             NodeList intersections = doc.getElementsByTagName("intersection");
 
             for (int temp = 0; temp < intersections.getLength(); temp++) {
@@ -60,7 +60,8 @@ public class XMLmap {
                 }
             }
 
-            // TODO read the input
+
+            // READ SEGMENTS
             NodeList segments = doc.getElementsByTagName("intersection");
 
             for (int temp = 0; temp < segments.getLength(); temp++) {
