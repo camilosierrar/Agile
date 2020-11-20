@@ -1,5 +1,6 @@
 package xml;
 
+import java.util.Map;
 import java.util.Scanner;
 import model.Map;
 

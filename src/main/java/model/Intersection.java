@@ -31,4 +31,6 @@ public class Intersection {
     public String toString() {
         return "Intersection{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + '}';
     }
+
+
 }
