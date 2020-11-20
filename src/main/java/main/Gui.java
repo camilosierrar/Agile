@@ -8,9 +8,9 @@ public class Gui extends JFrame {
 
     //Declaration des elemants graphiques de la fenetre (boutons)
 
-    //constructeur
+    //Constructor
     public Gui() {
-        //nom qu'aura la fenetre
+        //window name
         super("Title");
 
         //Dimensions et layout
@@ -19,20 +19,23 @@ public class Gui extends JFrame {
 
         this.setLayout(new BorderLayout()); //ou FlowLayout()
 
-        //creainstanciation des panels
-        JPanel p0 = new JPanel(new BorderLayout()); // ou FlowLayout()
+        //Panels
+        JPanel base = new JPanel(new BorderLayout()); // ou FlowLayout()
+        JPanel map = new JPanel();
+        JPanel sidebar = new JPanel();
 
-        //instanciation des attributs (bla= new tata())
-
-        //ajout des panels (/XChartPanel) a la fenetre this.add(panel);
-
-        //ajout des boutons/label/textarea... au JPanel   panel.add(bla);
-
+        //Attributes (bla= new tata())
+        base.setBackground(Color.DARK_GRAY);
+        map.setBackground(Color.CYAN);
+        sidebar.setBackground(Color.BLUE);
+        //Add
+        base.add(map,BorderLayout.CENTER);
+        base.add(sidebar, BorderLayout.WEST);
+        this.add(base);
         //bouton.addActionListener(new Listener(this,#));
 
-        //Rendre la fenêtre visible  FIN CONSTRUCTEUR
+        //END of Constructor
         this.setVisible(true);
-
     }
 
     //methode qui dit que fait Listener
