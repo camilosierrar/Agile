@@ -13,14 +13,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 public class XMLmap {
 
     public static Plan readData() {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
-        List<Segment> segmentsList = new ArrayList<Segment>();
+        ArrayList<Segment> segmentsList = new ArrayList<>();
+
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the file to load the Plan");
@@ -30,7 +30,7 @@ public class XMLmap {
 
         try {
 
-            File fXmlFile = new File("fichiersXML2020/"+file);
+            File fXmlFile = new File("fichiersXML2020/" + file);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -63,7 +63,7 @@ public class XMLmap {
                 Node segment = segments.item(temp);
 
                 if (segment.getNodeType() == Node.ELEMENT_NODE) {
-
+                    
                     Element elem = (Element) segment;
 
                     long destination = Long.parseLong(elem.getAttribute("destination"));
@@ -84,5 +84,9 @@ public class XMLmap {
 
         Plan plan = new Plan(intersectionsList, segmentsList);
         return plan;
+    }
+
+    public static void main(String[] args) {
+        readData();
     }
 }
