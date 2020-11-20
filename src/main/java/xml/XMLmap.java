@@ -89,7 +89,4 @@ public class XMLmap {
         return plan;
     }
 
-    public static void main(String[] args) {
-        readData();
-    }
 }

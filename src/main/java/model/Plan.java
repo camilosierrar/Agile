@@ -13,7 +13,7 @@ public class Plan {
     private Plan(HashMap<Long, Intersection> intersections, List<Segment> segments) {
         this.intersections = intersections;
         this.segments = segments;
-        this.created = true;
+        created = true;
     }
 
     public static Plan createPlan(HashMap<Long, Intersection> intersections, List<Segment> segments){
