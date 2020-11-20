@@ -21,6 +21,7 @@ public class XMLmap {
     public static Plan readData() {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
         ArrayList<Segment> segmentsList = new ArrayList<>();
+        Plan plan;
 
 
         Scanner scanner = new Scanner(System.in);
@@ -83,7 +84,8 @@ public class XMLmap {
             e.printStackTrace();
         }
 
-        Plan plan = new Plan(intersectionsList, segmentsList);
+
+        plan = Plan.createPlan(intersectionsList, segmentsList);
         return plan;
     }
 
