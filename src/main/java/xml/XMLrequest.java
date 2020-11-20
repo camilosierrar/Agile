@@ -51,8 +51,8 @@ public class XMLrequest {
                     int pickupDuration = Integer.parseInt(eElement.getAttribute("pickupDuration"));
                     int deliveryDuration = Integer.parseInt(eElement.getAttribute("deliveryDuration"));
 
-                    Intersection pickupIntersection = new Intersection(pickupAddressId);
-                    Intersection deliveryIntersection = new Intersection(deliveryAddressId);
+                    Intersection pickupIntersection = Plan.getIntersectionById(pickupAddressId);
+                    Intersection deliveryIntersection = Plan.getIntersectionById(deliveryAddressId);
 
                     Request requestObj = new Request(pickupIntersection, deliveryIntersection, pickupDuration, deliveryDuration);
                     requestsList.add(requestObj);
@@ -66,7 +66,7 @@ public class XMLrequest {
                 Element depot = (Element) depotNode;
                 Long depotAdress = Long.parseLong(depot.getAttribute("address"));
                 String depotTime = depot.getAttribute("departureTime");
-                Intersection departureIntersection = Plan.getIntersection(depotAdress);
+                Intersection departureIntersection = Plan.getIntersectionById(depotAdress);
 
                 String[] parts = depotTime.split(":");
                 int hour = Integer.parseInt(parts[0]);
