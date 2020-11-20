@@ -31,7 +31,7 @@ public class XMLmap {
 
         try {
 
-            File fXmlFile = new File(file);
+            File fXmlFile = new File("fichiersXML2020/"+file);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -57,16 +57,15 @@ public class XMLmap {
                 }
             }
 
-
             // READ SEGMENTS
-            NodeList segments = doc.getElementsByTagName("intersection");
+            NodeList segments = doc.getElementsByTagName("segment");
 
             for (int temp = 0; temp < segments.getLength(); temp++) {
-                Node intersection = segments.item(temp);
+                Node segment = segments.item(temp);
 
-                if (intersection.getNodeType() == Node.ELEMENT_NODE) {
+                if (segment.getNodeType() == Node.ELEMENT_NODE) {
 
-                    Element elem = (Element) segments;
+                    Element elem = (Element) segment;
 
                     long destination = Long.parseLong(elem.getAttribute("destination"));
                     double length = Double.parseDouble(elem.getAttribute("length"));
@@ -85,6 +84,7 @@ public class XMLmap {
         }
 
         Plan plan = new Plan(intersectionsList, segmentsList);
+        System.out.println();
         return plan;
     }
 }

@@ -1,6 +1,8 @@
 .idea
 target
 .iml
+.xml
+fichiersXML2020
 .classpath
 .project
 .settings/
