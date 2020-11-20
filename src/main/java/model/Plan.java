@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Plan {
-    static HashMap<Long, Intersection> intersections;
+    HashMap<Long, Intersection> intersections;
     List<Segment> segments;
     private static boolean created = false;
     public static Plan plan;
@@ -34,8 +34,8 @@ public class Plan {
         return segments;
     }
 
-    public static Intersection getIntersectionById(long intersectionId) {
-        return intersections.get(intersectionId);
+    public Intersection getIntersectionById(long intersectionId) {
+        return this.intersections.get(intersectionId);
     }
 
     @Override
