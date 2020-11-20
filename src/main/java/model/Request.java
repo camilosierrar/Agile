@@ -6,7 +6,6 @@ public class Request {
     private Intersection deliveryAddress;
     private int pickupDuration;
     private int deliveryDuration;
-<<<<<<< HEAD
 
     public Request(Intersection pickupAddress, Intersection deliveryAddress, int pickupDuration, int deliveryDuration) {
         this.pickupAddress = pickupAddress;
@@ -40,14 +39,4 @@ public class Request {
                 ", deliveryDuration=" + deliveryDuration +
                 '}';
     }
-||||||| parent of da05bdb... Changes in Intersection, Request and XMLrequest
-=======
-
-    public Request(Intersection pickupAddress, Intersection deliveryAddress, int pickupDuration, int deliveryDuration) {
-        this.pickupAddress = pickupAddress;
-        this.deliveryAddress = deliveryAddress;
-        this.pickupDuration = pickupDuration;
-        this.deliveryDuration = deliveryDuration;
-    }
->>>>>>> da05bdb... Changes in Intersection, Request and XMLrequest
 }
