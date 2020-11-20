@@ -11,6 +11,10 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class XMLrequest {
@@ -20,18 +24,18 @@ public class XMLrequest {
         System.out.println("Choose the file to load the requests");
         String file = scanner.next();
         scanner.close();
+        Tour tour = null;
 
         try {
+            LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File(file);
+            File fXmlFile = new File("fichiersXML2020/" + file);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
             doc.getDocumentElement().normalize();
 
-            //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-
-            // TODO read the input
+            // Get all requests
             NodeList requests = doc.getElementsByTagName("request");
 
             for (int temp = 0; temp < requests.getLength(); temp++) {
@@ -53,13 +57,42 @@ public class XMLrequest {
                     Intersection deliveryIntersection = new Intersection(deliveryAddressId);
 
                     Request requestObj = new Request(pickupIntersection, deliveryIntersection, pickupDuration, deliveryDuration);
+                    requestsList.add(requestObj);
                 }
             }
+
+            // Get departure time and address
+            Node depotNode = doc.getElementsByTagName("depot").item(0);
+
+            if (depotNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element depot = (Element) depotNode;
+                Long depotAdress = Long.parseLong(depot.getAttribute("address"));
+                String depotTime = depot.getAttribute("departureTime");
+                Intersection departureIntersection = new Intersection(depotAdress);
+
+                String[] parts = depotTime.split(":");
+                int hour = Integer.parseInt(parts[0]);
+                int minutes = Integer.parseInt(parts[1]);
+                int seconds = Integer.parseInt(parts[2]);
+
+                Date departureDate = new Date();
+                departureDate.setHours(hour);
+                departureDate.setMinutes(minutes);
+                departureDate.setSeconds(seconds);
+
+                String formatedDate = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(departureDate);
+                System.out.println(formatedDate);
+                tour = new Tour(departureIntersection, departureDate, requestsList);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        return tour;
+    }
 
-        return null;
+    public static void main(String[] args) {
+        readData();
     }
 }
