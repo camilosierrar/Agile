@@ -1,11 +1,11 @@
 package xml;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
+import model.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
 
 public class XMLmap {
 
@@ -15,12 +15,22 @@ public class XMLmap {
         String fileName = scanner.next();
         scanner.close();
 
-        File xmlMap = new File("../fichiersXML2020/"+fileName);
+        File xmlMap = new File("../fichiersXML2020/" + fileName);
+        Map carte;
+        if (xmlMap.isFile()) {
+            FileReader fr;
+            String documentString = "";
+            try {
+                fr = new FileReader(xmlMap);
+                int ch;
+                while ((ch = fr.read()) != -1) {
+                    documentString += (char) ch;
+                }
 
-        DocumentBuilderFactory dbFactory = new DocumentBuilderFactory();
-        DocumentBuilder db = dbFactory.newDocumentBuilder();
-        Document d = db.parse(xmlMap);
-        System.out.print(d);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
 
         return null;
     }
