@@ -24,7 +24,6 @@ public class Plan {
         else{
             return plan;
         }
-
     }
 
     public HashMap<Long, Intersection> getIntersections() {
@@ -33,6 +32,10 @@ public class Plan {
 
     public List<Segment> getSegments() {
         return segments;
+    }
+
+    public Intersection getIntersectionById(long intersectionId) {
+        return this.intersections.get(intersectionId);
     }
 
     @Override

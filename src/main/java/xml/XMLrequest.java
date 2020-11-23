@@ -1,6 +1,7 @@
 package xml;
 
 import model.Intersection;
+import model.Plan;
 import model.Request;
 import model.Tour;
 import org.w3c.dom.Document;
@@ -12,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -50,8 +52,8 @@ public class XMLrequest {
                     int pickupDuration = Integer.parseInt(eElement.getAttribute("pickupDuration"));
                     int deliveryDuration = Integer.parseInt(eElement.getAttribute("deliveryDuration"));
 
-                    Intersection pickupIntersection = new Intersection(pickupAddressId);
-                    Intersection deliveryIntersection = new Intersection(deliveryAddressId);
+                    Intersection pickupIntersection = Plan.plan.getIntersectionById(pickupAddressId);
+                    Intersection deliveryIntersection = Plan.plan.getIntersectionById(deliveryAddressId);
 
                     Request requestObj = new Request(pickupIntersection, deliveryIntersection, pickupDuration, deliveryDuration);
                     requestsList.add(requestObj);
@@ -65,17 +67,19 @@ public class XMLrequest {
                 Element depot = (Element) depotNode;
                 Long depotAdress = Long.parseLong(depot.getAttribute("address"));
                 String depotTime = depot.getAttribute("departureTime");
-                Intersection departureIntersection = new Intersection(depotAdress);
+                Intersection departureIntersection = Plan.plan.getIntersectionById(depotAdress);
 
                 String[] parts = depotTime.split(":");
                 int hour = Integer.parseInt(parts[0]);
                 int minutes = Integer.parseInt(parts[1]);
                 int seconds = Integer.parseInt(parts[2]);
 
-                Date departureDate = new Date();
-                departureDate.setHours(hour);
-                departureDate.setMinutes(minutes);
-                departureDate.setSeconds(seconds);
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, hour);
+                cal.set(Calendar.MINUTE, hour);
+                cal.set(Calendar.SECOND, hour);
+                Date departureDate = cal.getTime();
+                System.out.println(departureDate);
 
                 tour = new Tour(departureIntersection, departureDate, requestsList);
             }

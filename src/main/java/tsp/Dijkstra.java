@@ -12,37 +12,37 @@ public class Dijkstra {
     public static Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
 
-        Set<Node> settledNodes = new HashSet<>();
-        Set<Node> unsettledNodes = new HashSet<>();
+        Set<Node> visitedNodes = new HashSet<>();
+        Set<Node> unvisitedNodes = new HashSet<>();
 
-        unsettledNodes.add(source);
+        unvisitedNodes.add(source);
 
-        while (unsettledNodes.size() != 0) {
-            Node currentNode = getLowestDistanceNode(unsettledNodes);
-            unsettledNodes.remove(currentNode);
+        while (unvisitedNodes.size() != 0) {
+            Node currentNode = getLowestDistanceNode(unvisitedNodes);
+            unvisitedNodes.remove(currentNode);
             for (Map.Entry< Node, Integer> adjacencyPair:
                     currentNode.getAdjacentNodes().entrySet()) {
                 Node adjacentNode = adjacencyPair.getKey();
                 Integer edgeWeight = adjacencyPair.getValue();
-                if (!settledNodes.contains(adjacentNode)) {
+                if (!visitedNodes.contains(adjacentNode)) {
                     calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
-                    unsettledNodes.add(adjacentNode);
+                    unvisitedNodes.add(adjacentNode);
                 }
             }
-            settledNodes.add(currentNode);
+            visitedNodes.add(currentNode);
         }
         return graph;
     }
 
     /**
      *  renvoie le nœud dont la distance est la plus basse du jeu de nœuds non définis
-     * @param unsettledNodes
+     * @param unvisitedNodes
      * @return
      */
-    private static Node getLowestDistanceNode(Set < Node > unsettledNodes) {
+    private static Node getLowestDistanceNode(Set < Node > unvisitedNodes) {
         Node lowestDistanceNode = null;
         int lowestDistance = Integer.MAX_VALUE;
-        for (Node node: unsettledNodes) {
+        for (Node node: unvisitedNodes) {
             int nodeDistance = node.getDistance();
             if (nodeDistance < lowestDistance) {
                 lowestDistance = nodeDistance;
