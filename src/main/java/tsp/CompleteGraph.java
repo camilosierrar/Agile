@@ -1,4 +1,4 @@
-package controller;
+package tsp;
 
 public class CompleteGraph implements Graph {
 	private static final int MAX_COST = 40;

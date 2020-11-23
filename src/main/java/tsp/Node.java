@@ -1,4 +1,4 @@
-package controller;
+package tsp;
 
 import java.util.HashMap;
 import java.util.LinkedList;
