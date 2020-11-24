@@ -20,7 +20,7 @@ public class XMLmap {
     public static Plan readData(String file) {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
         ArrayList<Segment> segmentsList = new ArrayList<>();
-        Plan plan;
+        Plan plan = null;
 
         /*
         Scanner scanner = new Scanner(System.in);
@@ -82,6 +82,7 @@ public class XMLmap {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
 
 
