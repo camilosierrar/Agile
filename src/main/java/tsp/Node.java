@@ -1,15 +1,12 @@
 package tsp;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class Node {
     private long id;
     private Double distance = Double.MAX_VALUE;
     Map<Node, Double> adjacentNodes = new HashMap<>();
-    private List<Node> shortestPath = new LinkedList<>();
 
     public Node(long id){
         this.id = id;
@@ -37,14 +34,6 @@ public class Node {
 
     public Map<Node, Double> getAdjacentNodes() {
         return adjacentNodes;
-    }
-
-    public List<Node> getShortestPath() {
-        return shortestPath;
-    }
-
-    public void setShortestPath(List<Node> shortestPath) {
-        this.shortestPath = shortestPath;
     }
 
     public void setAdjacentNodes(Map<Node, Double> adjacentNodes) {

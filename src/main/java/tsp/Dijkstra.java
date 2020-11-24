@@ -20,6 +20,7 @@ public class Dijkstra implements Graph {
         this.tour = tour;
         this.nodes = new HashSet<>();
         this.pointsInterest = new HashSet<>();
+        this.parentNode = new HashMap<>();
         fillDijkstra();
     }
 
@@ -52,34 +53,59 @@ public class Dijkstra implements Graph {
         }
     }
 
-    public static Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
+    public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
-        while (unvisitedNodes.size() != 0) {
-            Node currentNode = getLowestDistanceNode(unvisitedNodes);
-            unvisitedNodes.remove(currentNode);
-            for (Map.Entry< Node, Double> adjacencyPair:
-                    currentNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = adjacencyPair.getKey();
-                Double edgeWeight = adjacencyPair.getValue();
+        while (!isConditionFulfilled(unvisitedNodes, visitedNodes)) {
+            //Gets the node with minimal distance on the graph
+            Node currentClosestNode = getLowestDistanceNode(unvisitedNodes);
+            unvisitedNodes.remove(currentClosestNode);
+            //For each of its successors : 
+            for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
+                Node adjacentNode = adjacencyNode.getKey();
+                Double edgeWeight = adjacencyNode.getValue();
                 if (!visitedNodes.contains(adjacentNode)) {
-                    calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
+                    //Computes distance of adjacentNode assuming last node is its parent
+                    //If distance computed is less than the one adjacentNode had, its parentNode and distance are updated
+                    calculateMinimumDistance(adjacentNode, edgeWeight, currentClosestNode);
+                    //Adds adjacentNodes to unvisitedNode step by step in order to avoid overloading memory, and for better performance
                     unvisitedNodes.add(adjacentNode);
                 }
             }
-            visitedNodes.add(currentNode);
+            visitedNodes.add(currentClosestNode);
         }
         return graph;
     }
 
+    private boolean isConditionFulfilled(Set<Node> unvisitedNodes, Set<Node> visitedNodes) {
+        boolean isFulfilled = false;
+        if(unvisitedNodes.size()==0)
+            isFulfilled=  true;
+        if(areAllPointsOfInterestVisited(visitedNodes))
+            isFulfilled=  true;
+        return isFulfilled;
+    }
+
+    private boolean areAllPointsOfInterestVisited(Set<Node> nodesVisited) {
+        Set<Long> nodesVisitedId = new HashSet<>();
+        Set<Long> nodesInterestingId = new HashSet<>();
+        for (Node node : nodesVisited) {
+            nodesVisitedId.add(node.getId());
+        }
+        for (Node node : nodesVisited) {
+            nodesInterestingId.add(node.getId());
+        }
+        return nodesVisitedId.containsAll(nodesInterestingId);
+    }
+
     /**
-     *  renvoie le nœud dont la distance est la plus basse du jeu de nœuds non définis
+     *  Get the node within unvisitedNodes with minimal distance 
      * @param unvisitedNodes
      * @return
      */
-    private static Node getLowestDistanceNode(Set < Node > unvisitedNodes) {
+    private Node getLowestDistanceNode(Set < Node > unvisitedNodes) {
         Node lowestDistanceNode = null;
         double lowestDistance = Double.MAX_VALUE;
         for (Node node: unvisitedNodes) {
@@ -93,19 +119,17 @@ public class Dijkstra implements Graph {
     }
 
     /**
-     * compare la distance réelle à celle nouvellement calculée tout en suivant le chemin récemment exploré
+     * Compare the current value of distance of evaluationNode with a new one computed
+     * assuming sourceNode is its parent
      * @param evaluationNode
      * @param edgeWeigh
      * @param sourceNode
      */
-    private static void calculateMinimumDistance(Node evaluationNode,
-                                                 Double edgeWeigh, Node sourceNode) {
+    private void calculateMinimumDistance(Node evaluationNode, Double edgeWeigh, Node sourceNode) {
         Double sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeigh);
-            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
-            shortestPath.add(sourceNode);
-            evaluationNode.setShortestPath(shortestPath);
+            parentNode.put(evaluationNode, sourceNode);
         }
     }
 
