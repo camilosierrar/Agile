@@ -1,4 +1,4 @@
-package controller;
+package tsp;
 
 public interface TSP {
 	/**

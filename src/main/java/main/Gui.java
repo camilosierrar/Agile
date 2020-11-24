@@ -1,5 +1,9 @@
 package main;
 
+import controller.Controller;
+import model.Plan;
+import model.Tour;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -18,11 +22,17 @@ public class Gui extends JFrame {
     JTextField reqPath;
     Canvas mapCanvas;
 
+    Controller controller;
+
     //Constructor
-    public Gui() {
+    public Gui(Controller controller) {
         //window name
         super("Delivelov");
+        this.controller = controller;
+        setGui();
+    }
 
+    private void setGui() {
         //Dimensions et layout
         this.setSize(1000,600);
         this.setMinimumSize(new Dimension(1200, 600));
@@ -62,22 +72,36 @@ public class Gui extends JFrame {
         info.setBackground(Color.DARK_GRAY);
         info.setMaximumSize(new Dimension(300,Integer.MAX_VALUE));
         //Add to topBar
-            //MapReading
+
+        //MapReading
         topBar.add(mapReadLabel);
         topBar.add(mapPath);
         topBar.add(mapRead);
-            //ReqReading
+        //ReqReading
         topBar.add(reqReadLabel);
         topBar.add(reqPath);
         topBar.add(reqRead);
-            //getBestTour
+        //getBestTour
         topBar.add(getBestTour);
 
         //Add to info
         info.add(temp);
 
-        //Add to map
-        map.add(mapCanvas);
+        // Add button listeners
+        mapRead.addActionListener(event -> {
+            // TODO ASK FOR THE FILE PATH
+            Plan plan = controller.loadMap("");
+        });
+
+        reqRead.addActionListener(event -> {
+            // TODO ASK FOR THE FILE PATH
+            Tour tour = controller.loadRequests("");
+        });
+
+        getBestTour.addActionListener(event -> {
+            // TODO
+            controller.findBestTour();
+        });
 
         //Add panels
         base.add(map,BorderLayout.CENTER);
