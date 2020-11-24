@@ -75,4 +75,13 @@ public class Dijkstra {
     public Set<Node> getNodes() {
         return nodes;
     }
+
+    public int getNbVertices() {
+        return this.nodes.size();
+    }
+
+    public int getCost(int i, int j) {
+        return 0;
+    }
+
 }
