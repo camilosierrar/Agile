@@ -39,6 +39,7 @@ public class Gui extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout()); //ou FlowLayout()
 
+
         //Panels
         base = new JPanel(new BorderLayout()); // ou FlowLayout()
         topBar = new JPanel();
@@ -89,13 +90,31 @@ public class Gui extends JFrame {
 
         // Add button listeners
         mapRead.addActionListener(event -> {
-            // TODO ASK FOR THE FILE PATH
-            Plan plan = controller.loadMap("");
+            String file = getFilePath(this);
+            Plan plan = controller.loadMap(file);
+
+            if (plan == null) {
+                JOptionPane.showMessageDialog(this,
+                        "File doesn't exist",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // TODO SHOW MAP IN THE UI
+            }
         });
 
         reqRead.addActionListener(event -> {
-            // TODO ASK FOR THE FILE PATH
-            Tour tour = controller.loadRequests("");
+            String file = getFilePath(this);
+            Tour tour = controller.loadRequests(file);
+
+            if (tour == null) {
+                JOptionPane.showMessageDialog(this,
+                        "File doesn't exist",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                // TODO SHOW REQUESTS IN THE UI
+            }
         });
 
         getBestTour.addActionListener(event -> {
@@ -111,5 +130,18 @@ public class Gui extends JFrame {
 
         //END of Constructor
         this.setVisible(true);
+    }
+
+
+    private String getFilePath(Frame frame) {
+        String filePath = (String)JOptionPane.showInputDialog(
+                frame,
+                "What file you want to read?",
+                "File path",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null, "");
+
+        return filePath;
     }
 }
