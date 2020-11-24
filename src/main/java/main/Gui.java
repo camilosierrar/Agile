@@ -1,10 +1,12 @@
 package main;
 
 import controller.Controller;
+import model.Intersection;
 import model.Plan;
 import model.Tour;
 
 import java.awt.*;
+import java.util.HashMap;
 import javax.swing.*;
 
 
@@ -43,7 +45,16 @@ public class Gui extends JFrame {
         //Panels
         base = new JPanel(new BorderLayout()); // ou FlowLayout()
         topBar = new JPanel();
-        map = new MapGui(null);
+
+            //Testing
+        HashMap<Long, Intersection> inter = new HashMap<Long,Intersection>();
+        inter.put((long) 25175791, new Intersection((long)25175791,45.75406,4.857418));
+        inter.put((long) 26057064, new Intersection((long)26057064,45.75704,4.8625107));
+        inter.put((long) 26317229, new Intersection((long)26317229,45.75465,4.8674865));
+
+        Plan plantest = Plan.createPlan(inter, null);
+
+        map = new MapGui(plantest);
         info = new JPanel();
 
         //JLabel
