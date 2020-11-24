@@ -11,13 +11,15 @@ public class Controller {
         // TODO constructor
     }
 
-    public Plan loadMap() {
-        return XMLmap.readData();
+    public Plan loadMap(String file) {
+        return XMLmap.readData(file);
     }
 
-    public Tour loadRequests() {
-        return XMLrequest.readData();
+    public Tour loadRequests(String file) {
+        return XMLrequest.readData(file);
     }
 
-    //public Intersection getIntersection()
+    public void findBestTour() {
+        // TODO
+    }
 }
