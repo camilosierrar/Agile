@@ -7,12 +7,12 @@ import model.Tour;
 import java.awt.*;
 import javax.swing.*;
 
-public class Gui extends JFrame {
-    //Declaration des attributs de la fenetre (private tata bla;)
 
-    //Declaration des elemants graphiques de la fenetre (boutons)
+public class Gui extends JFrame {
+
+    //Graphic Elements
     JPanel base;
-    JPanel map;
+    MapGui map;
     JPanel info;
     JPanel topBar;
     JButton mapRead;
@@ -20,6 +20,7 @@ public class Gui extends JFrame {
     JButton getBestTour;
     JTextField mapPath;
     JTextField reqPath;
+    Canvas mapCanvas;
 
     Controller controller;
 
@@ -41,7 +42,7 @@ public class Gui extends JFrame {
         //Panels
         base = new JPanel(new BorderLayout()); // ou FlowLayout()
         topBar = new JPanel();
-        map = new JPanel();
+        map = new MapGui();
         info = new JPanel();
 
         //JLabel
@@ -61,9 +62,12 @@ public class Gui extends JFrame {
         reqRead = new JButton("Load Requests");
         getBestTour = new JButton("Find Best Tour");
 
+        //Canvas
+        mapCanvas = new Canvas();
+
         //Attributes
         base.setBackground(Color.DARK_GRAY);
-        map.setBackground(new Color(0,51,102));
+        //map.setBackground(new Color(0,51,102));
         topBar.setBackground(Color.BLACK);
         info.setBackground(Color.DARK_GRAY);
         info.setMaximumSize(new Dimension(300,Integer.MAX_VALUE));
@@ -107,11 +111,5 @@ public class Gui extends JFrame {
 
         //END of Constructor
         this.setVisible(true);
-    }
-
-    //methode qui dit que fait Listener
-    public void  METHODE (){
-        //public void  METHODE (int bout){  <-- Si plusieurs Boutons
-
     }
 }
