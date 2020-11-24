@@ -1,4 +1,4 @@
-package tsp;
+package dijkstra;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +44,8 @@ public class Node {
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
-            ", distance='" + getDistance() + "'" +
-            ", adjacentNodes='" + getAdjacentNodes() + "'" +
+            //", distance='" + getDistance() + "'" +
+            ", adjacentNodes='" + getAdjacentNodes().size() + "'" +
             "}";
     }
 

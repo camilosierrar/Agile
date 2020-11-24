@@ -1,6 +1,7 @@
-package tsp;
+package dijkstra;
 
 import model.*;
+import tsp.Graph;
 
 import java.util.*;
 
@@ -64,19 +65,20 @@ public class Dijkstra implements Graph {
             unvisitedNodes.remove(currentClosestNode);
             //For each of its successors : 
             for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = adjacencyNode.getKey();
-                Double edgeWeight = adjacencyNode.getValue();
-                if (!visitedNodes.contains(adjacentNode)) {
-                    //Computes distance of adjacentNode assuming last node is its parent
-                    //If distance computed is less than the one adjacentNode had, its parentNode and distance are updated
-                    calculateMinimumDistance(adjacentNode, edgeWeight, currentClosestNode);
-                    //Adds adjacentNodes to unvisitedNode step by step in order to avoid overloading memory, and for better performance
-                    unvisitedNodes.add(adjacentNode);
+                Node adjacentNode = nodes.stream().filter(node -> node.getId() == adjacencyNode.getKey().getId()).findFirst().orElse(null) ;
+                if(adjacencyNode != null) {
+                    Double edgeWeight = adjacencyNode.getValue();
+                    if (!visitedNodes.contains(adjacentNode)) {
+                        //Computes distance of adjacentNode assuming last node is its parent
+                        //If distance computed is less than the one adjacentNode had, its parentNode and distance are updated
+                        calculateMinimumDistance(adjacentNode, edgeWeight, currentClosestNode);
+                        //Adds adjacentNodes to unvisitedNode step by step in order to avoid overloading memory, and for better performance
+                        unvisitedNodes.add(adjacentNode);
+                    }
                 }
             }
             visitedNodes.add(currentClosestNode);
         }
-        System.out.println(parentNode);
         return graph;
     }
 
@@ -134,7 +136,6 @@ public class Dijkstra implements Graph {
         }
     }
 
-
     public Node findNode(long id){
         for(Node node: this.nodes){
             if(node.getId() == id){
@@ -142,6 +143,27 @@ public class Dijkstra implements Graph {
             }
         }
         return null;
+    }
+
+    public LinkedList<Node> getShortestPath(Node destination, Node source) {
+        LinkedList<Node> shortestPath = new LinkedList<>();
+        shortestPath.add(destination);
+        Node currentNode = destination;
+        Node parent = null;
+        while(currentNode != source) {
+            parent = parentNode.get(currentNode);
+            shortestPath.add(parent);
+            currentNode = parent;
+        }
+        return shortestPath;
+    }
+
+    public double getCostOfShortestPath(LinkedList<Node> shortestPath) {
+        double cost = 0;
+        for(Node node : shortestPath) {
+            cost += node.getDistance();
+        }
+        return cost;
     }
 
     public Set<Node> getNodes() {
@@ -159,7 +181,7 @@ public class Dijkstra implements Graph {
     //TODO
     @Override
     public int getNbVertices() {
-        return 0;
+        return nodes.size();
     }
 
     @Override

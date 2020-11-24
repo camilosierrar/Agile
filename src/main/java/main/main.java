@@ -1,11 +1,13 @@
 package main;
 
+import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
 
 import model.Plan;
 import model.Tour;
-import tsp.Dijkstra;
-import tsp.Node;
+import dijkstra.Dijkstra;
+import dijkstra.Node;
 import xml.XMLmap;
 import xml.XMLrequest;
 
@@ -26,7 +28,10 @@ public class main {
 
         Dijkstra algo = new Dijkstra(Plan.plan, tour);
         Node source = algo.findNode(342873658);
+        Node destination = algo.findNode(208769039);
         algo = algo.calculateShortestPathFromSource(algo, source);
+        LinkedList<Node> shPath = algo.getShortestPath(destination, source);
+        System.out.println(shPath);
         //Gui gui = new Gui();
     }
 }
