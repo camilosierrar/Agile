@@ -76,6 +76,7 @@ public class Dijkstra implements Graph {
             }
             visitedNodes.add(currentClosestNode);
         }
+        System.out.println(parentNode);
         return graph;
     }
 
@@ -94,7 +95,7 @@ public class Dijkstra implements Graph {
         for (Node node : nodesVisited) {
             nodesVisitedId.add(node.getId());
         }
-        for (Node node : nodesVisited) {
+        for (Node node : this.pointsInterest) {
             nodesInterestingId.add(node.getId());
         }
         return nodesVisitedId.containsAll(nodesInterestingId);
@@ -147,6 +148,14 @@ public class Dijkstra implements Graph {
         return nodes;
     }
 
+    public Set<Node> getPointsInterest() {
+        return pointsInterest;
+    }
+
+    public Map<Node,Node> getParentNodes() {
+        return parentNode;
+    }
+
     //TODO
     @Override
     public int getNbVertices() {
@@ -162,5 +171,7 @@ public class Dijkstra implements Graph {
     public boolean isArc(int i, int j) {
         return false;
     }
+
+
 
 }

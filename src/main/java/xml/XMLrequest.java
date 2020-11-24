@@ -21,17 +21,19 @@ import java.util.Scanner;
 
 public class XMLrequest {
 
-    public static Tour readData() {
-        Scanner scanner = new Scanner(System.in);
+    public static Tour readData(String filename) {
+
+        /*Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the file to load the requests");
         String file = scanner.next();
-        scanner.close();
+        scanner.close();*/
+
         Tour tour = null;
 
         try {
             LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File("fichiersXML2020/" + file);
+            File fXmlFile = new File("fichiersXML2020/" + "requestsSmall1.xml");//filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -79,7 +81,6 @@ public class XMLrequest {
                 cal.set(Calendar.MINUTE, hour);
                 cal.set(Calendar.SECOND, hour);
                 Date departureDate = cal.getTime();
-                System.out.println(departureDate);
 
                 tour = new Tour(departureIntersection, departureDate, requestsList);
             }

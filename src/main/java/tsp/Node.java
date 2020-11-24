@@ -39,4 +39,14 @@ public class Node {
     public void setAdjacentNodes(Map<Node, Double> adjacentNodes) {
         this.adjacentNodes = adjacentNodes;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", distance='" + getDistance() + "'" +
+            ", adjacentNodes='" + getAdjacentNodes() + "'" +
+            "}";
+    }
+
 }
