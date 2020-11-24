@@ -1,5 +1,7 @@
 package main;
 
+import controller.Controller;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -18,7 +20,7 @@ public class Gui extends JFrame {
     JTextField reqPath;
 
     //Constructor
-    public Gui() {
+    public Gui(Controller controller) {
         //window name
         super("Delivelov");
 
