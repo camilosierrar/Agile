@@ -90,8 +90,7 @@ public class Gui extends JFrame {
 
         // Add button listeners
         mapRead.addActionListener(event -> {
-            String file = getFilePath(this);
-            Plan plan = controller.loadMap(file);
+            Plan plan = controller.loadMap(mapPath.getText());
 
             if (plan == null) {
                 JOptionPane.showMessageDialog(this,
@@ -104,8 +103,7 @@ public class Gui extends JFrame {
         });
 
         reqRead.addActionListener(event -> {
-            String file = getFilePath(this);
-            Tour tour = controller.loadRequests(file);
+            Tour tour = controller.loadRequests(reqPath.getText());
 
             if (tour == null) {
                 JOptionPane.showMessageDialog(this,
@@ -130,18 +128,5 @@ public class Gui extends JFrame {
 
         //END of Constructor
         this.setVisible(true);
-    }
-
-
-    private String getFilePath(Frame frame) {
-        String filePath = (String)JOptionPane.showInputDialog(
-                frame,
-                "What file you want to read?",
-                "File path",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null, "");
-
-        return filePath;
     }
 }
