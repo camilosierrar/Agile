@@ -51,6 +51,34 @@ public class Gui extends JFrame {
         inter.put((long) 25175791, new Intersection((long)25175791,45.75406,4.857418));
         inter.put((long) 26057064, new Intersection((long)26057064,45.75704,4.8625107));
         inter.put((long) 26317229, new Intersection((long)26317229,45.75465,4.8674865));
+        inter.put((long) 26079653, new Intersection((long) 26079653,45.758255,4.865917));
+        inter.put((long) 208769145, new Intersection((long) 208769145,45.7595,4.8722763));
+        inter.put((long) 208769027, new Intersection((long) 208769027,45.758717,4.8737717));
+        inter.put((long) 251167391, new Intersection((long) 251167391,45.74758,4.875293));
+        inter.put((long) 26079656, new Intersection((long) 26079656,45.75858,4.862883));
+        inter.put((long) 26079655, new Intersection((long) 26079655,45.757935,4.8685865));
+        inter.put((long) 208822503, new Intersection((long) 208822503,45.76229,4.869225));
+        inter.put((long) 479185290, new Intersection((long) 479185290,45.75072,4.858164));
+        inter.put((long) 54803905, new Intersection((long) 54803905,45.76194,4.8739953));
+        inter.put((long) 21992964, new Intersection((long) 21992964,45.74778,4.8682485));
+        inter.put((long) 208769133, new Intersection((long) 208769133,45.759453,4.8698664));
+        inter.put((long) 342873658, new Intersection((long) 342873658,45.76038,4.8775625));
+        inter.put((long) 342873532, new Intersection((long) 342873532,45.76051,4.8783274));
+        inter.put((long) 208769499, new Intersection((long) 208769499,45.760597,4.87622));
+        inter.put((long) 975886496, new Intersection((long) 975886496,45.756874,4.8574047));
+        inter.put((long) 1036842114, new Intersection((long) 1036842114,45.74993,4.8595204));
+        inter.put((long) 26033324, new Intersection((long) 26033324,45.757076,4.857407));
+        inter.put((long) 2034547834, new Intersection((long) 2034547834,45.749058,4.8610687));
+        inter.put((long) 25336247, new Intersection((long) 25336247,45.75039,4.8738017));
+        inter.put((long) 18697372, new Intersection((long) 18697372,45.747116,4.859554));
+        inter.put((long) 55475052, new Intersection((long) 55475052,45.758472,4.8751354));
+        inter.put((long) 474605986, new Intersection((long) 474605986,45.747997,4.864131));
+        //inter.put((long) 3267479470, new Intersection((long) 3267479470,45.75974,4.872321));
+        inter.put((long) 21992996, new Intersection((long) 21992996,45.747612,4.86394));
+        inter.put((long) 208769180, new Intersection((long) 208769180,45.759502,4.872345));
+        inter.put((long) 474605980, new Intersection((long) 474605980,45.74871,4.8645));
+        inter.put((long) 21992995, new Intersection((long) 21992995,45.74773,4.8634377));
+        //inter.put((long) 2383442941, new Intersection((long) 2383442941,45.754566,4.861602));
 
         Plan plantest = Plan.createPlan(inter, null);
 
