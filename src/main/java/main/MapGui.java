@@ -48,11 +48,39 @@ public class MapGui extends JPanel {
         ratioWidth = dim.width/coordWidth;
 
         //Render Intersections
+        int R,G,B;
+        int seed = 13;
+        R=seed;
+        G=seed;
+        B=seed;
+        Color p = new Color(R,G,B);
+        g.setColor( p );
         for (Intersection i : intersections.values()) {
             int x = (int)((i.getLongitude()-minLong)*ratioWidth);
             int y = (int)((i.getLatitude()-minLat)*ratioHeight);
             g.fillOval(x,y,10,10);
-            System.out.println("Point coord : "+x+" "+y);
+            System.out.println("Point coord : "+x+" "+y + "color :" +p);
+            R*=3333;
+            G*=5555;
+            B*=7777;
+            R%=255;
+            G%=255;
+            B%=255;
+            g.setColor( p = new Color(R,G,B));
+        }
+
+        Color c;
+        g.setColor( c = new Color(255,0,0));
+        for(int i=0;i<segments.size();i++){
+            Segment s = segments.get(i);
+            Intersection origin = s.getOrigin();
+            Intersection destination = s.getDestination();
+            int x1 = (int)((origin.getLongitude()-minLong)*ratioWidth);
+            int y1 = (int)((origin.getLatitude()-minLat)*ratioHeight);
+            int x2 = (int)((destination.getLongitude()-minLong)*ratioWidth);
+            int y2 = (int)((destination.getLatitude()-minLat)*ratioHeight);
+            g.drawLine(x1,y1,x2,y2);
+            System.out.println("Ligne coord : x1"+x1+" y1"+y1 +"x2"+ x2+"+y2+"+ y2);
         }
         //g.fillOval(100,100,10,10);
         //g.fillOval(860,266,10,10);

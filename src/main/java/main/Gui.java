@@ -3,11 +3,14 @@ package main;
 import controller.Controller;
 import model.Intersection;
 import model.Plan;
+import model.Segment;
 import model.Tour;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
+import java.util.List;
 
 
 public class Gui extends JFrame {
@@ -48,6 +51,8 @@ public class Gui extends JFrame {
 
             //Testing
         HashMap<Long, Intersection> inter = new HashMap<Long,Intersection>();
+        List<Segment> seg = new ArrayList<Segment>();
+
         inter.put((long) 25175791, new Intersection((long)25175791,45.75406,4.857418));
         inter.put((long) 26057064, new Intersection((long)26057064,45.75704,4.8625107));
         inter.put((long) 26317229, new Intersection((long)26317229,45.75465,4.8674865));
@@ -80,7 +85,19 @@ public class Gui extends JFrame {
         inter.put((long) 21992995, new Intersection((long) 21992995,45.74773,4.8634377));
         //inter.put((long) 2383442941, new Intersection((long) 2383442941,45.754566,4.861602));
 
-        Plan plantest = Plan.createPlan(inter, null);
+        seg.add(new Segment(new Intersection((long)25175791,45.75406,4.857418),
+                new Intersection((long)26057064, 45.75704,4.8625107), "Avenue du Tonkin", 2000));
+
+        seg.add(new Segment(new Intersection((long) 55475052,45.758472,4.8751354),
+                new Intersection((long) 208769180,45.759502,4.872345), "Rue de la Paix", 4000));
+
+        seg.add(new Segment(new Intersection((long) 26033324,45.757076,4.857407)
+                , new Intersection((long) 342873532,45.76051,4.8783274), "Boulevard  du roi", 3000));
+        seg.add(new Segment(new Intersection((long) 251167391,45.74758,4.875293)
+                ,new Intersection((long) 54803905,45.76194,4.8739953), "Impasse de la Servigne", 2000));
+
+
+        Plan plantest = Plan.createPlan(inter, seg);
 
         map = new MapGui(plantest);
         info = new JPanel();
