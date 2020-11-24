@@ -10,8 +10,9 @@ public class MapGui extends JPanel {
     int width;
     int height;
     Plan plan;
-    public MapGui() {
-
+    
+    public MapGui(Plan plan) {
+        this.plan = plan;
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

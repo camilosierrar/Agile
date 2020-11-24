@@ -42,7 +42,7 @@ public class Gui extends JFrame {
         //Panels
         base = new JPanel(new BorderLayout()); // ou FlowLayout()
         topBar = new JPanel();
-        map = new MapGui();
+        map = new MapGui(null);
         info = new JPanel();
 
         //JLabel
