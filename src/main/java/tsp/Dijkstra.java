@@ -1,7 +1,4 @@
-package controller;
-
-import model.Intersection;
-import model.Segment;
+package tsp;
 
 import java.util.*;
 

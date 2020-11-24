@@ -1,4 +1,4 @@
-package controller;
+package tsp;
 
 public class RunTSP {
 	public static void main(String[] args) {

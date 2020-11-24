@@ -1,4 +1,4 @@
-package controller;
+package tsp;
 
 import java.util.Collection;
 import java.util.Iterator;

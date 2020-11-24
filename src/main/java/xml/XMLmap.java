@@ -17,16 +17,17 @@ import java.util.Scanner;
 
 public class XMLmap {
 
-    public static Plan readData() {
+    public static Plan readData(String file) {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
         ArrayList<Segment> segmentsList = new ArrayList<>();
         Plan plan;
 
-
+        /*
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the file to load the Plan");
         String file = scanner.next();
         scanner.close();
+        */
 
 
         try {

@@ -12,20 +12,21 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Scanner;
+
 
 public class XMLrequest {
 
-    public static Tour readData() {
+    public static Tour readData(String file) {
+        /*
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the file to load the requests");
         String file = scanner.next();
         scanner.close();
+        */
+
         Tour tour = null;
 
         try {
@@ -76,8 +77,9 @@ public class XMLrequest {
 
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, hour);
-                cal.set(Calendar.MINUTE, hour);
-                cal.set(Calendar.SECOND, hour);
+                cal.set(Calendar.MINUTE, minutes);
+                cal.set(Calendar.SECOND, seconds);
+
                 Date departureDate = cal.getTime();
                 System.out.println(departureDate);
 
