@@ -54,6 +54,17 @@ public class Dijkstra implements Graph {
         }
     }
 
+
+
+    public Set<Dijkstra> executeDijkstraForEachInterestPoints(Dijkstra graphRef) {
+        Set<Dijkstra> graphs = new HashSet<>();
+        for(Node node : this.pointsInterest) {
+            Dijkstra graph = calculateShortestPathFromSource(graphRef, node);
+            graphs.add(graph);
+        }
+        return graphs;
+    }
+
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
         Set<Node> visitedNodes = new HashSet<>();
@@ -145,7 +156,7 @@ public class Dijkstra implements Graph {
         return null;
     }
 
-    public LinkedList<Node> getShortestPath(Node destination, Node source) {
+    public LinkedList<Node> getShortestPath(Node source, Node destination ) {
         LinkedList<Node> shortestPath = new LinkedList<>();
         shortestPath.add(destination);
         Node currentNode = destination;
