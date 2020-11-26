@@ -30,8 +30,8 @@ public class main {
         Set<Node> pointsOfInterest = algo.getPointsInterest();
         for(Node pointOfInterest: pointsOfInterest){
             System.out.println("Dijkstra for id " + pointOfInterest.getId());
-            algo = algo.calculateShortestPathFromSource(algo, pointOfInterest);
-            Set<Node> results = algo.getPointsOfInterestDistanceFromGraph(algo);
+            Dijkstra instance = algo.calculateShortestPathFromSource(algo, pointOfInterest);
+            Set<Node> results = instance.getPointsOfInterestDistanceFromGraph(instance);
             for(Node result: results){
                 System.out.println("id : " + result.getId() +", distance : " + result.getDistance());
             }
