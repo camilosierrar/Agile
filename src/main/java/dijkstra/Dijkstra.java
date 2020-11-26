@@ -156,7 +156,7 @@ public class Dijkstra implements Graph {
         return null;
     }
 
-    public LinkedList<Node> getShortestPath(Node source, Node destination ) {
+    /*public LinkedList<Node> getShortestPath(Node source, Node destination ) {
         LinkedList<Node> shortestPath = new LinkedList<>();
         shortestPath.add(destination);
         Node currentNode = destination;
@@ -167,15 +167,7 @@ public class Dijkstra implements Graph {
             currentNode = parent;
         }
         return shortestPath;
-    }
-
-    public double getCostOfShortestPath(LinkedList<Node> shortestPath) {
-        double cost = 0;
-        for(Node node : shortestPath) {
-            cost += node.getDistance();
-        }
-        return cost;
-    }
+    }*/
 
     public Set<Node> getNodes() {
         return nodes;

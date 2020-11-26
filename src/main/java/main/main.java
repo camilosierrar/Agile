@@ -30,8 +30,9 @@ public class main {
         Node source = algo.findNode(342873658);
         Node destination = algo.findNode(208769039);
         algo = algo.calculateShortestPathFromSource(algo, source);
-        LinkedList<Node> shPath = algo.getShortestPath(source, destination);
-        System.out.println(shPath);
+        System.out.println(algo.getParentNodes());
+        //LinkedList<Node> shPath = algo.getShortestPath(source, destination);
+        //System.out.println(shPath);
         //Gui gui = new Gui();
     }
 }
