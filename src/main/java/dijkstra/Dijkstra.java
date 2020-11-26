@@ -10,16 +10,29 @@ import java.util.*;
  * the shortest path
  */
 public class Dijkstra implements Graph {
+    /**
+     * Value node is key Node's parent with the shortest path
+     */
     private Map<Node,Node> parentNode;
+
     private Plan cityPlan;
     private Tour tour;
-    private Set<Node> nodes;
+
+    /**
+     * All distinct intersections of Plan object
+     */
+    private Set<Node> graphPlan;
+
+    /**
+     * Every pickup, delivery and departure addresses
+     */
     private Set<Node> pointsInterest;
+
 
     public Dijkstra(Plan cityPlan, Tour tour) {
         this.cityPlan = cityPlan;
         this.tour = tour;
-        this.nodes = new HashSet<>();
+        this.graphPlan = new HashSet<>();
         this.pointsInterest = new HashSet<>();
         this.parentNode = new HashMap<>();
         fillDijkstra();
@@ -39,7 +52,7 @@ public class Dijkstra implements Graph {
                     originNode.addDestination(destination, segment.getLength());
                 }
             }
-            this.nodes.add(originNode);
+            this.graphPlan.add(originNode);
         }
 
         //Fetches all points of interest
@@ -56,11 +69,11 @@ public class Dijkstra implements Graph {
 
 
 
-    public Set<Dijkstra> executeDijkstraForEachInterestPoints(Dijkstra graphRef) {
-        Set<Dijkstra> graphs = new HashSet<>();
+    public Map<Node, Dijkstra> executeDijkstraForEachInterestPoints(Dijkstra graphRef) {
+        Map<Node,Dijkstra> graphs = new HashMap<>();
         for(Node node : this.pointsInterest) {
             Dijkstra graph = calculateShortestPathFromSource(graphRef, node);
-            graphs.add(graph);
+            graphs.put(node,graph);
         }
         return graphs;
     }
@@ -76,7 +89,7 @@ public class Dijkstra implements Graph {
             unvisitedNodes.remove(currentClosestNode);
             //For each of its successors : 
             for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = nodes.stream().filter(node -> node.getId() == adjacencyNode.getKey().getId()).findFirst().orElse(null) ;
+                Node adjacentNode = graphPlan.stream().filter(node -> node.getId() == adjacencyNode.getKey().getId()).findFirst().orElse(null) ;
                 if(adjacencyNode != null) {
                     Double edgeWeight = adjacencyNode.getValue();
                     if (!visitedNodes.contains(adjacentNode)) {
@@ -119,7 +132,7 @@ public class Dijkstra implements Graph {
      * @param unvisitedNodes
      * @return
      */
-    private Node getLowestDistanceNode(Set < Node > unvisitedNodes) {
+    private Node getLowestDistanceNode(Set <Node> unvisitedNodes) {
         Node lowestDistanceNode = null;
         double lowestDistance = Double.MAX_VALUE;
         for (Node node: unvisitedNodes) {
@@ -148,7 +161,7 @@ public class Dijkstra implements Graph {
     }
 
     public Node findNode(long id){
-        for(Node node: this.nodes){
+        for(Node node: this.graphPlan){
             if(node.getId() == id){
                 return node;
             }
@@ -156,7 +169,19 @@ public class Dijkstra implements Graph {
         return null;
     }
 
-    /*public LinkedList<Node> getShortestPath(Node source, Node destination ) {
+    public Set<Node> getPointsOfInterestDistanceFromGraph(Dijkstra dijkstra){
+        Map<Node,Node> parents = dijkstra.getParentNodes();
+        System.out.println(parents);
+        Set<Node> pointsInterest = new HashSet<>();
+        for(Map.Entry<Node,Node> entry: parents.entrySet()){
+            if(this.getPointsInterest().contains(entry.getKey())) pointsInterest.add(entry.getKey());
+
+        }
+        return pointsInterest;
+    }
+
+    /*
+    public LinkedList<Node> getShortestPath(Node source, Node destination) {
         LinkedList<Node> shortestPath = new LinkedList<>();
         shortestPath.add(destination);
         Node currentNode = destination;
@@ -167,10 +192,11 @@ public class Dijkstra implements Graph {
             currentNode = parent;
         }
         return shortestPath;
-    }*/
+    }
+     */
 
-    public Set<Node> getNodes() {
-        return nodes;
+    public Set<Node> getGraphPlan() {
+        return graphPlan;
     }
 
     public Set<Node> getPointsInterest() {
@@ -184,7 +210,7 @@ public class Dijkstra implements Graph {
     //TODO
     @Override
     public int getNbVertices() {
-        return nodes.size();
+        return graphPlan.size();
     }
 
     @Override
