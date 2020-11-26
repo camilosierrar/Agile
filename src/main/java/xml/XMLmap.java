@@ -32,7 +32,7 @@ public class XMLmap {
 
         try {
 
-            File fXmlFile = new File("fichiersXML2020/" + "smallMap.xml");//fileName);
+            File fXmlFile = new File("fichiersXML2020/" + "largeMap.xml");//fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
