@@ -22,17 +22,20 @@ public class main {
         String fileNameRequests = scanner.next();
         Tour tour = XMLrequest.readData(fileNameRequests);
         scanner.close();*/
-
         Plan.plan = XMLmap.readData("");
         Tour tour = XMLrequest.readData("");
 
         Dijkstra algo = new Dijkstra(Plan.plan, tour);
-        Node source = algo.findNode(342873658);
-        Node destination = algo.findNode(208769039);
-        algo = algo.calculateShortestPathFromSource(algo, source);
-        LinkedList<Node> shPath = algo.getShortestPath(source, destination);
-        System.out.println(shPath);
-        //Gui gui = new Gui();
+        System.out.println("Points of interest : " + algo.getPointsInterest());
+        Set<Node> pointsOfInterest = algo.getPointsInterest();
+        for(Node pointOfInterest: pointsOfInterest){
+            System.out.println("Dijkstra for id " + pointOfInterest.getId());
+            algo = algo.calculateShortestPathFromSource(algo, pointOfInterest);
+            Set<Node> results = algo.getPointsOfInterestDistanceFromGraph(algo);
+            for(Node result: results){
+                System.out.println("id : " + result.getId() +", distance : " + result.getDistance());
+            }
+        }
     }
 }
 
