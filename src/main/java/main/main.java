@@ -1,6 +1,7 @@
 package main;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -22,16 +23,19 @@ public class main {
         String fileNameRequests = scanner.next();
         Tour tour = XMLrequest.readData(fileNameRequests);
         scanner.close();*/
+        
         Plan.plan = XMLmap.readData("");
         Tour tour = XMLrequest.readData("");
 
         Dijkstra algo = new Dijkstra(Plan.plan, tour);
         System.out.println("Points of interest : " + algo.getPointsInterest());
         Set<Node> pointsOfInterest = algo.getPointsInterest();
+        
         for(Node pointOfInterest: pointsOfInterest){
             System.out.println("Dijkstra for id " + pointOfInterest.getId());
-            Dijkstra instance = algo.calculateShortestPathFromSource(algo, pointOfInterest);
-            Set<Node> results = instance.getPointsOfInterestDistanceFromGraph(instance);
+            Dijkstra algo_test = new Dijkstra(Plan.plan, tour);
+            algo_test = algo_test.calculateShortestPathFromSource(algo_test, pointOfInterest);
+            Set<Node> results = algo_test.getPointsOfInterestDistanceFromGraph(algo_test);
             for(Node result: results){
                 System.out.println("id : " + result.getId() +", distance : " + result.getDistance());
             }

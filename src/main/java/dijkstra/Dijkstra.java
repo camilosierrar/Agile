@@ -67,8 +67,6 @@ public class Dijkstra implements Graph {
         }
     }
 
-
-
     public Map<Node, Dijkstra> executeDijkstraForEachInterestPoints(Dijkstra graphRef) {
         Map<Node,Dijkstra> graphs = new HashMap<>();
         for(Node node : this.pointsInterest) {
@@ -89,8 +87,8 @@ public class Dijkstra implements Graph {
             unvisitedNodes.remove(currentClosestNode);
             //For each of its successors : 
             for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = graphPlan.stream().filter(node -> node.getId() == adjacencyNode.getKey().getId()).findFirst().orElse(null) ;
-                if(adjacencyNode != null) {
+                Node adjacentNode = findNode(adjacencyNode.getKey().getId());//tream().filter(node -> node.getId() == adjacencyNode.getKey().getId()).findFirst().orElse(null) ;
+                if(adjacentNode != null) {
                     Double edgeWeight = adjacencyNode.getValue();
                     if (!visitedNodes.contains(adjacentNode)) {
                         //Computes distance of adjacentNode assuming last node is its parent
@@ -154,6 +152,8 @@ public class Dijkstra implements Graph {
      */
     private void calculateMinimumDistance(Node evaluationNode, Double edgeWeigh, Node sourceNode) {
         Double sourceDistance = sourceNode.getDistance();
+        /*if(evaluationNode.getId()==208769039)
+            System.out.println("iciiii " + evaluationNode.getDistance());*/
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeigh);
             parentNode.put(evaluationNode, sourceNode);
@@ -171,8 +171,9 @@ public class Dijkstra implements Graph {
 
     public Set<Node> getPointsOfInterestDistanceFromGraph(Dijkstra dijkstra){
         Map<Node,Node> parents = dijkstra.getParentNodes();
-        System.out.println(parents);
+        //System.out.println(parents);
         Set<Node> pointsInterest = new HashSet<>();
+        //System.out.println("ici : " + pointsInterest.stream().filter(node -> node.getId() == 208769039).findFirst());
         for(Map.Entry<Node,Node> entry: parents.entrySet()){
             if(this.getPointsInterest().contains(entry.getKey())) pointsInterest.add(entry.getKey());
 
