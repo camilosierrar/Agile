@@ -15,11 +15,17 @@ import java.util.List;
 
 public class Gui extends JFrame {
 
+    //Plan
+    Plan plan;
+    //Tour
+    Tour tour;
+
     //Graphic Elements
     JPanel base;
     MapGui map;
     JPanel info;
     JPanel topBar;
+    JPanel mapContainer;
     JButton mapRead;
     JButton reqRead;
     JButton getBestTour;
@@ -48,8 +54,9 @@ public class Gui extends JFrame {
         //Panels
         base = new JPanel(new BorderLayout()); // ou FlowLayout()
         topBar = new JPanel();
+        mapContainer = new JPanel(new BorderLayout());
 
-            //Testing
+        /*    //Testing
         HashMap<Long, Intersection> inter = new HashMap<Long,Intersection>();
         List<Segment> seg = new ArrayList<Segment>();
 
@@ -98,8 +105,8 @@ public class Gui extends JFrame {
 
 
         Plan plantest = Plan.createPlan(inter, seg);
-
-        map = new MapGui(plantest);
+        */
+        map = new MapGui(null,null);
         info = new JPanel();
 
         //JLabel
@@ -120,7 +127,7 @@ public class Gui extends JFrame {
         getBestTour = new JButton("Find Best Tour");
 
         //Canvas
-        mapCanvas = new Canvas();
+        //mapCanvas = new Canvas();
 
         //Attributes
         base.setBackground(Color.DARK_GRAY);
@@ -128,17 +135,20 @@ public class Gui extends JFrame {
         topBar.setBackground(Color.BLACK);
         info.setBackground(Color.DARK_GRAY);
         info.setMaximumSize(new Dimension(300,Integer.MAX_VALUE));
-        //Add to topBar
 
-        //MapReading
+        //Add to mapContainer
+        mapContainer.add(map,BorderLayout.CENTER);
+
+        //Add to topBar
+            //MapReading
         topBar.add(mapReadLabel);
         topBar.add(mapPath);
         topBar.add(mapRead);
-        //ReqReading
+            //ReqReading
         topBar.add(reqReadLabel);
         topBar.add(reqPath);
         topBar.add(reqRead);
-        //getBestTour
+            //getBestTour
         topBar.add(getBestTour);
 
         //Add to info
@@ -146,7 +156,7 @@ public class Gui extends JFrame {
 
         // Add button listeners
         mapRead.addActionListener(event -> {
-            Plan plan = controller.loadMap(mapPath.getText());
+            this.plan = controller.loadMap(mapPath.getText());
 
             if (plan == null) {
                 JOptionPane.showMessageDialog(this,
@@ -154,7 +164,13 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                // TODO SHOW MAP IN THE UI
+                mapContainer.removeAll();
+                map = new MapGui(plan, tour);
+                map.setBackground(Color.lightGray);
+                mapContainer.add(map,BorderLayout.CENTER);
+                System.out.println("Map Loaded");
+                mapContainer.validate();
+                mapContainer.repaint();
             }
         });
 
@@ -167,7 +183,13 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                // TODO SHOW REQUESTS IN THE UI
+                mapContainer.removeAll();
+                map = new MapGui(plan, tour);
+                map.setBackground(Color.lightGray);
+                mapContainer.add(map,BorderLayout.CENTER);
+                System.out.println("Map Loaded");
+                mapContainer.validate();
+                mapContainer.repaint();
             }
         });
 
@@ -177,7 +199,7 @@ public class Gui extends JFrame {
         });
 
         //Add panels
-        base.add(map,BorderLayout.CENTER);
+        base.add(mapContainer,BorderLayout.CENTER);
         base.add(topBar, BorderLayout.PAGE_START);
         base.add(info, BorderLayout.WEST);
         this.add(base);
