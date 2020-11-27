@@ -21,8 +21,6 @@ public class Gui extends JFrame {
 
     //Graphic Elements
     JPanel base;
-    MapGui map;
-    //JFrame map;
     JPanel info;
     JPanel topBar;
     JButton mapRead;
@@ -129,47 +127,63 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
+
+                // Remove previous markers
+                String removeMarkerScript = "var marker = new google.maps.Marker({});" +
+                        "maker.setMap(null);";
+                browser.mainFrame().ifPresent(frame ->
+                        frame.executeJavaScript(removeMarkerScript));
+
                 // SHOW REQUESTS IN THE UI
                 Intersection departure = tour.getAddressDeparture();
 
-                String markerScript = "var myLatlng = new google.maps.LatLng(" + departure.getLatitude()
-                        + "," + departure.getLongitude() + ");\n" +
-                        "var marker = new google.maps.Marker({\n" +
-                        "    position: myLatlng,\n" +
-                        "    map: map,\n" +
-                        "    title: 'Departure!'\n" +
-                        "});";
+                System.out.println(tour.toString());
 
-                browser.mainFrame().ifPresent(frame ->
-                        frame.executeJavaScript(markerScript));
+                try {
+                    String markerScript = "var myLatlng = new google.maps.LatLng(" + departure.getLatitude()
+                            + "," + departure.getLongitude() + ");\n" +
+                            "var marker = new google.maps.Marker({\n" +
+                            "    position: myLatlng,\n" +
+                            "    map: map,\n" +
+                            "    title: 'Departure!'\n" +
+                            "});";
+
+                    browser.mainFrame().ifPresent(frame ->
+                            frame.executeJavaScript(markerScript));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    System.out.println("DEPARTURE ADRESS NOT FOUND\n");
+                }
 
                 for (Request request: tour.getRequests()) {
                     System.out.println(tour.getRequests().toString());
-                    String deliveryMarkerScript = "var deliveryLatLong = new google.maps.LatLng(" + request.getDeliveryAddress().getLatitude()
-                            + "," + request.getDeliveryAddress().getLongitude() + ");\n" +
-                            "var deliveryMarker = new google.maps.Marker({\n" +
-                            "    position: deliveryLatLong,\n" +
-                            "    map: map,\n" +
-                            "    title: 'Delivery!'\n" +
-                            "});";
+                    try {
+                        String deliveryMarkerScript = "var deliveryLatLong = new google.maps.LatLng(" + request.getDeliveryAddress().getLatitude()
+                                + "," + request.getDeliveryAddress().getLongitude() + ");\n" +
+                                "var deliveryMarker = new google.maps.Marker({\n" +
+                                "    position: deliveryLatLong,\n" +
+                                "    map: map,\n" +
+                                "    title: 'Delivery!'\n" +
+                                "});";
 
-                    String pickupMarkerScript = "var pickupLatLong = new google.maps.LatLng(" + request.getPickupAddress().getLatitude()
-                            + "," + request.getPickupAddress().getLongitude() + ");\n" +
-                            "var pickupMarker = new google.maps.Marker({\n" +
-                            "    position: myLatlng,\n" +
-                            "    map: map,\n" +
-                            "    title: 'Pick Up!'\n" +
-                            "});";
+                        String pickupMarkerScript = "var pickupLatLong = new google.maps.LatLng(" + request.getPickupAddress().getLatitude()
+                                + "," + request.getPickupAddress().getLongitude() + ");\n" +
+                                "var pickupMarker = new google.maps.Marker({\n" +
+                                "    position: myLatlng,\n" +
+                                "    map: map,\n" +
+                                "    title: 'Pick Up!'\n" +
+                                "});";
 
-                    browser.mainFrame().ifPresent(frame ->
-                            frame.executeJavaScript(deliveryMarkerScript));
-                    browser.mainFrame().ifPresent(frame ->
-                            frame.executeJavaScript(pickupMarkerScript));
+                        browser.mainFrame().ifPresent(frame ->
+                                frame.executeJavaScript(deliveryMarkerScript));
+                        browser.mainFrame().ifPresent(frame ->
+                                frame.executeJavaScript(pickupMarkerScript));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        System.out.println("CRAP");
+                    }
+
                 }
-
-
-                browser.mainFrame().ifPresent(frame ->
-                        frame.executeJavaScript(markerScript));
             }
         });
 
@@ -229,12 +243,8 @@ public class Gui extends JFrame {
             base.add(toolBar, BorderLayout.SOUTH);
             base.add(view, BorderLayout.CENTER);
 
-            //frame.add(toolBar, BorderLayout.SOUTH);
-            //frame.add(view, BorderLayout.CENTER);
-            //frame.setSize(800, 500);
-            //frame.setVisible(true);
-
             browser.navigation().loadUrl("file:/Users/javigabe/Documents/universidad/erasmus/AGILE/Agile/src/main/java/resources/map.html");
+            //browser.navigation().loadUrl("https://www.google.com/maps/place/Lyon,+Francia/@45.7579341,4.7650812,13z/data=!3m1!4b1!4m5!3m4!1s0x47f4ea516ae88797:0x408ab2ae4bb21f0!8m2!3d45.764043!4d4.835659");
         });
     }
 }
