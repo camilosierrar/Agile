@@ -1,30 +1,41 @@
 package tsp;
 
+import dijkstra.Dijkstra;
 import dijkstra.Node;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static config.Config.Type_Request.*;
+
 public class CompleteGraph implements Graph {
-	int nbVertices;
-	double[][] cost;
-	Map<Node, Integer> idPoints;
+	private int nbVertices;
+	private double[][] cost;
+	private Map<Long, Integer> nodeAsInteger;
 	
 	/**
-	 * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
+	 * Create a complete graph of shortest path
 	 * @param nbVertices
+	 * @param shortestPaths
 	 */
-	public CompleteGraph(int nbVertices, Map<Node, Set<Node>> shortestPaths, Set<Node> pointsInterest){
-		//System.out.println(pointsInterest);
+	public CompleteGraph(int nbVertices, Map<Node, Set<Node>> shortestPaths){
 		this.nbVertices = nbVertices;
-		this.idPoints = new HashMap<>();
+		this.nodeAsInteger = new HashMap<>();
 		cost = new double[nbVertices][nbVertices];
-		int i = 0;
-		for(Node pointInterest: pointsInterest){
-			this.idPoints.put(pointInterest, i);
-			i++;
+		int i = 1;
+
+		for(Node pointInterest: Dijkstra.getPointsInterest())
+			if(pointInterest.getTypeOfNode().equals(DEPARTURE_ADDRESS))
+				this.nodeAsInteger.put(pointInterest.getId(), 0);
+			else
+				this.nodeAsInteger.put(pointInterest.getId(), i++);
+		
+		//prints id and typedelivery
+		for(Map.Entry<Long, Integer> entry: nodeAsInteger.entrySet()){
+			System.out.println("Node " + entry.getValue() + ", type of node : " + Dijkstra.findNodeInterest(entry.getKey()).getTypeOfNode());
 		}
+
 		for(Map.Entry<Node, Set<Node>> entry: shortestPaths.entrySet()){
 			Node source = entry.getKey();
 			Set<Node> destinations = entry.getValue();
@@ -34,6 +45,7 @@ public class CompleteGraph implements Graph {
 				cost[x][y] = destination.getDistance();
 			}
 		}
+
 		/*for(int a = 0 ; a < nbVertices; a++){
 			for(int b = 0; b < nbVertices; b++){
 				System.out.print(cost[a][b] + "\t");
@@ -43,13 +55,9 @@ public class CompleteGraph implements Graph {
 	}
 
 	public Integer findNodeIndex(long id){
-		for(Map.Entry<Node, Integer> entry: idPoints.entrySet()){
-			if(entry.getKey().getId() == id){
-				return entry.getValue();
-			}
-		}
-		return null;
+		return nodeAsInteger.get(id);
 	}
+
 	@Override
 	public int getNbVertices() {
 		return nbVertices;
@@ -69,4 +77,8 @@ public class CompleteGraph implements Graph {
 		return i != j;
 	}
 
+	@Override
+	public Map<Long, Integer> getNodeAsInteger() {
+		return nodeAsInteger;
+	}
 }

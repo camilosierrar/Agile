@@ -17,25 +17,31 @@ public class RunTSP {
         
         Plan.plan = XMLmap.readData("");
         Tour tour = XMLrequest.readData("");
-        Dijkstra algo = new Dijkstra(Plan.plan, tour);
-        System.out.println("Points of interest : " + algo.getPointsInterest());
-        Set<Node> pointsOfInterest = algo.getPointsInterest();
+
+        Dijkstra init_points = new Dijkstra(Plan.plan, tour);
+
+        System.out.println("Points of interest : " + Dijkstra.getPointsInterest());
+        Set<Node> pointsOfInterest = Dijkstra.getPointsInterest();
+
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
+        Map<Node,Node> pickupDeliveryCouples = Dijkstra.getPickUpDeliveryCouples();
+        System.out.println("Couples " + pickupDeliveryCouples);
         for (Node pointOfInterest : pointsOfInterest) {
             System.out.println("Dijkstra for id " + pointOfInterest.getId());
-            Dijkstra algoTest = new Dijkstra(Plan.plan, tour);
-            algoTest = algoTest.calculateShortestPathFromSource(algoTest, pointOfInterest);
-            Set<Node> results = algoTest.getPointsOfInterestDistanceFromGraph(algoTest);
+            Dijkstra algoPoint_i = new Dijkstra(Plan.plan, tour);
+            algoPoint_i = algoPoint_i.calculateShortestPathFromSource(algoPoint_i, pointOfInterest);
+            Set<Node> results = algoPoint_i.getPointsOfInterestDistanceFromGraph(algoPoint_i);
             for (Node result : results) {
                 System.out.println("id : " + result.getId() + ", distance : " + result.getDistance());
             }
             shortestPaths.put(pointOfInterest, results);
         }
 
-        //
+
         int nbVertices = pointsOfInterest.size();
         System.out.println("Graphs with " + nbVertices + " vertices:");
-        Graph g = new CompleteGraph(nbVertices, shortestPaths, pointsOfInterest);
+        
+        Graph g = new CompleteGraph(nbVertices, shortestPaths);
         long startTime = System.currentTimeMillis();
         tsp.searchSolution(20000, g);
         System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "

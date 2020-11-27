@@ -13,7 +13,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class XMLmap {
 
@@ -21,14 +20,6 @@ public class XMLmap {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
         ArrayList<Segment> segmentsList = new ArrayList<>();
         Plan plan;
-
-        /*
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose the file to load the Plan");
-        String file = scanner.next();
-        scanner.close();
-        */
-
 
         try {
 

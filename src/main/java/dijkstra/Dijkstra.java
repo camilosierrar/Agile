@@ -1,22 +1,18 @@
 package dijkstra;
 
 import model.*;
-import tsp.Graph;
-
 import java.util.*;
-
 import config.Config.Type_Request;
 
 /**
  * Implements Dijkstra's algorithm and compute for every point of interest
  * the shortest path
  */
-public class Dijkstra implements Graph {
+public class Dijkstra{
     /**
      * Value node is key Node's parent with the shortest path
      */
     private Map<Node,Node> parentNode;
-
     private Plan cityPlan;
     private Tour tour;
 
@@ -28,15 +24,18 @@ public class Dijkstra implements Graph {
     /**
      * Every pickup, delivery and departure addresses
      */
-    private Set<Node> pointsInterest;
+    private static Set<Node> pointsInterest;
+
+    private static Map<Node,Node> pickUpDeliveryCouples;
 
 
     public Dijkstra(Plan cityPlan, Tour tour) {
         this.cityPlan = cityPlan;
         this.tour = tour;
         this.graphPlan = new HashSet<>();
-        this.pointsInterest = new HashSet<>();
         this.parentNode = new HashMap<>();
+        Dijkstra.pointsInterest = new HashSet<>();
+        Dijkstra.pickUpDeliveryCouples = new HashMap<>();
         fillDijkstra();
     }
 
@@ -60,25 +59,17 @@ public class Dijkstra implements Graph {
         //Fetches all points of interest
         Node addressDeparture = findNode(this.tour.getAddressDeparture().getId());
         addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
-        this.pointsInterest.add(addressDeparture);
+        Dijkstra.pointsInterest.add(addressDeparture);
         List<Request> requests = this.tour.getRequests();
         for(Request request: requests){
             Node pickupAddress = findNode(request.getPickupAddress().getId());
             Node deliveryAddress = findNode(request.getDeliveryAddress().getId());
             pickupAddress.setTypeOfNode(Type_Request.PICK_UP);
             deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
-            this.pointsInterest.add(pickupAddress);
-            this.pointsInterest.add(deliveryAddress);
+            Dijkstra.pointsInterest.add(pickupAddress);
+            Dijkstra.pointsInterest.add(deliveryAddress);
+            Dijkstra.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
-    }
-
-    public Map<Node, Dijkstra> executeDijkstraForEachInterestPoints(Dijkstra graphRef) {
-        Map<Node,Dijkstra> graphs = new HashMap<>();
-        for(Node node : this.pointsInterest) {
-            Dijkstra graph = calculateShortestPathFromSource(graphRef, node);
-            graphs.put(node,graph);
-        }
-        return graphs;
     }
 
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
@@ -94,7 +85,7 @@ public class Dijkstra implements Graph {
             unvisitedNodes.remove(currentClosestNode);
             //For each of its successors : 
             for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = findNode(adjacencyNode.getKey().getId());//tream().filter(node -> node.getId() == adjacencyNode.getKey().getId()).findFirst().orElse(null) ;
+                Node adjacentNode = findNode(adjacencyNode.getKey().getId());
                 if(adjacentNode != null) {
                     Double edgeWeight = adjacencyNode.getValue();
                     if (!visitedNodes.contains(adjacentNode)) {
@@ -126,7 +117,7 @@ public class Dijkstra implements Graph {
         for (Node node : nodesVisited) {
             nodesVisitedId.add(node.getId());
         }
-        for (Node node : this.pointsInterest) {
+        for (Node node : Dijkstra.pointsInterest) {
             nodesInterestingId.add(node.getId());
         }
         return nodesVisitedId.containsAll(nodesInterestingId);
@@ -180,7 +171,7 @@ public class Dijkstra implements Graph {
         Map<Node,Node> parents = dijkstra.getParentNodes();
         Set<Node> pointsInterest = new HashSet<>();
         for(Map.Entry<Node,Node> entry: parents.entrySet())
-            if(this.getPointsInterest().contains(entry.getKey())) 
+            if(Dijkstra.getPointsInterest().contains(entry.getKey()))
                 pointsInterest.add(entry.getKey());
         return pointsInterest;
     }
@@ -204,30 +195,24 @@ public class Dijkstra implements Graph {
         return graphPlan;
     }
 
-    public Set<Node> getPointsInterest() {
-        return pointsInterest;
-    }
-
     public Map<Node,Node> getParentNodes() {
         return parentNode;
     }
 
-    //TODO
-    @Override
-    public int getNbVertices() {
-        return graphPlan.size();
+    public static Node findNodeInterest(long id){
+        for(Node node: Dijkstra.pointsInterest){
+            if(node.getId() == id){
+                return node;
+            }
+        }
+        return null;
     }
 
-    @Override
-    public double getCost(int i, int j) {
-        return 0;
+    public static Set<Node> getPointsInterest() {
+        return pointsInterest;
     }
 
-    @Override
-    public boolean isArc(int i, int j) {
-        return false;
+    public static Map<Node, Node> getPickUpDeliveryCouples() {
+        return pickUpDeliveryCouples;
     }
-
-
-
 }

@@ -1,11 +1,16 @@
 package tsp;
 
+import config.Config;
+import dijkstra.Dijkstra;
+import dijkstra.Node;
+
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class SeqIter implements Iterator<Integer> {
-	private Integer[] candidates;
-	private int nbCandidates;
+	protected Integer[] candidates;
+	protected int nbCandidates;
 
 	/**
 	 * Create an iterator to traverse the set of vertices in <code>unvisited</code> 
@@ -15,11 +20,39 @@ public class SeqIter implements Iterator<Integer> {
 	 * @param currentVertex
 	 * @param g
 	 */
-	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g){
+	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited){
+		Map<Long, Integer> nodeAsInteger = g.getNodeAsInteger();
+		//Candidates to be visited after currentVertex
 		this.candidates = new Integer[unvisited.size()];
 		for (Integer s : unvisited){
-			if (g.isArc(currentVertex, s))
-				candidates[nbCandidates++] = s;
+			//Always true since graph is complete
+			if (g.isArc(currentVertex, s)) {
+				Node curNode = null;
+				for(Map.Entry<Long, Integer> entry : nodeAsInteger.entrySet())
+					if(entry.getValue().equals(s)){
+						curNode = Dijkstra.findNodeInterest(entry.getKey());
+						break;
+					}
+				
+				assert curNode != null;
+				
+				//if node is a delivery check if pickup is visited
+				if(curNode.getTypeOfNode().equals(Config.Type_Request.DELIVERY)){
+					Node pickup = null;
+					for(Map.Entry<Node,Node> entry: Dijkstra.getPickUpDeliveryCouples().entrySet())
+						if(entry.getValue().getId() == curNode.getId()){
+							pickup = entry.getKey();
+							break;
+						}
+					//retrieves index of pickup point
+					int pickupIndex = nodeAsInteger.get(pickup.getId());
+					if(visited.contains(pickupIndex)){
+						candidates[nbCandidates++] = s;
+					}
+				}else{
+					candidates[nbCandidates++] = s;
+				}
+			}
 		}
 	}
 	

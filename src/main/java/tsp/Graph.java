@@ -1,5 +1,7 @@
 package tsp;
 
+import java.util.Map;
+
 public interface Graph {
 	/**
 	 * @return the number of vertices in <code>this</code>
@@ -20,4 +22,5 @@ public interface Graph {
 	 */
 	public abstract boolean isArc(int i, int j);
 
+	public abstract  Map<Long, Integer> getNodeAsInteger();
 }
