@@ -32,7 +32,7 @@ public class XMLrequest {
         try {
             LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File("fichiersXML2020/" + file);
+            File fXmlFile = new File("fichiersXML2020/" + file + ".xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
