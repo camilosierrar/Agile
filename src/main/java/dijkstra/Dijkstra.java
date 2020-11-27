@@ -214,7 +214,7 @@ public class Dijkstra implements Graph {
     }
 
     @Override
-    public int getCost(int i, int j) {
+    public double getCost(int i, int j) {
         return 0;
     }
 
