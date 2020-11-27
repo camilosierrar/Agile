@@ -127,12 +127,9 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-
                 // Remove previous markers
-                String removeMarkerScript = "var marker = new google.maps.Marker({});" +
-                        "maker.setMap(null);";
-                browser.mainFrame().ifPresent(frame ->
-                        frame.executeJavaScript(removeMarkerScript));
+                browser.navigation().loadUrl("file:/Users/javigabe/Documents/universidad/erasmus/AGILE/Agile/src/main/java/resources/map.html");
+
 
                 // SHOW REQUESTS IN THE UI
                 Intersection departure = tour.getAddressDeparture();
@@ -182,7 +179,6 @@ public class Gui extends JFrame {
                         e.printStackTrace();
                         System.out.println("CRAP");
                     }
-
                 }
             }
         });
