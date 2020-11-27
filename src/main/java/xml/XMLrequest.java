@@ -33,7 +33,7 @@ public class XMLrequest {
         try {
             LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File("src/resourceXML" + "requestsLarge9.xml");//filename);
+            File fXmlFile = new File("src/resourceXML/" + "requestsSmall1.xml");//filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);

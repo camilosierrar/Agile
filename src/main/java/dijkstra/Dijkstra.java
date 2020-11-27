@@ -78,6 +78,8 @@ public class Dijkstra implements Graph {
 
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
+        graph.findNode(source.getId()).setDistance(0);
+        parentNode.put(graph.findNode(source.getId()), graph.findNode(source.getId()));
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
@@ -171,13 +173,10 @@ public class Dijkstra implements Graph {
 
     public Set<Node> getPointsOfInterestDistanceFromGraph(Dijkstra dijkstra){
         Map<Node,Node> parents = dijkstra.getParentNodes();
-        //System.out.println(parents);
         Set<Node> pointsInterest = new HashSet<>();
-        //System.out.println("ici : " + pointsInterest.stream().filter(node -> node.getId() == 208769039).findFirst());
-        for(Map.Entry<Node,Node> entry: parents.entrySet()){
-            if(this.getPointsInterest().contains(entry.getKey())) pointsInterest.add(entry.getKey());
-
-        }
+        for(Map.Entry<Node,Node> entry: parents.entrySet())
+            if(this.getPointsInterest().contains(entry.getKey())) 
+                pointsInterest.add(entry.getKey());
         return pointsInterest;
     }
 
