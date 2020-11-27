@@ -16,7 +16,8 @@ public class SeqIterEnhanced implements Iterator<Integer> {
 	 * @param g
 	 */
 	public SeqIterEnhanced(Collection<Integer> unvisited, int currentVertex, Graph g){
-		this.candidates = new Integer[unvisited.size()];
+        this.candidates = new Integer[unvisited.size()];
+        
 		for (Integer s : unvisited){
 			if (g.isArc(currentVertex, s))
 				candidates[nbCandidates++] = s;
