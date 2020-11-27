@@ -26,8 +26,6 @@ public class Gui extends JFrame {
 
     //Graphic Elements
     JPanel base;
-    MapGui map;
-    //JFrame map;
     JPanel info;
     JPanel topBar;
     JPanel mapContainer;
@@ -261,12 +259,8 @@ public class Gui extends JFrame {
             base.add(toolBar, BorderLayout.SOUTH);
             base.add(view, BorderLayout.CENTER);
 
-            //frame.add(toolBar, BorderLayout.SOUTH);
-            //frame.add(view, BorderLayout.CENTER);
-            //frame.setSize(800, 500);
-            //frame.setVisible(true);
-
             browser.navigation().loadUrl("file:/Users/javigabe/Documents/universidad/erasmus/AGILE/Agile/src/main/java/resources/map.html");
+            //browser.navigation().loadUrl("https://www.google.com/maps/place/Lyon,+Francia/@45.7579341,4.7650812,13z/data=!3m1!4b1!4m5!3m4!1s0x47f4ea516ae88797:0x408ab2ae4bb21f0!8m2!3d45.764043!4d4.835659");
         });
     }
 }
