@@ -14,6 +14,7 @@ import java.util.Set;
 public class RunTSP {
     public static void main(String[] args) {
         TSP tsp = new TSP1();
+        
         Plan.plan = XMLmap.readData("");
         Tour tour = XMLrequest.readData("");
         Dijkstra algo = new Dijkstra(Plan.plan, tour);

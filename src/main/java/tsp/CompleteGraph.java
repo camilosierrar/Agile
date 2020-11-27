@@ -16,7 +16,7 @@ public class CompleteGraph implements Graph {
 	 * @param nbVertices
 	 */
 	public CompleteGraph(int nbVertices, Map<Node, Set<Node>> shortestPaths, Set<Node> pointsInterest){
-		System.out.println(pointsInterest);
+		//System.out.println(pointsInterest);
 		this.nbVertices = nbVertices;
 		this.idPoints = new HashMap<>();
 		cost = new double[nbVertices][nbVertices];
@@ -34,12 +34,12 @@ public class CompleteGraph implements Graph {
 				cost[x][y] = destination.getDistance();
 			}
 		}
-		for(int a = 0 ; a < nbVertices; a++){
+		/*for(int a = 0 ; a < nbVertices; a++){
 			for(int b = 0; b < nbVertices; b++){
 				System.out.print(cost[a][b] + "\t");
 			}
 			System.out.println();
-		}
+		}*/
 	}
 
 	public Integer findNodeIndex(long id){

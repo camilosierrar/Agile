@@ -83,7 +83,7 @@ public abstract class TemplateTSP implements TSP {
 						(int) (currentCost+g.getCost(currentVertex, nextVertex)));
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
-	        }	    
+	        }
 	    }
 	}
 

@@ -5,6 +5,8 @@ import tsp.Graph;
 
 import java.util.*;
 
+import config.Config.Type_Request;
+
 /**
  * Implements Dijkstra's algorithm and compute for every point of interest
  * the shortest path
@@ -57,11 +59,14 @@ public class Dijkstra implements Graph {
 
         //Fetches all points of interest
         Node addressDeparture = findNode(this.tour.getAddressDeparture().getId());
+        addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
         this.pointsInterest.add(addressDeparture);
         List<Request> requests = this.tour.getRequests();
         for(Request request: requests){
             Node pickupAddress = findNode(request.getPickupAddress().getId());
             Node deliveryAddress = findNode(request.getDeliveryAddress().getId());
+            pickupAddress.setTypeOfNode(Type_Request.PICK_UP);
+            deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
             this.pointsInterest.add(pickupAddress);
             this.pointsInterest.add(deliveryAddress);
         }

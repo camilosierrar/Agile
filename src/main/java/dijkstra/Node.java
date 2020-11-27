@@ -3,10 +3,13 @@ package dijkstra;
 import java.util.HashMap;
 import java.util.Map;
 
+import config.Config.Type_Request;
+
 public class Node {
     private long id;
     private Double distance = Double.MAX_VALUE;
-    Map<Node, Double> adjacentNodes = new HashMap<>();
+    private Map<Node, Double> adjacentNodes = new HashMap<>();
+    private Type_Request typeOfNode;
 
     public Node(long id){
         this.id = id;
@@ -32,6 +35,14 @@ public class Node {
         this.distance = distance;
     }
 
+    public Type_Request getTypeOfNode() {
+        return typeOfNode;
+    }
+
+    public void setTypeOfNode(Type_Request pTypeOfNode) {
+        this.typeOfNode = pTypeOfNode;
+    }
+
     public Map<Node, Double> getAdjacentNodes() {
         return adjacentNodes;
     }
@@ -40,12 +51,14 @@ public class Node {
         this.adjacentNodes = adjacentNodes;
     }
 
+
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
-            //", distance='" + getDistance() + "'" +
-            ", adjacentNodes='" + getAdjacentNodes().size() + "'" +
+            ", distance='" + getDistance() + "'" +
+            //", adjacentNodes='" + getAdjacentNodes() + "'" +
+            ", typeOfNode='" + getTypeOfNode() + "'" +
             "}";
     }
 
