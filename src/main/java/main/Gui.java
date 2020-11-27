@@ -127,6 +127,7 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
+
                 // Remove previous markers
                 browser.navigation().loadUrl("file:/Users/javigabe/Documents/universidad/erasmus/AGILE/Agile/src/main/java/resources/map.html");
 
@@ -152,8 +153,9 @@ public class Gui extends JFrame {
                     System.out.println("DEPARTURE ADRESS NOT FOUND\n");
                 }
 
+                System.out.println(tour.getRequests().toString());
+
                 for (Request request: tour.getRequests()) {
-                    System.out.println(tour.getRequests().toString());
                     try {
                         String deliveryMarkerScript = "var deliveryLatLong = new google.maps.LatLng(" + request.getDeliveryAddress().getLatitude()
                                 + "," + request.getDeliveryAddress().getLongitude() + ");\n" +
@@ -163,13 +165,13 @@ public class Gui extends JFrame {
                                 "    title: 'Delivery!'\n" +
                                 "});";
 
-                        String pickupMarkerScript = "var pickupLatLong = new google.maps.LatLng(" + request.getPickupAddress().getLatitude()
+                        String pickupMarkerScript = "var deliveryLatLong = new google.maps.LatLng(" + request.getPickupAddress().getLatitude()
                                 + "," + request.getPickupAddress().getLongitude() + ");\n" +
-                                "var pickupMarker = new google.maps.Marker({\n" +
-                                "    position: myLatlng,\n" +
+                                "var deliveryMarker = new google.maps.Marker({\n" +
+                                "    position: deliveryLatLong,\n" +
                                 "    map: map,\n" +
-                                "    title: 'Pick Up!'\n" +
-                                "});";
+                                "    title: 'Pick up!'\n" +
+                                "});";;
 
                         browser.mainFrame().ifPresent(frame ->
                                 frame.executeJavaScript(deliveryMarkerScript));
@@ -203,6 +205,7 @@ public class Gui extends JFrame {
     /**
      * In map.html file default zoom value is set to 13.
      */
+
 
 
     private void setMap(JPanel base) {

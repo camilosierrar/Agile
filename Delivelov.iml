@@ -48,5 +48,17 @@
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64-arm:7.12" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:7.12" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-swing:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.sothawo:mapjfx:2.15.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:mac:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:mac:11.0.2" level="project" />
   </component>
 </module>
