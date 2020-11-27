@@ -1,11 +1,15 @@
 package tsp;
 
+import config.Config;
+import dijkstra.Node;
+
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class SeqIter implements Iterator<Integer> {
-	private Integer[] candidates;
-	private int nbCandidates;
+	protected Integer[] candidates;
+	protected int nbCandidates;
 
 	/**
 	 * Create an iterator to traverse the set of vertices in <code>unvisited</code> 
@@ -15,11 +19,37 @@ public class SeqIter implements Iterator<Integer> {
 	 * @param currentVertex
 	 * @param g
 	 */
-	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g){
+	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited){
+		Map<Node, Node> couples = g.getPickupDeliveryCouples();
+		Map<Node, Integer> idPoints = g.getIdPoints();
 		this.candidates = new Integer[unvisited.size()];
 		for (Integer s : unvisited){
-			if (g.isArc(currentVertex, s))
-				candidates[nbCandidates++] = s;
+			if (g.isArc(currentVertex, s)) {
+				//Checks vertex type
+				Node curNode = null;
+				for(Map.Entry<Node, Integer> entry : idPoints.entrySet()){
+					if(entry.getValue().equals(s)){
+						curNode = entry.getKey();
+					}
+				}
+				assert curNode != null;
+				//if node is a delivery check if pickup is visited
+				if(curNode.getTypeOfNode().equals(Config.Type_Request.DELIVERY)){
+					Node pickup = null;
+					for(Map.Entry<Node,Node> entry: couples.entrySet()){
+						if(entry.getValue().getId() == curNode.getId()){
+							pickup = entry.getKey();
+						}
+					}
+					//retrieves index of pickup point
+					int pickupIndex = idPoints.get(pickup);
+					if(visited.contains(pickupIndex)){
+						candidates[nbCandidates++] = s;
+					}
+				}else{
+					candidates[nbCandidates++] = s;
+				}
+			}
 		}
 	}
 	

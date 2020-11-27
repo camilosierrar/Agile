@@ -1,5 +1,11 @@
 package tsp;
 
+import config.Config;
+import dijkstra.Node;
+
+import java.util.Map;
+import java.util.Set;
+
 public interface Graph {
 	/**
 	 * @return the number of vertices in <code>this</code>
@@ -20,4 +26,7 @@ public interface Graph {
 	 */
 	public abstract boolean isArc(int i, int j);
 
+	public abstract Map<Node,Node> getPickupDeliveryCouples();
+
+	public abstract  Map<Node, Integer> getIdPoints();
 }

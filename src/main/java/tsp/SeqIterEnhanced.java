@@ -1,39 +1,30 @@
 package tsp;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 
-public class SeqIterEnhanced implements Iterator<Integer> {
-    private Integer[] candidates;
-	private int nbCandidates;
+public class SeqIterEnhanced extends SeqIter {
+	public class VertexComparator implements Comparator<Integer> {
+		Graph graph;
+		int origin;
 
-	/**
-	 * Create an iterator to traverse the set of vertices in <code>unvisited</code> 
-	 * which are successors of <code>currentVertex</code> in <code>g</code>
-	 * Vertices are traversed in the same order as in <code>unvisited</code>
-	 * @param unvisited
-	 * @param currentVertex
-	 * @param g
-	 */
-	public SeqIterEnhanced(Collection<Integer> unvisited, int currentVertex, Graph g){
-		this.candidates = new Integer[unvisited.size()];
-		for (Integer s : unvisited){
-			if (g.isArc(currentVertex, s))
-				candidates[nbCandidates++] = s;
+		public VertexComparator(Graph graph, int origin) {
+			this.graph = graph;
+			this.origin = origin;
 		}
-	}
-	
-	@Override
-	public boolean hasNext() {
-		return nbCandidates > 0;
+
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return (int) (graph.getCost(origin, o1) - graph.getCost(origin, o2));
+		}
+
 	}
 
-	@Override
-	public Integer next() {
-		nbCandidates--;
-		return candidates[nbCandidates];
+	public SeqIterEnhanced(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited) {
+		super(unvisited, currentVertex, g, visited);
+		candidates = Arrays.copyOf(candidates, nbCandidates);
+		Arrays.sort(candidates, new VertexComparator(g, currentVertex));
 	}
-
-	@Override
-	public void remove() {}
 }

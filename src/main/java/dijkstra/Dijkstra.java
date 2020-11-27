@@ -11,12 +11,12 @@ import config.Config.Type_Request;
  * Implements Dijkstra's algorithm and compute for every point of interest
  * the shortest path
  */
-public class Dijkstra implements Graph {
+public class Dijkstra{
     /**
      * Value node is key Node's parent with the shortest path
      */
     private Map<Node,Node> parentNode;
-
+    private static Map<Node,Node> pickUpDeliveryCouples;
     private Plan cityPlan;
     private Tour tour;
 
@@ -28,7 +28,7 @@ public class Dijkstra implements Graph {
     /**
      * Every pickup, delivery and departure addresses
      */
-    private Set<Node> pointsInterest;
+    private static Set<Node> pointsInterest;
 
 
     public Dijkstra(Plan cityPlan, Tour tour) {
@@ -37,6 +37,7 @@ public class Dijkstra implements Graph {
         this.graphPlan = new HashSet<>();
         this.pointsInterest = new HashSet<>();
         this.parentNode = new HashMap<>();
+        this.pickUpDeliveryCouples = new HashMap<>();
         fillDijkstra();
     }
 
@@ -69,6 +70,7 @@ public class Dijkstra implements Graph {
             deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
             this.pointsInterest.add(pickupAddress);
             this.pointsInterest.add(deliveryAddress);
+            this.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
     }
 
@@ -212,22 +214,7 @@ public class Dijkstra implements Graph {
         return parentNode;
     }
 
-    //TODO
-    @Override
-    public int getNbVertices() {
-        return graphPlan.size();
+    public static Map<Node, Node> getPickUpDeliveryCouples() {
+        return pickUpDeliveryCouples;
     }
-
-    @Override
-    public double getCost(int i, int j) {
-        return 0;
-    }
-
-    @Override
-    public boolean isArc(int i, int j) {
-        return false;
-    }
-
-
-
 }

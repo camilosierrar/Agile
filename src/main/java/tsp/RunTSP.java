@@ -21,6 +21,8 @@ public class RunTSP {
         System.out.println("Points of interest : " + algo.getPointsInterest());
         Set<Node> pointsOfInterest = algo.getPointsInterest();
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
+        Map<Node,Node> pickupDeliveryCouples = algo.getPickUpDeliveryCouples();
+        System.out.println("Couples " + pickupDeliveryCouples);
         for (Node pointOfInterest : pointsOfInterest) {
             System.out.println("Dijkstra for id " + pointOfInterest.getId());
             Dijkstra algoTest = new Dijkstra(Plan.plan, tour);
@@ -32,10 +34,10 @@ public class RunTSP {
             shortestPaths.put(pointOfInterest, results);
         }
 
-        //
+
         int nbVertices = pointsOfInterest.size();
         System.out.println("Graphs with " + nbVertices + " vertices:");
-        Graph g = new CompleteGraph(nbVertices, shortestPaths, pointsOfInterest);
+        Graph g = new CompleteGraph(nbVertices, shortestPaths, pointsOfInterest, pickupDeliveryCouples);
         long startTime = System.currentTimeMillis();
         tsp.searchSolution(20000, g);
         System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
