@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.List;
 
-import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
+//import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 
 
 public class Gui extends JFrame {
@@ -28,6 +28,7 @@ public class Gui extends JFrame {
     JPanel base;
     JPanel info;
     JPanel topBar;
+    JPanel map;
     JPanel mapContainer;
     JButton mapRead;
     JButton reqRead;
@@ -40,10 +41,6 @@ public class Gui extends JFrame {
 
     Browser browser;
 
-
-    private static final int MIN_ZOOM = 0;
-    private static final int MAX_ZOOM = 21;
-    private static int zoomValue = 13;
 
     //Constructor
     public Gui(Controller controller) {
@@ -212,7 +209,6 @@ public class Gui extends JFrame {
         base.add(mapContainer,BorderLayout.CENTER);
         base.add(topBar, BorderLayout.PAGE_START);
         base.add(info, BorderLayout.WEST);
-        setMap(base);
         this.add(base);
 
         //END of Constructor
@@ -225,7 +221,7 @@ public class Gui extends JFrame {
      */
 
 
-    private void setMap(JPanel base) {
+   /* private void setMap(JPanel base) {
         System.setProperty("jxbrowser.license.key", "1BNDHFSC1FXEWE7VRF2L36BWMILQ32DMIU9ODTZZ9PT6OA9WADNKY3PV8JNUDYNG0CN370");
         EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED).build();
         Engine engine = Engine.newInstance(options);
@@ -262,5 +258,5 @@ public class Gui extends JFrame {
             browser.navigation().loadUrl("file:/Users/javigabe/Documents/universidad/erasmus/AGILE/Agile/src/main/java/resources/map.html");
             //browser.navigation().loadUrl("https://www.google.com/maps/place/Lyon,+Francia/@45.7579341,4.7650812,13z/data=!3m1!4b1!4m5!3m4!1s0x47f4ea516ae88797:0x408ab2ae4bb21f0!8m2!3d45.764043!4d4.835659");
         });
-    }
+    }*/
 }
