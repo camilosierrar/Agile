@@ -44,9 +44,10 @@ public class RunTSP {
                 + (System.currentTimeMillis() - startTime) + "ms : ");
         
         LinkedList<Node> shortestPath = new LinkedList<>();
-        //shortestPath.add(g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(0))));
+
 
         for (int i = 0; i < nbVertices; i++) {
+            //Current Node is the node i of the shortest path in tsp
             Node currentNode = g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(i)));
             Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == currentNode.getId()).findFirst().orElse(null).getValue();
             Node source = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i)));
@@ -55,14 +56,11 @@ public class RunTSP {
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
             else
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i+1)));
-            System.out.println("\n Source : " + source.getId()+" et Destination : " + destination.getId());
-            for(Node node : graph.getShortestPath(source, destination)) {
-                System.out.println( node.getId()+" " +node.getDistance());
-            }
             shortestPath.addAll(graph.getShortestPath(source ,destination));
-            
+            if(i!=nbVertices-1)
+                shortestPath.removeLast();
         }
-        System.out.println("chemin le plus court : ");
+        System.out.println("\nChemin le plus court : " + shortestPath);
 
         System.out.println("0");
     }

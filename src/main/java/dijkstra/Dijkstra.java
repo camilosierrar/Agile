@@ -182,19 +182,16 @@ public class Dijkstra{
     }
 
     public LinkedList<Node> getShortestPath(Node source, Node destination) {
-        LinkedList<Node> temp = new LinkedList<>();
         LinkedList<Node> shortestPath = new LinkedList<>();
-        temp.add(destination);
+        shortestPath.add(destination);
         Node currentNode = destination;
         Node parent = null;
         while(!currentNode.equals(source)) {
             parent = parentNode.get(currentNode);
-            temp.add(parent);
+            shortestPath.add(parent);
             currentNode = parent;
         }
-        for(Node node: temp) {
-            
-        }
+        Collections.reverse(shortestPath);
         return shortestPath;
     }
 
