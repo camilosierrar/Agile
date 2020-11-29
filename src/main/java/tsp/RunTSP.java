@@ -21,10 +21,18 @@ public class RunTSP {
 
         Dijkstra init_points = new Dijkstra(Plan.plan, tour);
 
+        /**
+         * Data structure containing the node source in key and in value the set of Node of interest 
+         * and their distance in shortest path to the source 
+         */
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
+
+        /**
+         * Data structure containing the graph of shortest path from source Node (in key)
+         */
         Map<Node,Dijkstra> dijkstras = new HashMap<>();
 
-        //For each point of interes, it executes Dijkstra and store result in data structure
+        //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : init_points.getPointsInterest()) {
             Dijkstra algoPoint_i = new Dijkstra(Plan.plan, tour);
             algoPoint_i = algoPoint_i.calculateShortestPathFromSource(algoPoint_i, pointOfInterest);
@@ -49,6 +57,7 @@ public class RunTSP {
         for (int i = 0; i < nbVertices; i++) {
             //Current Node is the node i of the shortest path in tsp
             Node currentNode = g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(i)));
+            //Find the graph which has for source currentNode
             Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == currentNode.getId()).findFirst().orElse(null).getValue();
             Node source = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i)));
             Node destination = null;
