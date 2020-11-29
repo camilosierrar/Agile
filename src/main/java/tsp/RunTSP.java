@@ -45,21 +45,24 @@ public class RunTSP {
         
         LinkedList<Node> shortestPath = new LinkedList<>();
         //shortestPath.add(g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(0))));
-        System.out.print(shortestPath);
-        System.out.print("0 ");
-        for (int i = 1; i < nbVertices; i++) {
-            System.out.print(tsp.getSolution(i) + " ");
+
+        for (int i = 0; i < nbVertices; i++) {
             Node currentNode = g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(i)));
             Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == currentNode.getId()).findFirst().orElse(null).getValue();
-            Node destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i-1)));
             Node source = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i)));
+            Node destination = null;
+            if(i == nbVertices-1)
+                destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
+            else
+                destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i+1)));
+            System.out.println("\n Source : " + source.getId()+" et Destination : " + destination.getId());
+            for(Node node : graph.getShortestPath(source, destination)) {
+                System.out.println( node.getId()+" " +node.getDistance());
+            }
             shortestPath.addAll(graph.getShortestPath(source ,destination));
             
         }
         System.out.println("chemin le plus court : ");
-        for(Node node: shortestPath) {
-            System.out.println(" " + node.getId());
-        }
 
         System.out.println("0");
     }

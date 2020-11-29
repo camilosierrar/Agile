@@ -75,7 +75,7 @@ public class Dijkstra{
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
         graph.findNode(source.getId()).setDistance(0);
-        parentNode.put(graph.findNode(source.getId()), graph.findNode(source.getId()));
+        //parentNode.put(graph.findNode(source.getId()), graph.findNode(source.getId()));
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
@@ -182,14 +182,18 @@ public class Dijkstra{
     }
 
     public LinkedList<Node> getShortestPath(Node source, Node destination) {
+        LinkedList<Node> temp = new LinkedList<>();
         LinkedList<Node> shortestPath = new LinkedList<>();
-        shortestPath.add(destination);
+        temp.add(destination);
         Node currentNode = destination;
         Node parent = null;
         while(!currentNode.equals(source)) {
             parent = parentNode.get(currentNode);
-            shortestPath.add(parent);
+            temp.add(parent);
             currentNode = parent;
+        }
+        for(Node node: temp) {
+            
         }
         return shortestPath;
     }
