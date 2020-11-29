@@ -113,7 +113,7 @@ public class Gui extends JFrame {
 
         Plan plantest = Plan.createPlan(inter, seg);
         */
-        map = new MapGui(null,null);
+        map = new MapGui(null,null, null);
         info = new JPanel();
 
         //JLabel
@@ -172,7 +172,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(plan, tour);
+                map = new MapGui(plan, tour, controller);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -191,7 +191,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(plan, tour);
+                map = new MapGui(plan, tour, controller);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");

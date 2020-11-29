@@ -1,11 +1,12 @@
 package main;
 
+import controller.Controller;
 import model.*;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 import java.util.List;
@@ -13,16 +14,22 @@ import java.util.List;
 
 public class MapGui  extends JPanel implements MouseListener{
 
-    HashMap<Long, Intersection> intersections;
-    List<Segment> segments;
-    Dimension dim;
-    List<Request> requests;
+    private HashMap<Long, Intersection> intersections;
+    private List<Segment> segments;
+    private Dimension dim;
+    private List<Request> requests;
+    private HashMap<Point, Intersection> pickUpTable;
+    private HashMap<Point, Intersection> deliveryTable;
+
     double ratioHeight, ratioWidth;
 
     final int DOT_RADIUS = 5;
-    final int MARKER_RADIUS = 3;
 
-    public MapGui(Plan plan, Tour tour) {
+    private List<Point> points;
+    private Controller controller;
+
+
+    public MapGui(Plan plan, Tour tour, Controller controller) {
         //this.plan = plan;
         if (plan != null) {
             intersections = plan.getIntersections();
@@ -33,8 +40,9 @@ public class MapGui  extends JPanel implements MouseListener{
         }
 
         addMouseListener(this);
-
-        //System.out.println("Inter : "+ intersections);
+        points = new ArrayList<>();
+        pickUpTable = new HashMap<>();
+        deliveryTable = new HashMap<>();
     }
 
     public void paintComponent(Graphics g) {
@@ -55,35 +63,11 @@ public class MapGui  extends JPanel implements MouseListener{
             //TODO Rajouter Une Marge de Chaque Cote
             double coordHeight = maxLat - minLat;
             double coordWidth = maxLong - minLong;
-            //Ratios (scaling)
 
+            //Ratios (scaling)
             ratioHeight = dim.height / coordHeight;
             ratioWidth = dim.width / coordWidth;
 
-            //Render Intersections
-            /*int R,G,B;
-            int seed = 13;
-            R=seed;
-            G=seed;
-            B=seed;
-            Color p = new Color(R,G,B);*/
-            g.setColor(Color.orange);
-            /*for (Intersection i : intersections.values()) {
-                int x = (int) ((i.getLongitude() - minLong) * ratioWidth);
-                int y = (int) ((i.getLatitude() - minLat) * ratioHeight);
-                g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
-                System.out.println("Point coord : "+x+" "+y + "color :" +p);
-                R*=3333;
-                G*=5555;
-                B*=7777;
-                R%=255;
-                G%=255;
-                B%=255;
-                g.setColor( p = new Color(R,G,B));
-            }*/
-
-            //Color c;
-            //g.setColor( c = new Color(255,0,0));
             g.setColor(Color.black);
             for (int i = 0; i < segments.size(); i++) {
                 Segment s = segments.get(i);
@@ -94,7 +78,6 @@ public class MapGui  extends JPanel implements MouseListener{
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
                 int y2 = (int) ((destination.getLatitude() - minLat) * ratioHeight);
                 g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS, x2 + DOT_RADIUS, y2 + DOT_RADIUS);
-                //System.out.println("Origine Long :"+origin.getLongitude());
             }
             if (requests != null) {
                 //Pickup Marker
@@ -103,6 +86,9 @@ public class MapGui  extends JPanel implements MouseListener{
                     int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
                     int y = (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
+                    Point point = new Point(x,y);
+                    points.add(point);
+                    pickUpTable.put(point, r.getPickupAddress());
                 }
 
                 //Delivery Marker
@@ -111,18 +97,32 @@ public class MapGui  extends JPanel implements MouseListener{
                     int x = (int) ((r.getDeliveryAddress().getLongitude() - minLong) * ratioWidth);
                     int y = (int) ((r.getDeliveryAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
+                    Point point = new Point(x,y);
+                    points.add(point);
+                    deliveryTable.put(point, r.getDeliveryAddress());
                 }
             }
-            //g.fillOval(100,100,10,10);
-            //g.fillOval(860,266,10,10);
-
-            //System.out.println("Dim: " + dim);
         }
     }
 
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        for (Point point: points) {
+            if ((e.getPoint().x > point.x - 10 && e.getPoint().x < point.x + 10) && (e.getPoint().y > point.y - 10 && e.getPoint().y < point.y + 10)) {
+                if (pickUpTable.containsKey(point)) {
+                    // It is a pickup point
+                    Intersection intersection = pickUpTable.get(point);
+                    System.out.println("Pick up point");
+                    System.out.println(intersection.toString());
+                } else if (deliveryTable.containsKey(point)) {
+                    // It is a delivery point
+                    Intersection intersection = deliveryTable.get(point);
+                    System.out.println("Delivery point");
+                    System.out.println(intersection.toString());
+                }
+            }
+        }
 
     }
 
