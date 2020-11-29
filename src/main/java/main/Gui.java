@@ -182,7 +182,7 @@ public class Gui extends JFrame {
         });
 
         reqRead.addActionListener(event -> {
-            Tour tour = controller.loadRequests(reqPath.getText());
+            tour = controller.loadRequests(reqPath.getText());
 
             if (tour == null) {
                 JOptionPane.showMessageDialog(this,

@@ -19,7 +19,7 @@ public class MapGui extends JPanel {
     final int DOT_RADIUS = 5;
     final int MARKER_RADIUS = 3;
     //Plan plan;
-    
+
     public MapGui(Plan plan, Tour tour) {
         //this.plan = plan;
         if (plan != null) {
@@ -31,6 +31,7 @@ public class MapGui extends JPanel {
         }
         //System.out.println("Inter : "+ intersections);
     }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.intersections != null && this.segments!=null) {
@@ -113,5 +114,7 @@ public class MapGui extends JPanel {
             //System.out.println("Dim: " + dim);
         }
     }
+
+
 
 }
