@@ -3,12 +3,15 @@ package main;
 import model.*;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Collections;
 import java.util.HashMap;
 import javax.swing.*;
 import java.util.List;
 
-public class MapGui extends JPanel {
+
+public class MapGui  extends JPanel implements MouseListener{
 
     HashMap<Long, Intersection> intersections;
     List<Segment> segments;
@@ -18,7 +21,6 @@ public class MapGui extends JPanel {
 
     final int DOT_RADIUS = 5;
     final int MARKER_RADIUS = 3;
-    //Plan plan;
 
     public MapGui(Plan plan, Tour tour) {
         //this.plan = plan;
@@ -29,6 +31,9 @@ public class MapGui extends JPanel {
         if (tour != null) {
             this.requests = tour.getRequests();
         }
+
+        addMouseListener(this);
+
         //System.out.println("Inter : "+ intersections);
     }
 
@@ -116,5 +121,28 @@ public class MapGui extends JPanel {
     }
 
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
 
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
 }
