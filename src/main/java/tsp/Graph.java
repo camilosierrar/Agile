@@ -23,4 +23,6 @@ public interface Graph {
 	public abstract boolean isArc(int i, int j);
 
 	public abstract  Map<Long, Integer> getNodeAsInteger();
+
+	public abstract long findIdNodeByIndex(int index);
 }

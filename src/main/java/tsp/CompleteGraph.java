@@ -39,9 +39,9 @@ public class CompleteGraph implements Graph {
 		for(Map.Entry<Node, Set<Node>> entry: shortestPaths.entrySet()){
 			Node source = entry.getKey();
 			Set<Node> destinations = entry.getValue();
-			int x = findNodeIndex(source.getId());
+			int x = findIndexNodeById(source.getId());
 			for(Node destination: destinations){
-				int y = findNodeIndex(destination.getId());
+				int y = findIndexNodeById(destination.getId());
 				cost[x][y] = destination.getDistance();
 			}
 		}
@@ -54,8 +54,18 @@ public class CompleteGraph implements Graph {
 		}*/
 	}
 
-	public Integer findNodeIndex(long id){
+	public Integer findIndexNodeById(long id){
 		return nodeAsInteger.get(id);
+	}
+
+	public long findIdNodeByIndex(int index){
+		long idCorrespondingNode = -1;
+		for(Map.Entry<Long, Integer> entry : nodeAsInteger.entrySet())
+			if(entry.getValue().equals(index)){
+				idCorrespondingNode = entry.getKey();
+				break;
+			}
+		return idCorrespondingNode;
 	}
 
 	@Override
