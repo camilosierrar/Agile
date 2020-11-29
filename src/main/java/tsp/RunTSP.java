@@ -21,26 +21,20 @@ public class RunTSP {
 
         Dijkstra init_points = new Dijkstra(Plan.plan, tour);
 
-        System.out.println("Points of interest : " + Dijkstra.getPointsInterest());
-        Set<Node> pointsOfInterest = Dijkstra.getPointsInterest();
-
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
-        Map<Node,Node> pickupDeliveryCouples = Dijkstra.getPickUpDeliveryCouples();
-        //System.out.println("Couples " + pickupDeliveryCouples);
-        for (Node pointOfInterest : pointsOfInterest) {
-            //System.out.println("Dijkstra for id " + pointOfInterest.getId());
+        Map<Node,Dijkstra> dijkstras = new HashMap<>();
+
+        //For each point of interes, it executes Dijkstra and store result in data structure
+        for (Node pointOfInterest : init_points.getPointsInterest()) {
             Dijkstra algoPoint_i = new Dijkstra(Plan.plan, tour);
             algoPoint_i = algoPoint_i.calculateShortestPathFromSource(algoPoint_i, pointOfInterest);
             Set<Node> results = algoPoint_i.getPointsOfInterestDistanceFromGraph(algoPoint_i);
-            /*for (Node result : results) {
-                System.out.println("id : " + result.getId() + ", distance : " + result.getDistance());
-            }*/
+
+            dijkstras.put(pointOfInterest, algoPoint_i);
             shortestPaths.put(pointOfInterest, results);
         }
-        System.out.println(shortestPaths);
 
-
-        int nbVertices = pointsOfInterest.size();
+        int nbVertices = init_points.getPointsInterest().size();
         System.out.println("Graphs with " + nbVertices + " vertices:");
         
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
@@ -50,17 +44,22 @@ public class RunTSP {
                 + (System.currentTimeMillis() - startTime) + "ms : ");
         
         LinkedList<Node> shortestPath = new LinkedList<>();
-        shortestPath.add(Dijkstra.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0))));
+        //shortestPath.add(g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(0))));
+        System.out.print(shortestPath);
         System.out.print("0 ");
         for (int i = 1; i < nbVertices; i++) {
             System.out.print(tsp.getSolution(i) + " ");
-            Node currentNode = Dijkstra.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i)));
-            Set<Node> shortestPathOfNode = shortestPaths.get(Dijkstra.findNodeInterest(currentNode.getId()));
-            System.out.println(currentNode.getId());
-            for(Node node: shortestPathOfNode)
-                shortestPath.add(node);
+            Node currentNode = g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(i)));
+            Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == currentNode.getId()).findFirst().orElse(null).getValue();
+            Node destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i-1)));
+            Node source = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i)));
+            shortestPath.addAll(graph.getShortestPath(source ,destination));
+            
         }
-        System.out.println("chemin le plus court : " + shortestPath);
+        System.out.println("chemin le plus court : ");
+        for(Node node: shortestPath) {
+            System.out.println(" " + node.getId());
+        }
 
         System.out.println("0");
     }

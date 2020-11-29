@@ -25,7 +25,7 @@ public class XMLrequest {
         try {
             LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File("resources/" + "requestsSmall2.xml");//filename);
+            File fXmlFile = new File("resources/" + "requestsSmall1.xml");//filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);

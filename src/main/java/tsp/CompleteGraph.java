@@ -4,6 +4,7 @@ import dijkstra.Dijkstra;
 import dijkstra.Node;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,11 @@ public class CompleteGraph implements Graph {
 	private int nbVertices;
 	private double[][] cost;
 	private Map<Long, Integer> nodeAsInteger;
-	
+	/**
+	 * Points of interest of the graph - the distance is 0
+	 */
+	private Set<Node> nodes;
+
 	/**
 	 * Create a complete graph of shortest path
 	 * @param nbVertices
@@ -22,18 +27,21 @@ public class CompleteGraph implements Graph {
 	public CompleteGraph(int nbVertices, Map<Node, Set<Node>> shortestPaths){
 		this.nbVertices = nbVertices;
 		this.nodeAsInteger = new HashMap<>();
+		this.nodes = new HashSet<>();
 		cost = new double[nbVertices][nbVertices];
 		int i = 1;
 
-		for(Node pointInterest: Dijkstra.getPointsInterest())
-			if(pointInterest.getTypeOfNode().equals(DEPARTURE_ADDRESS))
-				this.nodeAsInteger.put(pointInterest.getId(), 0);
+		for(Map.Entry<Node,Set<Node>> pointInterest: shortestPaths.entrySet()) {
+			if(pointInterest.getKey().getTypeOfNode().equals(DEPARTURE_ADDRESS))
+				this.nodeAsInteger.put(pointInterest.getKey().getId(), 0);
 			else
-				this.nodeAsInteger.put(pointInterest.getId(), i++);
+				this.nodeAsInteger.put(pointInterest.getKey().getId(), i++);
+			nodes.add(pointInterest.getKey());
+		}
 		
 		//prints id and typedelivery
 		for(Map.Entry<Long, Integer> entry: nodeAsInteger.entrySet()){
-			System.out.println("Node " + entry.getValue() + ", type of node : " + Dijkstra.findNodeInterest(entry.getKey()).getTypeOfNode());
+			System.out.println("Node " + entry.getValue() + ", id : " + entry.getKey() + " type of node : " + findNodeById(entry.getKey()).getTypeOfNode());
 		}
 
 		for(Map.Entry<Node, Set<Node>> entry: shortestPaths.entrySet()){
@@ -45,13 +53,6 @@ public class CompleteGraph implements Graph {
 				cost[x][y] = destination.getDistance();
 			}
 		}
-
-		/*for(int a = 0 ; a < nbVertices; a++){
-			for(int b = 0; b < nbVertices; b++){
-				System.out.print(cost[a][b] + "\t");
-			}
-			System.out.println();
-		}*/
 	}
 
 	public Integer findIndexNodeById(long id){
@@ -66,6 +67,21 @@ public class CompleteGraph implements Graph {
 				break;
 			}
 		return idCorrespondingNode;
+	}
+
+	public Node findNodeById(long id){
+		Node correspondingNode = null;
+		for(Node node : nodes)
+			if(node.getId() == id) {
+				correspondingNode = node;
+				break;
+			}
+		return correspondingNode;
+	}
+
+	@Override
+	public Set<Node> getNodes() {
+		return this.nodes;
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package tsp;
 
 import java.util.Map;
+import java.util.Set;
+
+import dijkstra.Node;
 
 public interface Graph {
 	/**
@@ -23,6 +26,8 @@ public interface Graph {
 	public abstract boolean isArc(int i, int j);
 
 	public abstract  Map<Long, Integer> getNodeAsInteger();
+	public abstract  Set<Node> getNodes();
 
 	public abstract long findIdNodeByIndex(int index);
+	public Node findNodeById(long id);
 }

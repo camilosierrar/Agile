@@ -24,7 +24,7 @@ public class Dijkstra{
     /**
      * Every pickup, delivery and departure addresses
      */
-    private static Set<Node> pointsInterest;
+    private Set<Node> pointsInterest;
 
     private static Map<Node,Node> pickUpDeliveryCouples;
 
@@ -34,7 +34,7 @@ public class Dijkstra{
         this.tour = tour;
         this.graphPlan = new HashSet<>();
         this.parentNode = new HashMap<>();
-        Dijkstra.pointsInterest = new HashSet<>();
+        this.pointsInterest = new HashSet<>();
         Dijkstra.pickUpDeliveryCouples = new HashMap<>();
         fillDijkstra();
     }
@@ -59,15 +59,15 @@ public class Dijkstra{
         //Fetches all points of interest
         Node addressDeparture = findNode(this.tour.getAddressDeparture().getId());
         addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
-        Dijkstra.pointsInterest.add(addressDeparture);
+        this.pointsInterest.add(addressDeparture);
         List<Request> requests = this.tour.getRequests();
         for(Request request: requests){
             Node pickupAddress = findNode(request.getPickupAddress().getId());
             Node deliveryAddress = findNode(request.getDeliveryAddress().getId());
             pickupAddress.setTypeOfNode(Type_Request.PICK_UP);
             deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
-            Dijkstra.pointsInterest.add(pickupAddress);
-            Dijkstra.pointsInterest.add(deliveryAddress);
+            this.pointsInterest.add(pickupAddress);
+            this.pointsInterest.add(deliveryAddress);
             Dijkstra.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
     }
@@ -117,7 +117,7 @@ public class Dijkstra{
         for (Node node : nodesVisited) {
             nodesVisitedId.add(node.getId());
         }
-        for (Node node : Dijkstra.pointsInterest) {
+        for (Node node : this.pointsInterest) {
             nodesInterestingId.add(node.getId());
         }
         return nodesVisitedId.containsAll(nodesInterestingId);
@@ -167,29 +167,32 @@ public class Dijkstra{
         return null;
     }
 
+    /**
+     * 
+     * @param dijkstra
+     * @return Set of Node of interest containing their distance to the source
+     */
     public Set<Node> getPointsOfInterestDistanceFromGraph(Dijkstra dijkstra){
         Map<Node,Node> parents = dijkstra.getParentNodes();
         Set<Node> pointsInterest = new HashSet<>();
         for(Map.Entry<Node,Node> entry: parents.entrySet())
-            if(Dijkstra.getPointsInterest().contains(entry.getKey()))
+            if(this.getPointsInterest().contains(entry.getKey()))
                 pointsInterest.add(entry.getKey());
         return pointsInterest;
     }
 
-    /*
     public LinkedList<Node> getShortestPath(Node source, Node destination) {
         LinkedList<Node> shortestPath = new LinkedList<>();
         shortestPath.add(destination);
         Node currentNode = destination;
         Node parent = null;
-        while(currentNode != source) {
+        while(!currentNode.equals(source)) {
             parent = parentNode.get(currentNode);
             shortestPath.add(parent);
             currentNode = parent;
         }
         return shortestPath;
     }
-     */
 
     public Set<Node> getGraphPlan() {
         return graphPlan;
@@ -199,8 +202,8 @@ public class Dijkstra{
         return parentNode;
     }
 
-    public static Node findNodeInterest(long id){
-        for(Node node: Dijkstra.pointsInterest){
+    public Node findNodeInterest(long id){
+        for(Node node: this.pointsInterest){
             if(node.getId() == id){
                 return node;
             }
@@ -208,7 +211,7 @@ public class Dijkstra{
         return null;
     }
 
-    public static Set<Node> getPointsInterest() {
+    public Set<Node> getPointsInterest() {
         return pointsInterest;
     }
 

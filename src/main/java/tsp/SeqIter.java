@@ -30,7 +30,7 @@ public class SeqIter implements Iterator<Integer> {
 				Node curNode = null;
 				for(Map.Entry<Long, Integer> entry : nodeAsInteger.entrySet())
 					if(entry.getValue().equals(s)){
-						curNode = Dijkstra.findNodeInterest(entry.getKey());
+						curNode = g.findNodeById(entry.getKey());
 						break;
 					}
 				

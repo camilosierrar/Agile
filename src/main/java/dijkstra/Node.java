@@ -51,6 +51,14 @@ public class Node {
         this.adjacentNodes = adjacentNodes;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Node)) return false;
+        Node n = (Node) obj;
+        return n.id == this.id;
+    }
 
     @Override
     public String toString() {
