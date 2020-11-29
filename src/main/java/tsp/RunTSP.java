@@ -53,7 +53,7 @@ public class RunTSP {
         
         LinkedList<Node> shortestPath = new LinkedList<>();
 
-
+        double previousDistance = 0;
         for (int i = 0; i < nbVertices; i++) {
             //Current Node is the node i of the shortest path in tsp
             Node currentNode = g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(i)));
@@ -65,7 +65,20 @@ public class RunTSP {
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
             else
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i+1)));
-            shortestPath.addAll(graph.getShortestPath(source ,destination));
+            LinkedList<Node> sp = graph.getShortestPath(source, destination);
+            for(Node node: sp){
+                Node temp = node;
+                temp.setDistance(node.getDistance() + previousDistance);
+                sp.set(sp.indexOf(node), temp);
+
+            }
+            System.out.println("\n\nSource : " + source.getId() + ", Destination : " + destination.getId());
+            for(Node node: graph.getShortestPath(source ,destination)){
+                System.out.println(node.getId() + " " + node.getDistance());
+            }
+            System.out.println(sp);
+            shortestPath.addAll(sp);
+            previousDistance = shortestPath.getLast().getDistance();
             if(i!=nbVertices-1)
                 shortestPath.removeLast();
         }
