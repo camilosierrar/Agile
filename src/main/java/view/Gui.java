@@ -4,6 +4,7 @@ import controller.Controller;
 import model.*;
 
 import java.awt.*;
+import java.util.List;
 import javax.swing.*;
 
 
@@ -128,7 +129,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                LinkedList<Segment> solution = controller.findBestTour(tour);
+                List<Segment> solution = controller.findBestTour(tour);
                 map = new MapGui(plan, tour, controller, solution);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);

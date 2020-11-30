@@ -8,6 +8,7 @@ import xml.XMLmap;
 import xml.XMLrequest;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Controller {
 
@@ -23,7 +24,7 @@ public class Controller {
         return XMLrequest.readData(file);
     }
 
-    public LinkedList<Segment> findBestTour(Tour tour) {
+    public List<Segment> findBestTour(Tour tour) {
         return RunTSP.getSolution(tour);
     }
 }

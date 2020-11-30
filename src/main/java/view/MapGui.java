@@ -28,10 +28,10 @@ public class MapGui  extends JPanel implements MouseListener{
 
     private List<Point> points;
     private Controller controller;
-    private LinkedList<Segment> solution = null;
+    private List<Segment> solution = null;
 
 
-    public MapGui(Plan plan, Tour tour, Controller controller, LinkedList<Segment> solution) {
+    public MapGui(Plan plan, Tour tour, Controller controller, List<Segment> solution) {
         //this.plan = plan;
         this.controller = controller;
         if (plan != null) {
