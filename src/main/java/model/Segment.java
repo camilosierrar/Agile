@@ -1,9 +1,9 @@
 package model;
 
 public class Segment {
-    Intersection origin;
-    Intersection destination;
-    String name;
+    private Intersection origin;
+    private Intersection destination;
+    private String name;
     double length;
 
     public Segment(Intersection origin, Intersection destination, String name, double length) {
