@@ -13,7 +13,7 @@ public class SeqIter implements Iterator<Integer> {
 	protected int nbCandidates;
 
 	/**
-	 * Create an iterator to traverse the set of vertices in <code>unvisited</code> 
+	 * Creates an iterator to traverse the set of vertices in <code>unvisited</code>
 	 * which are successors of <code>currentVertex</code> in <code>g</code>
 	 * Vertices are traversed in the same order as in <code>unvisited</code>
 	 * @param unvisited
@@ -33,9 +33,7 @@ public class SeqIter implements Iterator<Integer> {
 						curNode = g.findNodeById(entry.getKey());
 						break;
 					}
-				
 				assert curNode != null;
-				
 				//if node is a delivery check if pickup is visited
 				if(curNode.getTypeOfNode().equals(Config.Type_Request.DELIVERY)){
 					Node pickup = null;
