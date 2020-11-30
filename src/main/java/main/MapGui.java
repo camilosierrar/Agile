@@ -31,7 +31,7 @@ public class MapGui  extends JPanel implements MouseListener{
 
     private List<Point> points;
     private Controller controller;
-    private LinkedList<Segment> solution;
+    private LinkedList<Segment> solution = null;
 
 
     public MapGui(Plan plan, Tour tour, Controller controller, LinkedList<Segment> solution) {
@@ -84,7 +84,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 int y1 = (int) ((origin.getLatitude() - minLat) * ratioHeight);
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
                 int y2 = (int) ((destination.getLatitude() - minLat) * ratioHeight);
-                if (solution.contains(s)) {
+                if (solution != null && solution.contains(s)) {
                     // IF THE SEGMENT IS IN OUR SOLUTION WE WANT TO PRINT IT RED
                     g.setColor(Color.RED);
                 }
