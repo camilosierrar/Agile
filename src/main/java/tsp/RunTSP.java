@@ -7,71 +7,81 @@ import model.Tour;
 import xml.XMLmap;
 import xml.XMLrequest;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RunTSP {
     public static void main(String[] args) {
-        TSP tsp = new TSP1();
-        
+        //Load data
         Plan.plan = XMLmap.readData("");
         Tour tour = XMLrequest.readData("");
-
-        Dijkstra init_points = new Dijkstra(Plan.plan, tour);
-
-        /**
-         * Data structure containing the node source in key and in value the set of Node of interest 
-         * and their distance in shortest path to the source 
-         */
+        //Initializes dijkstra
+        Dijkstra initPoints = new Dijkstra(Plan.plan, tour);
+        //Data structure containing the node source in key and in value the set of Node of interest
+        //and their distance in shortest path to the source
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
-
-        /**
-         * Data structure containing the graph of shortest path from source Node (in key)
-         */
+        //Data structure containing the graph of shortest path from source Node (in key)
         Map<Node,Dijkstra> dijkstras = new HashMap<>();
-
         //For each point of interest, it executes Dijkstra and store result in data structure
-        for (Node pointOfInterest : init_points.getPointsInterest()) {
-            Dijkstra algoPoint_i = new Dijkstra(Plan.plan, tour);
-            algoPoint_i = algoPoint_i.calculateShortestPathFromSource(algoPoint_i, pointOfInterest);
-            Set<Node> results = algoPoint_i.getPointsOfInterestDistanceFromGraph(algoPoint_i);
-
-            dijkstras.put(pointOfInterest, algoPoint_i);
+        for (Node pointOfInterest : initPoints.getPointsInterest()) {
+            Dijkstra algoPointI = new Dijkstra(Plan.plan, tour);
+            algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest);
+            Set<Node> results = algoPointI.getPointsInterest();
+            dijkstras.put(pointOfInterest, algoPointI);
             shortestPaths.put(pointOfInterest, results);
         }
-
-        int nbVertices = init_points.getPointsInterest().size();
-        System.out.println("Graphs with " + nbVertices + " vertices:");
-        
+        //Initializes complete graph and launch TSP algo
+        int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
-        long startTime = System.currentTimeMillis();
+        TSP tsp = new TSP1();
         tsp.searchSolution(20000, g);
-        System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
-                + (System.currentTimeMillis() - startTime) + "ms : ");
-        
+        //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
+        //Stores index and id given by tsp (solution for optimal tour)
+        List<Integer> indexSolution = new LinkedList<>();
+        List<Long> idSolution = new LinkedList<>();
+        //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
 
-
+        double previousDistance = 0;
         for (int i = 0; i < nbVertices; i++) {
-            //Current Node is the node i of the shortest path in tsp
-            Node currentNode = g.findNodeById(g.findIdNodeByIndex(tsp.getSolution(i)));
-            //Find the graph which has for source currentNode
-            Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == currentNode.getId()).findFirst().orElse(null).getValue();
-            Node source = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i)));
-            Node destination = null;
-            if(i == nbVertices-1)
+            int indexTsp = tsp.getSolution(i);
+            long idIndexTSP = g.findIdNodeByIndex(indexTsp);
+            //adds solution
+            indexSolution.add(indexTsp);
+            idSolution.add(idIndexTSP);
+            Node source = g.findNodeById(idIndexTSP);
+            //Finds corresponding dijkstra
+            Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null).getValue();
+            Node destination;
+            //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
+            if(i == (nbVertices-1))
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
             else
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i+1)));
-            shortestPath.addAll(graph.getShortestPath(source ,destination));
+            LinkedList<Node> sp = graph.getShortestPath(source, destination);
+            for(Node node: sp){
+                Node temp = node;
+                temp.setDistance(node.getDistance() + previousDistance);
+                sp.set(sp.indexOf(node), temp);
+            }
+            shortestPath.addAll(sp);
+            previousDistance = shortestPath.getLast().getDistance();
             if(i!=nbVertices-1)
                 shortestPath.removeLast();
         }
-        System.out.println("\nChemin le plus court : " + shortestPath);
-        
-        System.out.println("0");
+        printGraphInformation(shortestPath,indexSolution,idSolution);
     }
 
+    public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution){
+        System.out.println("SOLUTION");
+        for(int i = 0; i < indexSolution.size(); ++i){
+            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i));
+        }
+        //index solution doesn't contain departure address twice
+        System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " + idSolution.get(0));
+        System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
+        System.out.println("\n\n SOLUTION IN DETAILS");
+        for(Node node: solutionNodes){
+            System.out.println("ID : " + node.getId() + "\t\tDISTANCE : " + node.getDistance());
+        }
+    }
 }

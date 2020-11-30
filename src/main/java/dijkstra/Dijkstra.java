@@ -5,16 +5,14 @@ import java.util.*;
 import config.Config.Type_Request;
 
 /**
- * Implements Dijkstra's algorithm and compute for every point of interest
- * the shortest path
+ * Implements Dijkstra's algorithm and computes for every point of interest shortest path to other points of interest
  */
 public class Dijkstra{
     /**
      * Value node is key Node's parent with the shortest path
      */
     private Map<Node,Node> parentNode;
-    private Plan cityPlan;
-    private Tour tour;
+
 
     /**
      * All distinct intersections of Plan object
@@ -27,8 +25,15 @@ public class Dijkstra{
     private Set<Node> pointsInterest;
 
     private static Map<Node,Node> pickUpDeliveryCouples;
+    private Plan cityPlan;
+    private Tour tour;
 
 
+    /**
+     * Instantiates Dijkstra and fill its variables given Tour and Plan object
+     * @param cityPlan Set of intersections and segments
+     * @param tour Set of requests (pickup and delivery)
+     */
     public Dijkstra(Plan cityPlan, Tour tour) {
         this.cityPlan = cityPlan;
         this.tour = tour;
@@ -39,12 +44,17 @@ public class Dijkstra{
         fillDijkstra();
     }
 
+    /**
+     * From a Plan and a Tour object, retrieves and stores all informations as nodes
+     * Fills graphPlan, pickup/delivery couples and points of interest
+     */
     private void fillDijkstra(){
-        //Fetches all intersections
+        //Stores all intersections in graphPlan
         HashMap<Long,Intersection> intersections = this.cityPlan.getIntersections();
         for(Map.Entry<Long,Intersection> entry: intersections.entrySet()){
             Intersection intersection = entry.getValue();
             Node originNode = new Node(intersection.getId());
+            //Iterates over all segment from Plan and adds adjacent nodes
             for(Segment segment: this.cityPlan.getSegments()){
                 Intersection origin = segment.getOrigin();
                 if(originNode.getId() == origin.getId()){
@@ -56,36 +66,46 @@ public class Dijkstra{
             this.graphPlan.add(originNode);
         }
 
-        //Fetches all points of interest
-        Node addressDeparture = findNode(this.tour.getAddressDeparture().getId());
+        //Stores all points of interest and pickup/delivery couple
+        //Stores departure address
+        Node addressDeparture = findNodeGraph(this.tour.getAddressDeparture().getId());
         addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
         this.pointsInterest.add(addressDeparture);
         List<Request> requests = this.tour.getRequests();
+        //Stores pickup and delivery addresses
         for(Request request: requests){
-            Node pickupAddress = findNode(request.getPickupAddress().getId());
-            Node deliveryAddress = findNode(request.getDeliveryAddress().getId());
+            Node pickupAddress = findNodeGraph(request.getPickupAddress().getId());
+            Node deliveryAddress = findNodeGraph(request.getDeliveryAddress().getId());
             pickupAddress.setTypeOfNode(Type_Request.PICK_UP);
             deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
             this.pointsInterest.add(pickupAddress);
             this.pointsInterest.add(deliveryAddress);
+            //Adds couple to structure
             Dijkstra.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
     }
 
+    /**
+     * Dijkstra algorithm.
+     * Computes shortest path to every point of interest
+     * points of interests distance are set to minimum distance to source
+     * @param graph Dijkstra with data loaded and initialized (nodes with distance set to infinity)
+     * @param source node from which we want to calculate shortest path
+     * @return Dijkstra instance with variables containing proper data (i.e, distances) starting from source node
+     */
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
-        graph.findNode(source.getId()).setDistance(0);
-        //parentNode.put(graph.findNode(source.getId()), graph.findNode(source.getId()));
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
+        //Continues until all nodes are or all points of interest are visited
         while (!isConditionFulfilled(unvisitedNodes, visitedNodes)) {
             //Gets the node with minimal distance on the graph
             Node currentClosestNode = getLowestDistanceNode(unvisitedNodes);
             unvisitedNodes.remove(currentClosestNode);
             //For each of its successors : 
             for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = findNode(adjacencyNode.getKey().getId());
+                Node adjacentNode = findNodeGraph(adjacencyNode.getKey().getId());
                 if(adjacentNode != null) {
                     Double edgeWeight = adjacencyNode.getValue();
                     if (!visitedNodes.contains(adjacentNode)) {
@@ -102,6 +122,13 @@ public class Dijkstra{
         return graph;
     }
 
+    /**
+     * Checks conditions to stop dijkstra algorithm.
+     * Checks if all nodes are visited (black) or if all points of interest are visited (black)
+     * @param unvisitedNodes set of unvisited nodes
+     * @param visitedNodes set of visited nodes
+     * @return true if at least one of the above conditions is true
+     */
     private boolean isConditionFulfilled(Set<Node> unvisitedNodes, Set<Node> visitedNodes) {
         boolean isFulfilled = false;
         if(unvisitedNodes.size()==0)
@@ -111,6 +138,11 @@ public class Dijkstra{
         return isFulfilled;
     }
 
+    /**
+     * Checks if the set of visited nodes contains all points of interest
+     * @param nodesVisited set of visited nodes
+     * @return true if nodesVisited contains all points of interest
+     */
     private boolean areAllPointsOfInterestVisited(Set<Node> nodesVisited) {
         Set<Long> nodesVisitedId = new HashSet<>();
         Set<Long> nodesInterestingId = new HashSet<>();
@@ -124,9 +156,9 @@ public class Dijkstra{
     }
 
     /**
-     *  Get the node within unvisitedNodes with minimal distance 
-     * @param unvisitedNodes
-     * @return
+     * Fetches node in unvisitedNodes set having lowest distance
+     * @param unvisitedNodes set of unvisited nodes
+     * @return node with the lowest distance among unvisited nodes
      */
     private Node getLowestDistanceNode(Set <Node> unvisitedNodes) {
         Node lowestDistanceNode = null;
@@ -142,50 +174,30 @@ public class Dijkstra{
     }
 
     /**
-     * Compare the current value of distance of evaluationNode with a new one computed
-     * assuming sourceNode is its parent
-     * @param evaluationNode
-     * @param edgeWeigh
-     * @param sourceNode
+     * Compares the distance of evaluationNode with a new one computed assuming sourceNode is its parent
+     * @param evaluationNode current node in dijkstra algorithm step
+     * @param edgeWeigh distance of the edge
+     * @param sourceNode source node
      */
     private void calculateMinimumDistance(Node evaluationNode, Double edgeWeigh, Node sourceNode) {
         Double sourceDistance = sourceNode.getDistance();
-        /*if(evaluationNode.getId()==208769039)
-            System.out.println("iciiii " + evaluationNode.getDistance());*/
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeigh);
             parentNode.put(evaluationNode, sourceNode);
         }
     }
 
-    public Node findNode(long id){
-        for(Node node: this.graphPlan){
-            if(node.getId() == id){
-                return node;
-            }
-        }
-        return null;
-    }
-
     /**
-     * 
-     * @param dijkstra
-     * @return Set of Node of interest containing their distance to the source
+     * Finds shortest path between two nodes
+     * @param source source node
+     * @param destination destination node
+     * @return list of nodes constituting the shortest path between source and destination
      */
-    public Set<Node> getPointsOfInterestDistanceFromGraph(Dijkstra dijkstra){
-        Map<Node,Node> parents = dijkstra.getParentNodes();
-        Set<Node> pointsInterest = new HashSet<>();
-        for(Map.Entry<Node,Node> entry: parents.entrySet())
-            if(this.getPointsInterest().contains(entry.getKey()))
-                pointsInterest.add(entry.getKey());
-        return pointsInterest;
-    }
-
     public LinkedList<Node> getShortestPath(Node source, Node destination) {
         LinkedList<Node> shortestPath = new LinkedList<>();
         shortestPath.add(destination);
         Node currentNode = destination;
-        Node parent = null;
+        Node parent;
         while(!currentNode.equals(source)) {
             parent = parentNode.get(currentNode);
             shortestPath.add(parent);
@@ -195,14 +207,11 @@ public class Dijkstra{
         return shortestPath;
     }
 
-    public Set<Node> getGraphPlan() {
-        return graphPlan;
-    }
-
-    public Map<Node,Node> getParentNodes() {
-        return parentNode;
-    }
-
+    /**
+     * Finds points of interest given an id
+     * @param id node's id
+     * @return point of interest as a Node or null if it doesn't exist
+     */
     public Node findNodeInterest(long id){
         for(Node node: this.pointsInterest){
             if(node.getId() == id){
@@ -210,6 +219,28 @@ public class Dijkstra{
             }
         }
         return null;
+    }
+
+    /**
+     * Finds node in graph given an id
+     * @param id node's id
+     * @return node or null if it is not in the graph
+     */
+    public Node findNodeGraph(long id){
+        for(Node node: this.graphPlan){
+            if(node.getId() == id){
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public Set<Node> getGraphPlan() {
+        return graphPlan;
+    }
+
+    public Map<Node,Node> getParentNodes() {
+        return parentNode;
     }
 
     public Set<Node> getPointsInterest() {

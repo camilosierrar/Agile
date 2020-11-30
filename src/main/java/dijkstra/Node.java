@@ -5,6 +5,9 @@ import java.util.Map;
 
 import config.Config.Type_Request;
 
+/**
+ * Encapsulates model information (intersections, segments,...) in a data structure adapted to graphs (complete graph, Dijkstra)
+ */
 public class Node {
     private long id;
     private Double distance = Double.MAX_VALUE;
