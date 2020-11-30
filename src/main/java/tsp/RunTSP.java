@@ -23,9 +23,28 @@ public class RunTSP {
         Plan.plan = XMLmap.readData(fileNamePlan);
         Tour tour = XMLrequest.readData(fileNameRequests);
 
+        LinkedList<Node> solution = getSolution(tour);
+        System.out.println(solution);
+    }
+
+    public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution){
+        System.out.println("SOLUTION");
+        for(int i = 0; i < indexSolution.size(); ++i){
+            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i));
+        }
+        //index solution doesn't contain departure address twice
+        System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " + idSolution.get(0));
+        System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
+        System.out.println("\n\n SOLUTION IN DETAILS");
+        for(Node node: solutionNodes){
+            System.out.println("ID : " + node.getId() + "\t\tDISTANCE : " + node.getDistance());
+        }
+    }
+
+    public static LinkedList<Node> getSolution(Tour tour){
         //Initializes dijkstra
         Dijkstra initPoints = new Dijkstra(Plan.plan, tour);
-        
+
         //Data structure containing the node source in key and in value the set of Node of interest
         //and their distance in shortest path to the source
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
@@ -50,7 +69,6 @@ public class RunTSP {
 
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
-
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();
 
@@ -85,20 +103,6 @@ public class RunTSP {
             if(i!=nbVertices-1)
                 shortestPath.removeLast();
         }
-        printGraphInformation(shortestPath,indexSolution,idSolution);
-    }
-
-    public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution){
-        System.out.println("SOLUTION");
-        for(int i = 0; i < indexSolution.size(); ++i){
-            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i));
-        }
-        //index solution doesn't contain departure address twice
-        System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " + idSolution.get(0));
-        System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
-        System.out.println("\n\n SOLUTION IN DETAILS");
-        for(Node node: solutionNodes){
-            System.out.println("ID : " + node.getId() + "\t\tDISTANCE : " + node.getDistance());
-        }
+        return shortestPath;
     }
 }
