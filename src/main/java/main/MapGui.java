@@ -25,16 +25,18 @@ public class MapGui  extends JPanel implements MouseListener{
     private HashMap<Point, Intersection> pickUpTable;
     private HashMap<Point, Intersection> deliveryTable;
 
-    double ratioHeight, ratioWidth;
+    private double ratioHeight, ratioWidth;
 
-    final int DOT_RADIUS = 5;
+    private final int DOT_RADIUS = 5;
 
     private List<Point> points;
     private Controller controller;
+    private LinkedList<Segment> solution;
 
 
-    public MapGui(Plan plan, Tour tour, Controller controller) {
+    public MapGui(Plan plan, Tour tour, Controller controller, LinkedList<Segment> solution) {
         //this.plan = plan;
+        this.controller = controller;
         if (plan != null) {
             intersections = plan.getIntersections();
             segments = plan.getSegments();
@@ -42,6 +44,7 @@ public class MapGui  extends JPanel implements MouseListener{
         if (tour != null) {
             this.requests = tour.getRequests();
             this.departureAddress = tour.getAddressDeparture();
+            this.solution = solution;
 ;        }
         addMouseListener(this);
         points = new ArrayList<>();
@@ -72,8 +75,8 @@ public class MapGui  extends JPanel implements MouseListener{
             ratioHeight = dim.height / coordHeight;
             ratioWidth = dim.width / coordWidth;
 
-            g.setColor(Color.black);
             for (int i = 0; i < segments.size(); i++) {
+                g.setColor(Color.black);
                 Segment s = segments.get(i);
                 Intersection origin = intersections.get(s.getOrigin().getId());
                 Intersection destination = intersections.get(s.getDestination().getId());
@@ -81,6 +84,10 @@ public class MapGui  extends JPanel implements MouseListener{
                 int y1 = (int) ((origin.getLatitude() - minLat) * ratioHeight);
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
                 int y2 = (int) ((destination.getLatitude() - minLat) * ratioHeight);
+                if (solution.contains(s)) {
+                    // IF THE SEGMENT IS IN OUR SOLUTION WE WANT TO PRINT IT RED
+                    g.setColor(Color.RED);
+                }
                 g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS, x2 + DOT_RADIUS, y2 + DOT_RADIUS);
             }
             if (requests != null) {
