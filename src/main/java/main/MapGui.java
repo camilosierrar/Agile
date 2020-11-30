@@ -1,7 +1,9 @@
 package main;
 
 import controller.Controller;
+import dijkstra.Node;
 import model.*;
+import tsp.RunTSP;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -18,6 +21,7 @@ public class MapGui  extends JPanel implements MouseListener{
     private List<Segment> segments;
     private Dimension dim;
     private List<Request> requests;
+    private Intersection departureAddress;
     private HashMap<Point, Intersection> pickUpTable;
     private HashMap<Point, Intersection> deliveryTable;
 
@@ -37,8 +41,8 @@ public class MapGui  extends JPanel implements MouseListener{
         }
         if (tour != null) {
             this.requests = tour.getRequests();
-        }
-
+            this.departureAddress = tour.getAddressDeparture();
+;        }
         addMouseListener(this);
         points = new ArrayList<>();
         pickUpTable = new HashMap<>();
@@ -101,6 +105,15 @@ public class MapGui  extends JPanel implements MouseListener{
                     points.add(point);
                     deliveryTable.put(point, r.getDeliveryAddress());
                 }
+            }
+            if(departureAddress != null){
+                //departure address
+                g.setColor(Color.yellow);
+                int x = (int) ((departureAddress.getLongitude() - minLong) * ratioWidth);
+                int y = (int) ((departureAddress.getLatitude() - minLat) * ratioHeight);
+                g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
+                Point point = new Point(x,y);
+                points.add(point);
             }
         }
     }

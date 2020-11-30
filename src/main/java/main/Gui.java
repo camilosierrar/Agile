@@ -1,13 +1,16 @@
 package main;
 
 import controller.Controller;
+import dijkstra.Node;
 import model.*;
+import tsp.RunTSP;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.util.LinkedList;
 import java.util.List;
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
@@ -176,7 +179,6 @@ public class Gui extends JFrame {
 
         reqRead.addActionListener(event -> {
             tour = controller.loadRequests(reqPath.getText());
-
             if (tour == null) {
                 JOptionPane.showMessageDialog(this,
                         "File doesn't exist",
@@ -195,7 +197,9 @@ public class Gui extends JFrame {
 
         getBestTour.addActionListener(event -> {
             // TODO
+            //LinkedList<Segment> solution = RunTSP.getSolution(this.tour);
             controller.findBestTour();
+
         });
 
         //Add panels
