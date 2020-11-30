@@ -9,6 +9,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-win32:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-win64:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64-arm:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-swing:7.12" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-compiler-plugin:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-model:3.0" level="project" />
@@ -41,5 +48,12 @@
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-compiler-api:2.8.4" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-compiler-manager:2.8.4" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.plexus:plexus-compiler-javac:2.8.4" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-win32:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-win64:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64-arm:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:7.12" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-swing:7.12" level="project" />
   </component>
 </module>
