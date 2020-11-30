@@ -73,20 +73,29 @@ public class MapGui  extends JPanel implements MouseListener{
             ratioWidth = dim.width / coordWidth;
 
             for (int i = 0; i < segments.size(); i++) {
-                g.setColor(Color.black);
+                g.setColor(Color.white);
                 Segment s = segments.get(i);
                 Intersection origin = intersections.get(s.getOrigin().getId());
                 Intersection destination = intersections.get(s.getDestination().getId());
                 int x1 = (int) ((origin.getLongitude() - minLong) * ratioWidth);
-                int y1 = (int) ((origin.getLatitude() - minLat) * ratioHeight);
+                int y1 = dim.height - (int) ((origin.getLatitude() - minLat) * ratioHeight);
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
-                int y2 = (int) ((destination.getLatitude() - minLat) * ratioHeight);
+                int y2 = dim.height - (int) ((destination.getLatitude() - minLat) * ratioHeight);
+                g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS, x2 + DOT_RADIUS, y2 + DOT_RADIUS);
+            }
+            for (int i = 0; i < segments.size(); i++) {
+                g.setColor(Color.RED);
+                Segment s = segments.get(i);
+                Intersection origin = intersections.get(s.getOrigin().getId());
+                Intersection destination = intersections.get(s.getDestination().getId());
+                int x1 = (int) ((origin.getLongitude() - minLong) * ratioWidth);
+                int y1 = dim.height - (int) ((origin.getLatitude() - minLat) * ratioHeight);
+                int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
+                int y2 = dim.height - (int) ((destination.getLatitude() - minLat) * ratioHeight);
                 if (solution != null && solution.contains(s)) {
                     System.out.println(s.toString());
-                    // IF THE SEGMENT IS IN OUR SOLUTION WE WANT TO PRINT IT RED
-                    g.setColor(Color.RED);
+                    g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS, x2 + DOT_RADIUS, y2 + DOT_RADIUS);
                 }
-                g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS, x2 + DOT_RADIUS, y2 + DOT_RADIUS);
             }
             
             if (requests != null) {
@@ -94,7 +103,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 g.setColor(Color.red);
                 for (Request r : requests) {
                     int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
-                    int y = (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
+                    int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
                     Point point = new Point(x,y);
                     points.add(point);
@@ -105,7 +114,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 g.setColor(Color.green);
                 for (Request r : requests) {
                     int x = (int) ((r.getDeliveryAddress().getLongitude() - minLong) * ratioWidth);
-                    int y = (int) ((r.getDeliveryAddress().getLatitude() - minLat) * ratioHeight);
+                    int y = dim.height - (int) ((r.getDeliveryAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
                     Point point = new Point(x,y);
                     points.add(point);
@@ -116,7 +125,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 //departure address
                 g.setColor(Color.yellow);
                 int x = (int) ((departureAddress.getLongitude() - minLong) * ratioWidth);
-                int y = (int) ((departureAddress.getLatitude() - minLat) * ratioHeight);
+                int y = dim.height - (int) ((departureAddress.getLatitude() - minLat) * ratioHeight);
                 g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
                 Point point = new Point(x,y);
                 points.add(point);
