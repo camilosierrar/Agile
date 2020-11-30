@@ -38,11 +38,6 @@ public class CompleteGraph implements Graph {
 				this.nodeAsInteger.put(pointInterest.getKey().getId(), i++);
 			nodes.add(pointInterest.getKey());
 		}
-		
-		//prints id and typedelivery
-		for(Map.Entry<Long, Integer> entry: nodeAsInteger.entrySet()){
-			System.out.println("Node " + entry.getValue() + ", id : " + entry.getKey() + " type of node : " + findNodeById(entry.getKey()).getTypeOfNode());
-		}
 
 		for(Map.Entry<Node, Set<Node>> entry: shortestPaths.entrySet()){
 			Node source = entry.getKey();

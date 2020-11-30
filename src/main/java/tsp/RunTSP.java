@@ -70,7 +70,7 @@ public class RunTSP {
                 shortestPath.removeLast();
         }
         System.out.println("\nChemin le plus court : " + shortestPath);
-
+        
         System.out.println("0");
     }
 
