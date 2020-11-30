@@ -28,10 +28,11 @@ public class MapGui  extends JPanel implements MouseListener{
 
     private List<Point> points;
     private Controller controller;
-    private LinkedList<Segment> solution = null;
+    private List<Segment> solution = null;
+    private Point departure;
 
 
-    public MapGui(Plan plan, Tour tour, Controller controller, LinkedList<Segment> solution) {
+    public MapGui(Plan plan, Tour tour, Controller controller, List<Segment> solution) {
         //this.plan = plan;
         this.controller = controller;
         if (plan != null) {
@@ -47,6 +48,7 @@ public class MapGui  extends JPanel implements MouseListener{
         points = new ArrayList<>();
         pickUpTable = new HashMap<>();
         deliveryTable = new HashMap<>();
+        departure = null;
     }
 
     public void paintComponent(Graphics g) {
@@ -117,8 +119,8 @@ public class MapGui  extends JPanel implements MouseListener{
                 int x = (int) ((departureAddress.getLongitude() - minLong) * ratioWidth);
                 int y = (int) ((departureAddress.getLatitude() - minLat) * ratioHeight);
                 g.fillOval(x, y, DOT_RADIUS * 2, DOT_RADIUS * 2);
-                Point point = new Point(x,y);
-                points.add(point);
+                departure = new Point(x,y);
+                points.add(departure);
             }
         }
     }
@@ -138,6 +140,9 @@ public class MapGui  extends JPanel implements MouseListener{
                     Intersection intersection = deliveryTable.get(point);
                     System.out.println("Delivery point");
                     System.out.println(intersection.toString());
+                } else if(point.equals(departure)) {
+                    System.out.println("Departure point");
+                    System.out.println(departure.toString());
                 }
             }
         }
