@@ -1,9 +1,13 @@
 package controller;
 
 import model.Plan;
+import model.Segment;
 import model.Tour;
+import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
+
+import java.util.LinkedList;
 
 public class Controller {
 
@@ -19,7 +23,7 @@ public class Controller {
         return XMLrequest.readData(file);
     }
 
-    public void findBestTour() {
-
+    public LinkedList<Segment> findBestTour(Tour tour) {
+        return RunTSP.getSolution(tour);
     }
 }
