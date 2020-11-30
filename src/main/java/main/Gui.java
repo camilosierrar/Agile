@@ -1,9 +1,5 @@
 package main;
 
-import com.teamdev.jxbrowser.browser.Browser;
-import com.teamdev.jxbrowser.engine.Engine;
-import com.teamdev.jxbrowser.engine.EngineOptions;
-import com.teamdev.jxbrowser.view.swing.BrowserView;
 import controller.Controller;
 import model.*;
 
@@ -38,9 +34,6 @@ public class Gui extends JFrame {
     Canvas mapCanvas;
 
     Controller controller;
-
-    Browser browser;
-
 
     //Constructor
     public Gui(Controller controller) {
