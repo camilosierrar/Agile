@@ -90,6 +90,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 }
                 g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS, x2 + DOT_RADIUS, y2 + DOT_RADIUS);
             }
+            
             if (requests != null) {
                 //Pickup Marker
                 g.setColor(Color.red);

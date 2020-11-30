@@ -58,7 +58,7 @@ public class Gui extends JFrame {
         topBar = new JPanel();
         mapContainer = new JPanel(new BorderLayout());
 
-        map = new MapGui(null,null, null);
+        map = new MapGui(null,null, null, null);
         info = new JPanel();
 
         //JLabel
@@ -117,7 +117,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(plan, tour, controller);
+                map = new MapGui(plan, tour, controller, null);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -135,7 +135,8 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(plan, tour, controller);
+                LinkedList<Segment> solution = controller.findBestTour(tour);
+                map = new MapGui(plan, tour, controller, solution);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -144,12 +145,6 @@ public class Gui extends JFrame {
             }
         });
 
-        getBestTour.addActionListener(event -> {
-            // TODO
-            //LinkedList<Segment> solution = RunTSP.getSolution(this.tour);
-            controller.findBestTour();
-
-        });
 
         //Add panels
         base.add(mapContainer,BorderLayout.CENTER);
