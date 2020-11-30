@@ -1,9 +1,7 @@
-package main;
+package view;
 
 import controller.Controller;
-import dijkstra.Node;
 import model.*;
-import tsp.RunTSP;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,7 +9,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
-import java.util.LinkedList;
 import java.util.List;
 
 

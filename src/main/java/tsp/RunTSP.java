@@ -2,7 +2,9 @@ package tsp;
 
 import dijkstra.Dijkstra;
 import dijkstra.Node;
+import model.Intersection;
 import model.Plan;
+import model.Segment;
 import model.Tour;
 import xml.XMLmap;
 import xml.XMLrequest;
@@ -23,8 +25,8 @@ public class RunTSP {
         Plan.plan = XMLmap.readData(fileNamePlan);
         Tour tour = XMLrequest.readData(fileNameRequests);
 
-        LinkedList<Node> solution = getSolution(tour);
-        System.out.println(solution);
+        List<Segment> segmentsSolution = getSolution(tour);
+        System.out.println(segmentsSolution);
     }
 
     public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution){
@@ -41,7 +43,7 @@ public class RunTSP {
         }
     }
 
-    public static LinkedList<Node> getSolution(Tour tour){
+    public static List<Segment> getSolution(Tour tour){
         //Initializes dijkstra
         Dijkstra initPoints = new Dijkstra(Plan.plan, tour);
 
@@ -103,6 +105,25 @@ public class RunTSP {
             if(i!=nbVertices-1)
                 shortestPath.removeLast();
         }
-        return shortestPath;
+        List<Segment> segments = Plan.plan.getSegments();
+        Map<Long, Intersection> intersections = Plan.plan.getIntersections();
+        for(int i = 0; i < shortestPath.size(); ++i){
+            long indexStart;
+            long indexEnd;
+            indexStart = shortestPath.get(i).getId();
+            if (i != shortestPath.size() - 1) {
+                indexEnd = shortestPath.get(i+1).getId();
+            }else{
+                indexEnd = shortestPath.get(0).getId();
+            }
+            Intersection start = intersections.get(indexStart);
+            Intersection end = intersections.get(indexEnd);
+            for(Segment segment : segments){
+                if(segment.getOrigin().equals(start) && segment.getDestination().equals(end)){
+                    segments.add(segment);
+                }
+            }
+        }
+        return segments;
     }
 }

@@ -1,17 +1,10 @@
-package main;
+package view;
 
 import controller.Controller;
-import dijkstra.Node;
 import model.*;
-import tsp.RunTSP;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.util.LinkedList;
-import java.util.List;
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 
