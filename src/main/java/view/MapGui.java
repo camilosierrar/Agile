@@ -82,6 +82,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
                 int y2 = (int) ((destination.getLatitude() - minLat) * ratioHeight);
                 if (solution != null && solution.contains(s)) {
+                    System.out.println(s.toString());
                     // IF THE SEGMENT IS IN OUR SOLUTION WE WANT TO PRINT IT RED
                     g.setColor(Color.RED);
                 }

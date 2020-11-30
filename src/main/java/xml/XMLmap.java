@@ -64,8 +64,8 @@ public class XMLmap {
                     String name = elem.getAttribute("name");
                     long origin = Long.parseLong(elem.getAttribute("origin"));
 
-                    Intersection destinationObj = new Intersection(destination);
-                    Intersection originObj = new Intersection(origin);
+                    Intersection destinationObj = intersectionsList.get(destination);
+                    Intersection originObj = intersectionsList.get(origin);
 
                     Segment segmentObj = new Segment(originObj, destinationObj, name, length);
                     segmentsList.add(segmentObj);
