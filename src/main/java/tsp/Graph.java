@@ -25,9 +25,27 @@ public interface Graph {
 	 */
 	public abstract boolean isArc(int i, int j);
 
+	/**
+	 * @return The map that translate id of node to integer indexes
+	 */
 	public abstract  Map<Long, Integer> getNodeAsInteger();
+
+	/**
+	 * @return the set of nodes of the graph
+	 */
 	public abstract  Set<Node> getNodes();
 
+	/**
+	 * 
+	 * @param index
+	 * @return Node of the corresponding index
+	 */
 	public abstract long findIdNodeByIndex(int index);
-	public Node findNodeById(long id);
+
+	/**
+	 * 
+	 * @param id
+	 * @return Node of corresponding id
+	 */
+	public abstract Node findNodeById(long id);
 }

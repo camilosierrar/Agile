@@ -21,7 +21,9 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<g.getNbVertices(); i++) 
 			unvisited.add(i);
 		Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
-		visited.add(0); // The first visited vertex is 0
+		// The first visited vertex is 0
+		visited.add(0); 
+		//Cost of best solution at start is + infinite
 		bestSolCost = Double.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, 0);
 	}
@@ -68,6 +70,8 @@ public abstract class TemplateTSP implements TSP {
 		if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){ 
 	    	if (g.isArc(currentVertex,0)){ 
+				//if all points were visited and current cost plus cost of the arc
+				//to return to the start point is best cost, this solution is the best
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){ 
 	    			visited.toArray(bestSol);
 	    			bestSolCost = currentCost+g.getCost(currentVertex,0);

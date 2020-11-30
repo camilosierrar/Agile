@@ -11,16 +11,28 @@ import java.util.*;
 
 public class RunTSP {
     public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose the file to load the Plan");
+        String fileNamePlan = scanner.next();
+        System.out.println("Choose the file to load the requests");
+        String fileNameRequests = scanner.next();
+        scanner.close();
+
         //Load data
-        Plan.plan = XMLmap.readData("");
-        Tour tour = XMLrequest.readData("");
+        Plan.plan = XMLmap.readData(fileNamePlan);
+        Tour tour = XMLrequest.readData(fileNameRequests);
+
         //Initializes dijkstra
         Dijkstra initPoints = new Dijkstra(Plan.plan, tour);
+        
         //Data structure containing the node source in key and in value the set of Node of interest
         //and their distance in shortest path to the source
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
+
         //Data structure containing the graph of shortest path from source Node (in key)
         Map<Node,Dijkstra> dijkstras = new HashMap<>();
+
         //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : initPoints.getPointsInterest()) {
             Dijkstra algoPointI = new Dijkstra(Plan.plan, tour);
@@ -29,15 +41,20 @@ public class RunTSP {
             dijkstras.put(pointOfInterest, algoPointI);
             shortestPaths.put(pointOfInterest, results);
         }
+
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
         TSP tsp = new TSP1();
         tsp.searchSolution(20000, g);
+
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
+
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();
+
+
         List<Long> idSolution = new LinkedList<>();
         //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
 

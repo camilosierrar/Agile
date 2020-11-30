@@ -9,7 +9,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class SeqIter implements Iterator<Integer> {
+	/**
+	 * Vertices Candidates that can be visited after current vertex
+	 */
 	protected Integer[] candidates;
+
+	/**
+	 * number of vertices that can be visited after current vertex
+	 */
 	protected int nbCandidates;
 
 	/**

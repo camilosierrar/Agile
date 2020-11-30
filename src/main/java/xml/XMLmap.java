@@ -23,7 +23,7 @@ public class XMLmap {
 
         try {
 
-            File fXmlFile = new File("resources/" + "smallMap.xml");//fileName);
+            File fXmlFile = new File("resources/" + fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);

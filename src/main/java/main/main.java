@@ -1,13 +1,9 @@
 package main;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 
 import model.Plan;
 import model.Tour;
-import dijkstra.Dijkstra;
-import dijkstra.Node;
 import xml.XMLmap;
 import xml.XMLrequest;
 

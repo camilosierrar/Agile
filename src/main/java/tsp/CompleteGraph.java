@@ -1,6 +1,5 @@
 package tsp;
 
-import dijkstra.Dijkstra;
 import dijkstra.Node;
 
 import java.util.HashMap;
@@ -72,6 +71,7 @@ public class CompleteGraph implements Graph {
 	 * @param index node's index
 	 * @return corresponding id for given index
 	 */
+	@Override
 	public long findIdNodeByIndex(int index){
 		long idCorrespondingNode = -1;
 		for(Map.Entry<Long, Integer> entry : nodeAsInteger.entrySet())
@@ -87,6 +87,7 @@ public class CompleteGraph implements Graph {
 	 * @param id node's id
 	 * @return point of interest with input's id or null otherwise
 	 */
+	@Override
 	public Node findNodeById(long id){
 		Node correspondingNode = null;
 		for(Node node : nodes)
