@@ -6,10 +6,6 @@ import model.*;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
-import java.util.List;
-
-
-
 
 public class Gui extends JFrame {
 
@@ -124,6 +120,16 @@ public class Gui extends JFrame {
 
         reqRead.addActionListener(event -> {
             tour = controller.loadRequests(reqPath.getText());
+            mapContainer.removeAll();
+            map = new MapGui(plan, tour, controller, null);
+            map.setBackground(Color.lightGray);
+            mapContainer.add(map,BorderLayout.CENTER);
+            System.out.println("Map Loaded");
+            mapContainer.validate();
+            mapContainer.repaint();
+        });
+
+        getBestTour.addActionListener(event -> {
             if (tour == null) {
                 JOptionPane.showMessageDialog(this,
                         "File doesn't exist",
@@ -140,7 +146,6 @@ public class Gui extends JFrame {
                 mapContainer.repaint();
             }
         });
-
 
         //Add panels
         base.add(mapContainer,BorderLayout.CENTER);
