@@ -16,23 +16,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 
-
 public class XMLrequest {
 
-    public static Tour readData(String file) {
-        /*
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose the file to load the requests");
-        String file = scanner.next();
-        scanner.close();
-        */
+    public static Tour readData(String filename) {
 
         Tour tour = null;
 
         try {
             LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File("fichiersXML2020/" + file + ".xml");
+            File fXmlFile = new File("resources/" + filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -79,9 +72,7 @@ public class XMLrequest {
                 cal.set(Calendar.HOUR_OF_DAY, hour);
                 cal.set(Calendar.MINUTE, minutes);
                 cal.set(Calendar.SECOND, seconds);
-
                 Date departureDate = cal.getTime();
-                System.out.println(departureDate);
 
                 tour = new Tour(departureIntersection, departureDate, requestsList);
             }
