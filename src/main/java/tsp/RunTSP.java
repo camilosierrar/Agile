@@ -109,6 +109,7 @@ public class RunTSP {
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
             else
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i + 1)));
+            
             LinkedList<Node> sp = graph.getShortestPath(source, destination);
             for (Node node : sp) {
                 Node temp = node;
