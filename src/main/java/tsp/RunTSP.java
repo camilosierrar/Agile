@@ -25,9 +25,9 @@ public class RunTSP {
         Plan.plan = XMLmap.readData("fileNamePlan");
         Tour tour = XMLrequest.readData("fileNameRequests");
         List<Segment> segmentsSolution = getSolution(tour);
-        for(Segment segment: segmentsSolution){
+        /*for(Segment segment: segmentsSolution){
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
-        }
+        }*/
     }
 
     public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution) {
@@ -126,7 +126,7 @@ public class RunTSP {
                 }
             }
         }
-        //printGraphInformation(shortestPath, indexSolution, idSolution);
+        printGraphInformation(shortestPath, indexSolution, idSolution);
         return solution;
     }
 }
