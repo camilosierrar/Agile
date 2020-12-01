@@ -1,15 +1,15 @@
 package main;
 
 import controller.Controller;
-import model.*;
+import model.Plan;
+import model.Tour;
+import main.Utils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.util.List;
+import javax.swing.filechooser.FileFilter;
+
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 
@@ -125,8 +125,8 @@ public class Gui extends JFrame {
         reqReadLabel.setForeground(Color.WHITE);
 
         //JTextField
-        mapPath = new JTextField(20);
-        reqPath = new JTextField(20);
+        mapPath = new JTextField(10);
+        reqPath = new JTextField(10);
 
         //Buttons
         mapRead = new JButton("Load Map");
@@ -170,7 +170,10 @@ public class Gui extends JFrame {
         mapFile.addActionListener(event -> {
             this.mapFromFile = true;
 
+
             final JFileChooser fc = new JFileChooser("resources/");
+            FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "Map");
+            fc.setFileFilter( filter1);
 
             int returnVal = fc.showOpenDialog(Gui.this);
 
@@ -222,6 +225,8 @@ public class Gui extends JFrame {
             this.reqFromFile = true;
 
             final JFileChooser fc = new JFileChooser("resources/");
+            FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "requests");
+            fc.setFileFilter( filter1);
 
             int returnVal = fc.showOpenDialog(Gui.this);
 
