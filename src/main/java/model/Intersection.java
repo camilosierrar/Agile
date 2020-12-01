@@ -33,6 +33,10 @@ public class Intersection {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return obj == this;
+    }
+    @Override
     public String toString() {
         return "Intersection{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + '}';
     }

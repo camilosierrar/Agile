@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Plan {
-    HashMap<Long, Intersection> intersections;
-    List<Segment> segments;
+    private HashMap<Long, Intersection> intersections;
+    private List<Segment> segments;
     private static boolean created = false;
     public static Plan plan;
 
@@ -17,13 +17,8 @@ public class Plan {
     }
 
     public static Plan createPlan(HashMap<Long, Intersection> intersections, List<Segment> segments){
-        if(!created) {
-            plan = new Plan(intersections, segments);
-            return plan;
-        }
-        else{
-            return plan;
-        }
+        plan = new Plan(intersections, segments);
+        return plan;
     }
 
     public HashMap<Long, Intersection> getIntersections() {

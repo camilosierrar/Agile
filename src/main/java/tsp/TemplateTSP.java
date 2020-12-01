@@ -7,7 +7,7 @@ import java.util.Iterator;
 public abstract class TemplateTSP implements TSP {
 	private Integer[] bestSol;
 	protected Graph g;
-	private int bestSolCost;
+	private double bestSolCost;
 	private int timeLimit;
 	private long startTime;
 	
@@ -21,8 +21,10 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<g.getNbVertices(); i++) 
 			unvisited.add(i);
 		Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
-		visited.add(0); // The first visited vertex is 0
-		bestSolCost = Integer.MAX_VALUE;
+		// The first visited vertex is 0
+		visited.add(0); 
+		//Cost of best solution at start is + infinite
+		bestSolCost = Double.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, 0);
 	}
 	
@@ -32,7 +34,7 @@ public abstract class TemplateTSP implements TSP {
 		return -1;
 	}
 	
-	public int getSolutionCost(){
+	public double getSolutionCost(){
 		if (g != null)
 			return bestSolCost;
 		return -1;
@@ -54,7 +56,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param g
 	 * @return an iterator for visiting all vertices in <code>unvisited</code> which are successors of <code>currentVertex</code>
 	 */
-	protected abstract Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g);
+	protected abstract Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g, Collection<Integer> visited);
 	
 	/**
 	 * Template method of a branch and bound algorithm for solving the TSP in <code>g</code>.
@@ -68,22 +70,24 @@ public abstract class TemplateTSP implements TSP {
 		if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){ 
 	    	if (g.isArc(currentVertex,0)){ 
+				//if all points were visited and current cost plus cost of the arc
+				//to return to the start point is best cost, this solution is the best
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){ 
 	    			visited.toArray(bestSol);
 	    			bestSolCost = currentCost+g.getCost(currentVertex,0);
 	    		}
 	    	}
 	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){
-	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);
+	        Iterator<Integer> it = iterator(currentVertex, unvisited, g, visited);
 	        while (it.hasNext()){
 	        	Integer nextVertex = it.next();
 	        	visited.add(nextVertex);
 	            unvisited.remove(nextVertex);
-	            branchAndBound(nextVertex, unvisited, visited, 
-	            		currentCost+g.getCost(currentVertex, nextVertex));
+	            branchAndBound(nextVertex, unvisited, visited,
+						(int) (currentCost+g.getCost(currentVertex, nextVertex)));
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
-	        }	    
+	        }
 	    }
 	}
 
