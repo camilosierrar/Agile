@@ -126,7 +126,7 @@ public class RunTSP {
                 }
             }
         }
-        printGraphInformation(shortestPath, indexSolution, idSolution);
+        //printGraphInformation(shortestPath, indexSolution, idSolution);
         return solution;
     }
 }
