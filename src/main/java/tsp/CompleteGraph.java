@@ -54,7 +54,6 @@ public class CompleteGraph implements Graph {
 			for(Node destination: destinations){
 				int y = findIndexNodeById(destination.getId());
 				cost[x][y] = destination.getDistance();
-				if(x == y) System.out.println("source : " + source + ", destination : " + destination);
 			}
 		}
 		for(int j=0;j<cost.length;j++)

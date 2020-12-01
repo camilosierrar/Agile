@@ -71,6 +71,7 @@ public class RunTSP {
 
         //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : initPoints.getPointsInterest()) {
+            //System.out.println("point intérêt : " + pointOfInterest);
             Dijkstra algoPointI = new Dijkstra(Plan.plan, tour);
             algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest);
             Set<Node> results = algoPointI.getPointsInterest();

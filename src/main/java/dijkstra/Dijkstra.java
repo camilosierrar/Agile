@@ -96,10 +96,10 @@ public class Dijkstra{
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
         source.setDistance(0);
         findNodeGraph(source.getId()).setDistance(0);
+        parentNode.put(findNodeGraph(source.getId()),findNodeGraph(source.getId()));
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
-        parentNode.put(findNodeGraph(source.getId()),findNodeGraph(source.getId()));
         //Continues until all nodes are or all points of interest are visited
         while (!isConditionFulfilled(unvisitedNodes, visitedNodes)) {
             //Gets the node with minimal distance on the graph

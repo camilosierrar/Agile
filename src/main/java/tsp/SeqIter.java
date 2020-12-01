@@ -52,9 +52,8 @@ public class SeqIter implements Iterator<Integer> {
 						}
 					//retrieves index of pickup point
 					int pickupIndex = nodeAsInteger.get(pickup.getId());
-					if(visited.contains(pickupIndex)){
+					if(visited.contains(pickupIndex))
 						candidates[nbCandidates++] = s;
-					}
 				}else{
 					//Else adds anyway because it's either a departure address or a pickup
 					candidates[nbCandidates++] = s;
