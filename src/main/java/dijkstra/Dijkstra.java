@@ -83,6 +83,7 @@ public class Dijkstra{
             //Adds couple to structure
             Dijkstra.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
+        System.out.println(this.pointsInterest);
     }
 
     /**

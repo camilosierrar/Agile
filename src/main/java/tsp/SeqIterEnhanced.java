@@ -16,7 +16,7 @@ public class SeqIterEnhanced extends SeqIter {
 
 		@Override
 		public int compare(Integer o1, Integer o2) {
-			return (int) (graph.getCost(origin, o1) - graph.getCost(origin, o2));
+			return (int)(graph.getCost(origin, o1) - graph.getCost(origin, o2));
 		}
 
 	}
@@ -24,6 +24,7 @@ public class SeqIterEnhanced extends SeqIter {
 	public SeqIterEnhanced(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited) {
 		super(unvisited, currentVertex, g, visited);
 		candidates = Arrays.copyOf(candidates, nbCandidates);
+		//Sorts candidates (unvisited nodes) by their distance to the current node in ascending order
 		Arrays.sort(candidates, new VertexComparator(g, currentVertex));
 	}
 }
