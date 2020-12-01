@@ -81,7 +81,7 @@ public class RunTSP {
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
-        TSP tsp = new TSP1();
+        TSPEnhanced tsp = new TSPEnhanced();
         tsp.searchSolution(20000, g);
 
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
@@ -115,10 +115,12 @@ public class RunTSP {
                 sp.set(sp.indexOf(node), temp);
             }
             shortestPath.addAll(sp);
-            previousDistance = shortestPath.getLast().getDistance();
-            if (i != nbVertices - 1)
+            if (i != nbVertices - 1) {
+                previousDistance = shortestPath.getLast().getDistance();
                 shortestPath.removeLast();
+            }
         }
+
         List<Segment> solution = new LinkedList<>();
         List<Segment> segments = Plan.plan.getSegments();
         Map<Long, Intersection> intersections = Plan.plan.getIntersections();
