@@ -72,6 +72,7 @@ public class MapGui extends JPanel implements MouseListener{
             ratioHeight = dim.height / coordHeight;
             ratioWidth = dim.width / coordWidth;
 
+
             for (int i = 0; i < segments.size(); i++) {
                 g.setColor(Color.white);
                 Segment s = segments.get(i);
@@ -86,6 +87,13 @@ public class MapGui extends JPanel implements MouseListener{
             for (int i = 0; i < segments.size(); i++) {
                 g.setColor(Color.RED);
                 Segment s = segments.get(i);
+
+                if (solution == null) {
+                    break;
+                } else if (!solution.contains(s)) {
+                    continue;
+                }
+
                 Intersection origin = intersections.get(s.getOrigin().getId());
                 Intersection destination = intersections.get(s.getDestination().getId());
                 int x1 = (int) ((origin.getLongitude() - minLong) * ratioWidth);
@@ -121,7 +129,7 @@ public class MapGui extends JPanel implements MouseListener{
                     deliveryTable.put(point, r.getDeliveryAddress());
                 }
             }
-            if(departureAddress != null){
+            if (departureAddress != null) {
                 //departure address
                 g.setColor(Color.yellow);
                 int x = (int) ((departureAddress.getLongitude() - minLong) * ratioWidth);
@@ -148,6 +156,10 @@ public class MapGui extends JPanel implements MouseListener{
                     Intersection intersection = deliveryTable.get(point);
                     System.out.println("Delivery point");
                     System.out.println(intersection.toString());
+                } else {
+                    // It is the departure point
+                    System.out.println("Departure point");
+                    System.out.println(departureAddress.toString());
                 }
             }
         }
