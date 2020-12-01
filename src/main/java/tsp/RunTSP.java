@@ -20,7 +20,6 @@ public class RunTSP {
         System.out.println("Choose the file to load the requests");
         String fileNameRequests = scanner.next();
         scanner.close();
-
         //Load data
         Plan.plan = XMLmap.readData(fileNamePlan);
         Tour tour = XMLrequest.readData(fileNameRequests);
