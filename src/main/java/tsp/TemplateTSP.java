@@ -74,7 +74,7 @@ public abstract class TemplateTSP implements TSP {
 				//to return to the start point is best cost, this solution is the best
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){ 
 	    			visited.toArray(bestSol);
-	    			bestSolCost = currentCost+g.getCost(currentVertex,0);
+					bestSolCost = currentCost+g.getCost(currentVertex,0);
 	    		}
 	    	}
 	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){

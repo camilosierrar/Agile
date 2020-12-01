@@ -2,6 +2,7 @@ package tsp;
 
 import dijkstra.Node;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -53,8 +54,11 @@ public class CompleteGraph implements Graph {
 			for(Node destination: destinations){
 				int y = findIndexNodeById(destination.getId());
 				cost[x][y] = destination.getDistance();
+				if(x == y) System.out.println("source : " + source + ", destination : " + destination);
 			}
 		}
+		for(int j=0;j<cost.length;j++)
+			System.out.println("le coût "+j+": " + Arrays.toString(cost[j]));
 	}
 
 	/**

@@ -14,33 +14,48 @@ import java.util.*;
 public class RunTSP {
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        /*Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the file to load the Plan");
         String fileNamePlan = scanner.next();
         System.out.println("Choose the file to load the requests");
         String fileNameRequests = scanner.next();
-        scanner.close();
+        scanner.close();*/
         //Load data
-        Plan.plan = XMLmap.readData(fileNamePlan);
-        Tour tour = XMLrequest.readData(fileNameRequests);
+        Plan.plan = XMLmap.readData("fileNamePlan");
+        Tour tour = XMLrequest.readData("fileNameRequests");
         List<Segment> segmentsSolution = getSolution(tour);
-        for(Segment segment: segmentsSolution){
+        /*for(Segment segment: segmentsSolution){
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
-        }
+        }*/
     }
 
     public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution) {
         System.out.println("SOLUTION");
         for (int i = 0; i < indexSolution.size(); ++i) {
-            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i));
+            //To Print the couple
+            /*final int index = i;
+            Node cur = solutionNodes.stream().filter(node -> node.getId() == idSolution.get(index)).findFirst().orElse(null);
+            Map.Entry<Node,Node> pairOfCur = Dijkstra.getPickUpDeliveryCouples().entrySet().stream()
+                            .filter(elem -> elem.getKey().getId() == cur.getId() || elem.getValue().getId() == cur.getId()).findFirst().orElse(null);
+                            //.map(elem -> {if(elem.getKey().getId() == cur.getId()) return elem.getValue(); else return elem.getKey();}).findFirst().orElse(null);
+            Node nodePair = null;
+            if(pairOfCur != null) {
+                if(pairOfCur.getKey().getId() == cur.getId())
+                    nodePair = pairOfCur.getValue();
+                else if(pairOfCur.getValue().getId() == cur.getId())
+                    nodePair = pairOfCur.getKey();
+            }*/
+            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i) );
+                            /*+ "\t\t Type : " + cur.getTypeOfNode() );+ "\t\t Couple : " + ((nodePair!=null)?nodePair.getId():"null")
+                            + " : "  + ((nodePair!=null)?nodePair.getTypeOfNode():""));*/
         }
         //index solution doesn't contain departure address twice
         System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " + idSolution.get(0));
         System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
-        System.out.println("\n\n SOLUTION IN DETAILS");
+        /*System.out.println("\n\n SOLUTION IN DETAILS");
         for (Node node : solutionNodes) {
             System.out.println("ID : " + node.getId() + "\t\tDISTANCE : " + node.getDistance());
-        }
+        }*/
     }
 
     public static List<Segment> getSolution(Tour tour) {
@@ -73,11 +88,10 @@ public class RunTSP {
         LinkedList<Node> shortestPath = new LinkedList<>();
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();
-
-
+        //Store the id of the Nodes solution
         List<Long> idSolution = new LinkedList<>();
-        //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
 
+        //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
         double previousDistance = 0;
         for (int i = 0; i < nbVertices; i++) {
             int indexTsp = tsp.getSolution(i);
