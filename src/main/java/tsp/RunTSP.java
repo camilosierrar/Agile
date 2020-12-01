@@ -126,6 +126,7 @@ public class RunTSP {
                 }
             }
         }
+        System.out.println(shortestPath);
         return solution;
     }
 }
