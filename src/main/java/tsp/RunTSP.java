@@ -14,16 +14,16 @@ import java.util.*;
 public class RunTSP {
     public static void main(String[] args) {
 
-        /*Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the file to load the Plan");
         String fileNamePlan = scanner.next();
         System.out.println("Choose the file to load the requests");
         String fileNameRequests = scanner.next();
-        scanner.close();*/
+        scanner.close();
 
         //Load data
-        Plan.plan = XMLmap.readData("fileNamePlan");
-        Tour tour = XMLrequest.readData("fileNameRequests");
+        Plan.plan = XMLmap.readData(fileNamePlan);
+        Tour tour = XMLrequest.readData(fileNameRequests);
         List<Segment> segmentsSolution = getSolution(tour);
         for(Segment segment: segmentsSolution){
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
@@ -126,7 +126,7 @@ public class RunTSP {
                 }
             }
         }
-        //printGraphInformation(shortestPath, indexSolution, idSolution);
+        printGraphInformation(shortestPath,indexSolution, idSolution);
         return solution;
     }
 }
