@@ -6,9 +6,6 @@ import model.*;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
-import java.util.List;
-
-
 
 
 public class Gui extends JFrame {
@@ -20,7 +17,7 @@ public class Gui extends JFrame {
 
     //Graphic Elements
     JPanel base;
-    JPanel info;
+    JTextArea info;
     JPanel topBar;
     JPanel map;
     JPanel mapContainer;
@@ -41,6 +38,14 @@ public class Gui extends JFrame {
         setGui();
     }
 
+    public void setInfo(String info) {
+        this.info.setText(info);
+        this.info.setForeground(Color.white);
+
+        this.info.validate();
+        this.info.repaint();
+    }
+
     private void setGui() {
         //Dimensions et layout
         this.setSize(1000,600);
@@ -54,14 +59,13 @@ public class Gui extends JFrame {
         topBar = new JPanel();
         mapContainer = new JPanel(new BorderLayout());
 
-        map = new MapGui(null,null, null, null);
-        info = new JPanel();
+        map = new MapGui(this, null,null, null, null);
+        info = new JTextArea(5,30);
 
         //JLabel
         JLabel mapReadLabel = new JLabel("Path To Map");
         JLabel reqReadLabel = new JLabel("Path To Requests");
-        JLabel temp = new JLabel("If you Click on the Map you will receive information here");
-        temp.setForeground(Color.WHITE);
+        String temp = "If you Click on the Map you will receive information here";
         mapReadLabel.setForeground(Color.WHITE);
         reqReadLabel.setForeground(Color.WHITE);
 
@@ -83,6 +87,7 @@ public class Gui extends JFrame {
         topBar.setBackground(Color.BLACK);
         info.setBackground(Color.DARK_GRAY);
         info.setMaximumSize(new Dimension(300,Integer.MAX_VALUE));
+        info.setForeground(Color.WHITE);
 
         //Add to mapContainer
         mapContainer.add(map,BorderLayout.CENTER);
@@ -100,7 +105,7 @@ public class Gui extends JFrame {
         topBar.add(getBestTour);
 
         //Add to info
-        info.add(temp);
+        info.setText(temp);
 
         // Add button listeners
         mapRead.addActionListener(event -> {
@@ -113,7 +118,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(plan, tour, controller, null);
+                map = new MapGui(this, plan, tour, controller, null);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -131,8 +136,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                List<Segment> solution = controller.findBestTour(tour);
-                map = new MapGui(plan, tour, controller, solution);
+                map = new MapGui(this, plan, tour, controller, null);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -140,6 +144,26 @@ public class Gui extends JFrame {
                 mapContainer.repaint();
             }
         });
+
+        getBestTour.addActionListener(event -> {
+            tour = controller.loadRequests(reqPath.getText());
+            if (tour == null) {
+                JOptionPane.showMessageDialog(this,
+                        "File doesn't exist",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                mapContainer.removeAll();
+                List<Segment> solution = controller.findBestTour(tour);
+                map = new MapGui(this, plan, tour, controller, solution);
+                map.setBackground(Color.lightGray);
+                mapContainer.add(map,BorderLayout.CENTER);
+                System.out.println("Map Loaded");
+                mapContainer.validate();
+                mapContainer.repaint();
+            }
+        });
+
 
 
         //Add panels

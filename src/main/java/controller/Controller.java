@@ -27,4 +27,6 @@ public class Controller {
     public List<Segment> findBestTour(Tour tour) {
         return RunTSP.getSolution(tour);
     }
+
+
 }
