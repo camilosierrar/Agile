@@ -40,13 +40,14 @@ public class CompleteGraph implements Graph {
 		//Adds departure address with index set at 0 (first value in the matrix)
 		//Important as it enables TSP to start with departure address
 		int i = 1;
-		for(Map.Entry<Node,Set<Node>> pointInterest: shortestPaths.entrySet()) {
-			if(pointInterest.getKey().getTypeOfNode().equals(DEPARTURE_ADDRESS))
-				this.nodeAsInteger.put(pointInterest.getKey().getId(), 0);
+		for(Map.Entry<Node,Set<Node>> entry: shortestPaths.entrySet()) {
+			if(entry.getKey().getTypeOfNode().equals(DEPARTURE_ADDRESS))
+				this.nodeAsInteger.put(entry.getKey().getId(), 0);
 			else
-				this.nodeAsInteger.put(pointInterest.getKey().getId(), i++);
-			nodes.add(pointInterest.getKey());
+				this.nodeAsInteger.put(entry.getKey().getId(), i++);
+			nodes.add(entry.getKey());
 		}
+
 		for(Map.Entry<Node, Set<Node>> entry: shortestPaths.entrySet()){
 			Node source = entry.getKey();
 			Set<Node> destinations = entry.getValue();
@@ -56,8 +57,6 @@ public class CompleteGraph implements Graph {
 				cost[x][y] = destination.getDistance();
 			}
 		}
-		for(int j=0;j<cost.length;j++)
-			System.out.println("le coût "+j+": " + Arrays.toString(cost[j]));
 	}
 
 	/**
@@ -93,7 +92,7 @@ public class CompleteGraph implements Graph {
 	@Override
 	public Node findNodeById(long id){
 		Node correspondingNode = null;
-		for(Node node : nodes)
+		for(Node node : this.nodes)
 			if(node.getId() == id) {
 				correspondingNode = node;
 				break;

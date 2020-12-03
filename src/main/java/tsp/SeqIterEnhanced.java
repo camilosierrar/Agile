@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public class SeqIterEnhanced extends SeqIter {
-	public class VertexComparator implements Comparator<Integer> {
+	public class EdgeComparator implements Comparator<Integer> {
 		Graph graph;
 		int origin;
 
-		public VertexComparator(Graph graph, int origin) {
+		public EdgeComparator(Graph graph, int origin) {
 			this.graph = graph;
 			this.origin = origin;
 		}
@@ -25,6 +25,6 @@ public class SeqIterEnhanced extends SeqIter {
 		super(unvisited, currentVertex, g, visited);
 		candidates = Arrays.copyOf(candidates, nbCandidates);
 		//Sorts candidates (unvisited nodes) by their distance to the current node in ascending order
-		Arrays.sort(candidates, new VertexComparator(g, currentVertex));
+		Arrays.sort(candidates, new EdgeComparator(g, currentVertex));
 	}
 }

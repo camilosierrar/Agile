@@ -54,16 +54,22 @@ public class Dijkstra{
         for(Map.Entry<Long,Intersection> entry: intersections.entrySet()){
             Intersection intersection = entry.getValue();
             Node originNode = new Node(intersection.getId());
+            this.graphPlan.add(originNode);
+        }
+
+        //Set adjacent Nodes for each segments
+        for(Map.Entry<Long,Intersection> entry: intersections.entrySet()){
+            Intersection intersection = entry.getValue();
+            Node originNode = findNodeGraph(intersection.getId());
             //Iterates over all segment from Plan and adds adjacent nodes
             for(Segment segment: this.cityPlan.getSegments()){
                 Intersection origin = segment.getOrigin();
                 if(originNode.getId() == origin.getId()){
                     Intersection dest = segment.getDestination();
-                    Node destination = new Node(dest.getId());
+                    Node destination = findNodeGraph(dest.getId());
                     originNode.addDestination(destination, segment.getLength());
                 }
             }
-            this.graphPlan.add(originNode);
         }
 
         //Stores all points of interest and pickup/delivery couple
@@ -83,7 +89,6 @@ public class Dijkstra{
             //Adds couple to structure
             Dijkstra.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
-        System.out.println(this.pointsInterest);
     }
 
     /**
@@ -94,10 +99,10 @@ public class Dijkstra{
      * @param source node from which we want to calculate shortest path
      * @return Dijkstra instance with variables containing proper data (i.e, distances) starting from source node
      */
-    public Dijkstra calculateShortestPathFromSource(Dijkstra graph, Node source) {
+    public Dijkstra calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
+        Node source = findNodeGraph(source_Id);
         source.setDistance(0);
-        findNodeGraph(source.getId()).setDistance(0);
-        parentNode.put(findNodeGraph(source.getId()),findNodeGraph(source.getId()));
+        parentNode.put(source,source);
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
@@ -108,15 +113,14 @@ public class Dijkstra{
             unvisitedNodes.remove(currentClosestNode);
             //For each of its successors : 
             for (Map.Entry< Node, Double> adjacencyNode : currentClosestNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = findNodeGraph(adjacencyNode.getKey().getId());
-                if(adjacentNode != null) {
+                if(adjacencyNode != null) {
                     Double edgeWeight = adjacencyNode.getValue();
-                    if (!visitedNodes.contains(adjacentNode)) {
-                        //Computes distance of adjacentNode assuming last node is its parent
+                    if (!visitedNodes.contains(adjacencyNode.getKey())) {
+                        //Computes distance of adjacentNode assuming currentClosestNode is its parent
                         //If distance computed is less than the one adjacentNode had, its parentNode and distance are updated
-                        calculateMinimumDistance(adjacentNode, edgeWeight, currentClosestNode);
-                        //Adds adjacentNodes to unvisitedNode step by step in order to avoid overloading memory, and for better performance
-                        unvisitedNodes.add(adjacentNode);
+                        calculateMinimumDistance(adjacencyNode.getKey(), edgeWeight, currentClosestNode);
+                        //Adds adjacencyNodes to unvisitedNode step by step in order to avoid overloading memory, and for better performance
+                        unvisitedNodes.add(adjacencyNode.getKey());
                     }
                 }
             }
@@ -134,9 +138,7 @@ public class Dijkstra{
      */
     private boolean isConditionFulfilled(Set<Node> unvisitedNodes, Set<Node> visitedNodes) {
         boolean isFulfilled = false;
-        if(unvisitedNodes.size()==0)
-            isFulfilled=  true;
-        if(areAllPointsOfInterestVisited(visitedNodes))
+        if(unvisitedNodes.size()==0 || areAllPointsOfInterestVisited(visitedNodes))
             isFulfilled=  true;
         return isFulfilled;
     }
@@ -208,6 +210,7 @@ public class Dijkstra{
             currentNode = parent;
         }
         Collections.reverse(shortestPath);
+        
         return shortestPath;
     }
 

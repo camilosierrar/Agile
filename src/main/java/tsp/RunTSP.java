@@ -14,12 +14,6 @@ import java.util.*;
 public class RunTSP {
     public static void main(String[] args) {
 
-        /*Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose the file to load the Plan");
-        String fileNamePlan = scanner.next();
-        System.out.println("Choose the file to load the requests");
-        String fileNameRequests = scanner.next();
-        scanner.close();*/
         //Load data
         Plan.plan = XMLmap.readData("fileNamePlan");
         Tour tour = XMLrequest.readData("fileNameRequests");
@@ -46,7 +40,7 @@ public class RunTSP {
                     nodePair = pairOfCur.getKey();
             }*/
             System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i) );
-                            /*+ "\t\t Type : " + cur.getTypeOfNode() );+ "\t\t Couple : " + ((nodePair!=null)?nodePair.getId():"null")
+                            /*+ "\t\t Type : " + cur.getTypeOfNode() + "\t\t Couple : " + ((nodePair!=null)?nodePair.getId():"null")
                             + " : "  + ((nodePair!=null)?nodePair.getTypeOfNode():""));*/
         }
         //index solution doesn't contain departure address twice
@@ -71,19 +65,18 @@ public class RunTSP {
 
         //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : initPoints.getPointsInterest()) {
-            //System.out.println("point intérêt : " + pointOfInterest);
             Dijkstra algoPointI = new Dijkstra(Plan.plan, tour);
-            algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest);
+            algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest.getId());
             Set<Node> results = algoPointI.getPointsInterest();
-            dijkstras.put(pointOfInterest, algoPointI);
-            shortestPaths.put(pointOfInterest, results);
+            dijkstras.put(algoPointI.findNodeGraph(pointOfInterest.getId()), algoPointI);
+            shortestPaths.put(algoPointI.findNodeGraph(pointOfInterest.getId()), results);
         }
 
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
-        TSPEnhanced tsp = new TSPEnhanced();
-        tsp.searchSolution(20000, g);
+        TSP tsp = new TSP1();
+        tsp.searchSolution(2000000, g);
 
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
@@ -101,7 +94,7 @@ public class RunTSP {
             indexSolution.add(indexTsp);
             idSolution.add(idIndexTSP);
             Node source = g.findNodeById(idIndexTSP);
-            //Finds corresponding dijkstra
+            //Finds corresponding dijkstra graph
             Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null).getValue();
             Node destination;
             //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
@@ -109,16 +102,17 @@ public class RunTSP {
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
             else
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i + 1)));
-            
-            LinkedList<Node> sp = graph.getShortestPath(source, destination);
+            Node sourceDijkstra = graph.findNodeInterest(source.getId());
+
+            LinkedList<Node> sp = graph.getShortestPath(sourceDijkstra, destination);
             for (Node node : sp) {
                 Node temp = node;
                 temp.setDistance(node.getDistance() + previousDistance);
                 sp.set(sp.indexOf(node), temp);
             }
             shortestPath.addAll(sp);
+            previousDistance = shortestPath.getLast().getDistance();
             if (i != nbVertices - 1) {
-                previousDistance = shortestPath.getLast().getDistance();
                 shortestPath.removeLast();
             }
         }

@@ -38,7 +38,7 @@ public interface Graph {
 	/**
 	 * 
 	 * @param index
-	 * @return Node of the corresponding index
+	 * @return Id of Node of the corresponding index
 	 */
 	public abstract long findIdNodeByIndex(int index);
 

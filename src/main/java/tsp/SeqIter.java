@@ -4,6 +4,7 @@ import config.Config;
 import dijkstra.Dijkstra;
 import dijkstra.Node;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class SeqIter implements Iterator<Integer> {
 	 * @param g Corresponding graph
 	 */
 	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited){
+		nbCandidates = 0;
 		Map<Long, Integer> nodeAsInteger = g.getNodeAsInteger();
 		//Candidates to be visited after currentVertex
 		this.candidates = new Integer[unvisited.size()];
