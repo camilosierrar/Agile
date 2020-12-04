@@ -237,6 +237,13 @@ public class Dijkstra{
         return null;
     }
 
+    public void addRequest(List<Node> addedNodes){
+        this.pointsInterest.addAll(addedNodes);
+        for(Node node: this.pointsInterest){
+            calculateShortestPathFromSource(this, node.getId());
+        }
+    }
+
     public Set<Node> getGraphPlan() {
         return graphPlan;
     }
