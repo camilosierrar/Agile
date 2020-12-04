@@ -75,8 +75,11 @@ public class RunTSP {
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
-        TSP tsp = new TSP1();
-        tsp.searchSolution(2000000, g);
+        TSP tsp = new TSPEnhanced();
+        long startTime = System.currentTimeMillis();
+        tsp.searchSolution(20000, g);
+        System.out.print("Solution found in "
+					+(System.currentTimeMillis() - startTime)+"ms : ");
 
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
