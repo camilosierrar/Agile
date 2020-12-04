@@ -229,15 +229,13 @@ public class Dijkstra{
         return null;
     }
 
-    public void addRequest(long pickupId, long deliveryId){
+    public void addRequest(long pickupId, long deliveryId, long sourceId){
         Node pickup = findNodeGraph(pickupId);
         pickup.setTypeOfNode(Type_Request.PICK_UP);
         Node delivery = findNodeGraph(deliveryId);
         delivery.setTypeOfNode(Type_Request.DELIVERY);
         this.pointsInterest.addAll(Arrays.asList(pickup, delivery));
-        for(Node node: this.pointsInterest){
-            this.calculateShortestPathFromSource(this, node.getId());
-        }
+        this.calculateShortestPathFromSource(this, sourceId);
     }
 
     public Set<Node> getGraphPlan() {

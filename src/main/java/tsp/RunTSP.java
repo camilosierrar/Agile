@@ -96,7 +96,7 @@ public class RunTSP {
         Variable.pointsInterestId.add(deliveryId);
         //Updates old Dijkstras
         for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet()){
-            entry.getValue().addRequest(pickupId, deliveryId);
+            entry.getValue().addRequest(pickupId, deliveryId,entry.getKey().getId());
         }
         //Executes dijkstra for added request
         doDijkstra(pickupId);
@@ -108,6 +108,7 @@ public class RunTSP {
         //Initializes complete graph and launch TSP algo
         int nbVertices = Variable.pointsInterestId.size();
         Graph g = new CompleteGraph(nbVertices, Variable.shortestPaths);
+        g.prettyPrint();
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
         tsp.searchSolution(Config.TIME_LIMIT, g);

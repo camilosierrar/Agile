@@ -48,4 +48,6 @@ public interface Graph {
 	 * @return Node of corresponding id
 	 */
 	public abstract Node findNodeById(long id);
+
+	public void prettyPrint();
 }

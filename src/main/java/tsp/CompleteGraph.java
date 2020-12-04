@@ -56,9 +56,8 @@ public class CompleteGraph implements Graph {
 	}
 
 	public void prettyPrint(){
-		System.out.println("nbVerticies: " + this.nbVertices + " \n");
-		for(int i = 0; i < cost.length; i++)
-
+		System.out.println("nbVertices: " + this.nbVertices + " \n");
+		for (double[] doubles : cost) System.out.println(Arrays.toString(doubles));
 	}
 
     /**
