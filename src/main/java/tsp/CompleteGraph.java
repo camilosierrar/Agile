@@ -2,11 +2,7 @@ package tsp;
 
 import dijkstra.Node;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static config.Config.Type_Request.*;
 
@@ -59,11 +55,45 @@ public class CompleteGraph implements Graph {
 		}
 	}
 
-	/**
-	 * Finds node index in nodeAsInteger given its id
-	 * @param id node's id
-	 * @return corresponding index for given id
-	 */
+    /**
+     * TODO
+     * @param shortestPathsAddedRequest
+     * @param addedNodes
+     */
+    public void addRequest(Map<Node, Set<Node>> shortestPathsAddedRequest, List<Node> addedNodes) {
+        //Updates vertices
+        this.nbVertices += 2;
+        int addIndex = this.nbVertices - 2;
+        //Adds nodes to variables
+        this.nodes.addAll(addedNodes);
+        for (Node addNode : addedNodes) {
+            this.nodeAsInteger.put(addNode.getId(), addIndex++);
+        }
+        //Updates cost
+        double[][] newCost = new double[nbVertices][nbVertices];
+        //Copy previous cost matrix
+        for (int i = 0; i < this.cost.length; i++) {
+            newCost[i] = this.cost[i].clone();
+        }
+        //Computes new cost from new points of interests to every old points of interest
+        //And from old points of interests to newly added points of interest
+        for (Map.Entry<Node, Set<Node>> entry : shortestPathsAddedRequest.entrySet()) {
+            Node source = entry.getKey();
+            int x = findIndexNodeById(source.getId());
+            Set<Node> destinations = entry.getValue();
+            for (Node destination : destinations) {
+                int y = findIndexNodeById(destination.getId());
+                newCost[x][y] = destination.getDistance();
+            }
+        }
+        this.cost = newCost;
+    }
+
+        /**
+         * Finds node index in nodeAsInteger given its id
+         * @param id node's id
+         * @return corresponding index for given id
+         */
 	public Integer findIndexNodeById(long id){
 		return nodeAsInteger.get(id);
 	}

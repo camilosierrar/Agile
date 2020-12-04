@@ -1,5 +1,6 @@
 package tsp;
 
+import config.Variable;
 import dijkstra.Dijkstra;
 import dijkstra.Node;
 import model.Intersection;
@@ -15,12 +16,12 @@ public class RunTSP {
     public static void main(String[] args) {
 
         //Load data
-        Plan.plan = XMLmap.readData("fileNamePlan");
-        Tour tour = XMLrequest.readData("fileNameRequests");
-        List<Segment> segmentsSolution = getSolution(tour);
-        /*for(Segment segment: segmentsSolution){
+        Variable.cityPlan = XMLmap.readData("");
+        Variable.tour = XMLrequest.readData("");
+        List<Segment> segmentsSolution = getSolution(Variable.tour);
+        for(Segment segment: segmentsSolution) {
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
-        }*/
+        }
     }
 
     public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution) {
@@ -53,9 +54,8 @@ public class RunTSP {
     }
 
     public static List<Segment> getSolution(Tour tour) {
-        long startTimeDijkstra = System.currentTimeMillis();
         //Initializes dijkstra
-        Dijkstra initPoints = new Dijkstra(Plan.plan, tour);
+        Dijkstra initPoints = new Dijkstra();
 
         //Data structure containing the node source in key and in value the set of Node of interest
         //and their distance in shortest path to the source
@@ -66,27 +66,21 @@ public class RunTSP {
 
         //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : initPoints.getPointsInterest()) {
-            Dijkstra algoPointI = new Dijkstra(Plan.plan, tour);
-            algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest.getId());
+            Dijkstra algoPointI = new Dijkstra();
+            algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest.getId());
             Set<Node> results = algoPointI.getPointsInterest();
             dijkstras.put(algoPointI.findNodeGraph(pointOfInterest.getId()), algoPointI);
             shortestPaths.put(algoPointI.findNodeGraph(pointOfInterest.getId()), results);
         }
-        System.out.print("Dijkstra found in "
-					+(System.currentTimeMillis() - startTimeDijkstra)+"ms \n \n");
 
-        long startTimeCompleteGraph = System.currentTimeMillis();
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
-        System.out.print("Complete graph instanciated in "
-                    +(System.currentTimeMillis() - startTimeCompleteGraph)+"ms \n \n");
-                    
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
-        tsp.searchSolution(120000, g);
+        tsp.searchSolution(20000, g);
         System.out.print("Solution found in "
-					+(System.currentTimeMillis() - startTime)+"ms \n ");
+					+ (System.currentTimeMillis() - startTime)+"ms : ");
 
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
@@ -94,7 +88,6 @@ public class RunTSP {
         List<Integer> indexSolution = new LinkedList<>();
         //Store the id of the Nodes solution
         List<Long> idSolution = new LinkedList<>();
-
         //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
         double previousDistance = 0;
         for (int i = 0; i < nbVertices; i++) {

@@ -9,16 +9,16 @@ public class SeqIterEnhanced extends SeqIter {
 	 * Order heuristic
 	 * Sorts vertices by their distance to the current vertex in ascending order
 	 * @param unvisited
-	 * @param currentVertex
+	 * @param curEdge
 	 * @param g
 	 * @param visited
 	 */
-	public SeqIterEnhanced(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited) {
-		super(unvisited, currentVertex, g, visited);
+	public SeqIterEnhanced(Collection<Integer> unvisited, int curEdge, Graph g, Collection<Integer> visited) {
+		super(unvisited, curEdge, g, visited);
 		//To get rid of null values
 		candidates = Arrays.copyOf(candidates, nbCandidates);
 		//Sort
-		Arrays.sort(candidates, new EdgeComparator(g, currentVertex));
+		Arrays.sort(candidates, new EdgeComparator(g, curEdge));
 	}
 
 	/**

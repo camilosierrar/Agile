@@ -1,5 +1,6 @@
 package dijkstra;
 
+import config.Variable;
 import model.*;
 import java.util.*;
 import config.Config.Type_Request;
@@ -25,25 +26,17 @@ public class Dijkstra{
     private Set<Node> pointsInterest;
 
     private static Map<Node,Node> pickUpDeliveryCouples;
-    private Plan cityPlan;
-    private Tour tour;
-    
+
+
     /**
      * Instantiates Dijkstra and fill its variables given Tour and Plan object
-     * @param cityPlan Set of intersections and segments
-     * @param tour Set of requests (pickup and delivery)
      */
-    public Dijkstra(Plan cityPlan, Tour tour) {
-        long startTimeFillingDijkstra = System.currentTimeMillis();
-        this.cityPlan = cityPlan;
-        this.tour = tour;
+    public Dijkstra() {
         this.graphPlan = new HashSet<>();
         this.parentNode = new HashMap<>();
         this.pointsInterest = new HashSet<>();
         Dijkstra.pickUpDeliveryCouples = new HashMap<>();
         fillDijkstra();
-        System.out.print("Dijkstra filled in "
-					+(System.currentTimeMillis() - startTimeFillingDijkstra)+"ms \n ");
     }
 
     /**
@@ -52,7 +45,7 @@ public class Dijkstra{
      */
     private void fillDijkstra(){
         //Stores all intersections in graphPlan
-        HashMap<Long,Intersection> intersections = this.cityPlan.getIntersections();
+        HashMap<Long,Intersection> intersections = Variable.cityPlan.getIntersections();
         for(Map.Entry<Long,Intersection> entry: intersections.entrySet()){
             Intersection intersection = entry.getValue();
             Node originNode = new Node(intersection.getId());
@@ -64,7 +57,7 @@ public class Dijkstra{
             Intersection intersection = entry.getValue();
             Node originNode = findNodeGraph(intersection.getId());
             //Iterates over all segment from Plan and adds adjacent nodes
-            for(Segment segment: this.cityPlan.getSegments()){
+            for(Segment segment: Variable.cityPlan.getSegments()){
                 Intersection origin = segment.getOrigin();
                 if(originNode.getId() == origin.getId()){
                     Intersection dest = segment.getDestination();
@@ -76,10 +69,10 @@ public class Dijkstra{
 
         //Stores all points of interest and pickup/delivery couple
         //Stores departure address
-        Node addressDeparture = findNodeGraph(this.tour.getAddressDeparture().getId());
+        Node addressDeparture = findNodeGraph(Variable.tour.getAddressDeparture().getId());
         addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
         this.pointsInterest.add(addressDeparture);
-        List<Request> requests = this.tour.getRequests();
+        List<Request> requests = Variable.tour.getRequests();
         //Stores pickup and delivery addresses
         for(Request request: requests){
             Node pickupAddress = findNodeGraph(request.getPickupAddress().getId());
@@ -98,11 +91,10 @@ public class Dijkstra{
      * Computes shortest path to every point of interest
      * points of interests distance are set to minimum distance to source
      * @param graph Dijkstra with data loaded and initialized (nodes with distance set to infinity)
-     * @param source node from which we want to calculate shortest path
+     * @param source_Id node from which we want to calculate shortest path
      * @return Dijkstra instance with variables containing proper data (i.e, distances) starting from source node
      */
-    public void calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
-        long startTimeCalculatingSP = System.currentTimeMillis();
+    public Dijkstra calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
         Node source = findNodeGraph(source_Id);
         source.setDistance(0);
         parentNode.put(source,source);
@@ -129,9 +121,7 @@ public class Dijkstra{
             }
             visitedNodes.add(currentClosestNode);
         }
-        System.out.print("Shortest path of Dijkstra calculated in "
-					+(System.currentTimeMillis() - startTimeCalculatingSP)+"ms \n");
-        return;
+        return graph;
     }
 
     /**

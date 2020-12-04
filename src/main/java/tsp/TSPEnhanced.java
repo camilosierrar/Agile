@@ -8,7 +8,7 @@ public class TSPEnhanced extends TSP1 {
     @Override
     protected double bound(Integer currentVertex, Collection<Integer> unvisited) {
         //l is lowest cost's arc between last vertex visited and an unvisited one
-        double l = Integer.MAX_VALUE;
+        double l = Double.MAX_VALUE;
         for (int i = 0; i < g.getNbVertices(); i++) {
             if (i != currentVertex && !unvisited.contains(i)) {
                 l = Double.min(l, g.getCost(currentVertex, i));
