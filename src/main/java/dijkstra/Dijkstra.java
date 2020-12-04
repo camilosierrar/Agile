@@ -27,14 +27,14 @@ public class Dijkstra{
     private static Map<Node,Node> pickUpDeliveryCouples;
     private Plan cityPlan;
     private Tour tour;
-
-
+    
     /**
      * Instantiates Dijkstra and fill its variables given Tour and Plan object
      * @param cityPlan Set of intersections and segments
      * @param tour Set of requests (pickup and delivery)
      */
     public Dijkstra(Plan cityPlan, Tour tour) {
+        long startTimeFillingDijkstra = System.currentTimeMillis();
         this.cityPlan = cityPlan;
         this.tour = tour;
         this.graphPlan = new HashSet<>();
@@ -42,6 +42,8 @@ public class Dijkstra{
         this.pointsInterest = new HashSet<>();
         Dijkstra.pickUpDeliveryCouples = new HashMap<>();
         fillDijkstra();
+        System.out.print("Dijkstra filled in "
+					+(System.currentTimeMillis() - startTimeFillingDijkstra)+"ms \n ");
     }
 
     /**
@@ -99,7 +101,8 @@ public class Dijkstra{
      * @param source node from which we want to calculate shortest path
      * @return Dijkstra instance with variables containing proper data (i.e, distances) starting from source node
      */
-    public Dijkstra calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
+    public void calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
+        long startTimeCalculatingSP = System.currentTimeMillis();
         Node source = findNodeGraph(source_Id);
         source.setDistance(0);
         parentNode.put(source,source);
@@ -126,7 +129,9 @@ public class Dijkstra{
             }
             visitedNodes.add(currentClosestNode);
         }
-        return graph;
+        System.out.print("Shortest path of Dijkstra calculated in "
+					+(System.currentTimeMillis() - startTimeCalculatingSP)+"ms \n");
+        return;
     }
 
     /**

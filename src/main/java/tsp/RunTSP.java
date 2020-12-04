@@ -53,6 +53,7 @@ public class RunTSP {
     }
 
     public static List<Segment> getSolution(Tour tour) {
+        long startTimeDijkstra = System.currentTimeMillis();
         //Initializes dijkstra
         Dijkstra initPoints = new Dijkstra(Plan.plan, tour);
 
@@ -66,20 +67,26 @@ public class RunTSP {
         //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : initPoints.getPointsInterest()) {
             Dijkstra algoPointI = new Dijkstra(Plan.plan, tour);
-            algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest.getId());
+            algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest.getId());
             Set<Node> results = algoPointI.getPointsInterest();
             dijkstras.put(algoPointI.findNodeGraph(pointOfInterest.getId()), algoPointI);
             shortestPaths.put(algoPointI.findNodeGraph(pointOfInterest.getId()), results);
         }
+        System.out.print("Dijkstra found in "
+					+(System.currentTimeMillis() - startTimeDijkstra)+"ms \n \n");
 
+        long startTimeCompleteGraph = System.currentTimeMillis();
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
+        System.out.print("Complete graph instanciated in "
+                    +(System.currentTimeMillis() - startTimeCompleteGraph)+"ms \n \n");
+                    
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
-        tsp.searchSolution(20000, g);
+        tsp.searchSolution(120000, g);
         System.out.print("Solution found in "
-					+(System.currentTimeMillis() - startTime)+"ms : ");
+					+(System.currentTimeMillis() - startTime)+"ms \n ");
 
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
