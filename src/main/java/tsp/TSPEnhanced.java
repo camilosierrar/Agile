@@ -14,7 +14,6 @@ public class TSPEnhanced extends TSP1 {
                 l = Double.min(l, g.getCost(currentVertex, i));
             }
         }
-
         // Sum of li's for each unvisited nodes
         double s = 0; 
         for (int i : unvisited) {
@@ -22,10 +21,10 @@ public class TSPEnhanced extends TSP1 {
             double li = g.getCost(i, 0);
             for (int j : unvisited) 
                 if (i != j) 
-                    li = Double.min(li, (int)g.getCost(i, j));
+                    li = Double.min(li, g.getCost(i, j));
             s += li;
         }
-        return l + s;
+        return (int)l + s;
     }
 
     @Override

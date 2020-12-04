@@ -60,10 +60,8 @@ public class RunTSP {
         //Data structure containing the node source in key and in value the set of Node of interest
         //and their distance in shortest path to the source
         Map<Node, Set<Node>> shortestPaths = new HashMap<>();
-
         //Data structure containing the graph of shortest path from source Node (in key)
         Map<Node, Dijkstra> dijkstras = new HashMap<>();
-
         //For each point of interest, it executes Dijkstra and store result in data structure
         for (Node pointOfInterest : initPoints.getPointsInterest()) {
             Dijkstra algoPointI = new Dijkstra();
@@ -72,7 +70,6 @@ public class RunTSP {
             dijkstras.put(algoPointI.findNodeGraph(pointOfInterest.getId()), algoPointI);
             shortestPaths.put(algoPointI.findNodeGraph(pointOfInterest.getId()), results);
         }
-
         //Initializes complete graph and launch TSP algo
         int nbVertices = initPoints.getPointsInterest().size();
         Graph g = new CompleteGraph(nbVertices, shortestPaths);
@@ -121,8 +118,8 @@ public class RunTSP {
         }
 
         List<Segment> solution = new LinkedList<>();
-        List<Segment> segments = Plan.plan.getSegments();
-        Map<Long, Intersection> intersections = Plan.plan.getIntersections();
+        List<Segment> segments = Variable.cityPlan.getSegments();
+        Map<Long, Intersection> intersections = Variable.cityPlan.getIntersections();
         for (int i = 0; i < shortestPath.size(); ++i) {
             long indexStart;
             long indexEnd;
