@@ -166,7 +166,7 @@ public class MapGui  extends JPanel implements MouseListener{
                     temp = "Departure Point\n" + this.departureAddress.toString();
                 }
 
-                this.gui.setInfo(temp);
+                //this.gui.setInfo(temp);
             }
         }
 
