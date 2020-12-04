@@ -240,7 +240,7 @@ public class Dijkstra{
     public void addRequest(List<Node> addedNodes){
         this.pointsInterest.addAll(addedNodes);
         for(Node node: this.pointsInterest){
-            calculateShortestPathFromSource(this, node.getId());
+            this.calculateShortestPathFromSource(this, node.getId());
         }
     }
 
