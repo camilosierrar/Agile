@@ -1,5 +1,6 @@
 package tsp;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,4 +49,9 @@ public interface Graph {
 	 * @return Node of corresponding id
 	 */
 	public abstract Node findNodeById(long id);
-}
+
+	public void prettyPrint();
+
+	public void addRequest(Map<Node, Set<Node>> shortestPathsAddedRequest, List<Node> addedNodes);
+
+	}

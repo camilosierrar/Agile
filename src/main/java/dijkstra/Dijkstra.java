@@ -34,6 +34,7 @@ public class Dijkstra{
         this.graphPlan = new HashSet<>();
         for(Node node : Variable.graph) {
             Node newNode = new Node(node.getId());
+            newNode.setTypeOfNode(node.getTypeOfNode());
             this.graphPlan.add(newNode);
         }
         for(Node node : Variable.graph) {
@@ -44,8 +45,8 @@ public class Dijkstra{
         }
 
         this.pointsInterest = new HashSet<>();
-        for(Node node : Variable.pointsInterest) {
-            this.pointsInterest.add(findNodeGraph(node.getId()));
+        for(Long nodeId : Variable.pointsInterestId) {
+            this.pointsInterest.add(findNodeGraph(nodeId));
         }
         this.parentNode = new HashMap<>();
     }

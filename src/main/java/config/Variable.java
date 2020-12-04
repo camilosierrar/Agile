@@ -15,7 +15,7 @@ public class Variable {
     // key: pickup, value: delivery
     public static Map<Long,Long> pickUpDeliveryCouplesId = new HashMap<>();
     public static Set<Node> graph = new HashSet<>();
-    public static Set<Node> pointsInterest = new HashSet<>();
+    public static Set<Long> pointsInterestId = new HashSet<>();
 
 
     public static Node findNodeInFirstGraph(long id){
