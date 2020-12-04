@@ -1,12 +1,10 @@
 package tsp;
 
+import config.Config;
 import config.Variable;
 import dijkstra.Dijkstra;
 import dijkstra.Node;
-import model.Intersection;
-import model.Plan;
-import model.Segment;
-import model.Tour;
+import model.*;
 import xml.XMLmap;
 import xml.XMLrequest;
 
@@ -14,14 +12,22 @@ import java.util.*;
 
 public class RunTSP {
     public static void main(String[] args) {
-
-        //Load data
-        Variable.cityPlan = XMLmap.readData("");
-        Variable.tour = XMLrequest.readData("");
-        List<Segment> segmentsSolution = getSolution(Variable.tour);
+        long startTime = System.currentTimeMillis();
+        loadData();
+        long endTime = System.currentTimeMillis();
+        computeDijkstra();
+        System.out.println("ça a mis : " + (endTime-startTime) + " ms");
+        Request request = new Request(
+                Variable.cityPlan.getIntersectionById(26079654),
+                Variable.cityPlan.getIntersectionById(33066313),
+                20,
+                40);
+        addRequest(request);
+        List<Segment> segmentsSolution = getSolution();
         for(Segment segment: segmentsSolution) {
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
         }
+
     }
 
     public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution) {
@@ -53,32 +59,59 @@ public class RunTSP {
         }*/
     }
 
-    public static List<Segment> getSolution(Tour tour) {
-        //Initializes dijkstra
-        Dijkstra initPoints = new Dijkstra();
 
-        //Data structure containing the node source in key and in value the set of Node of interest
-        //and their distance in shortest path to the source
-        Map<Node, Set<Node>> shortestPaths = new HashMap<>();
-        //Data structure containing the graph of shortest path from source Node (in key)
-        Map<Node, Dijkstra> dijkstras = new HashMap<>();
-        //For each point of interest, it executes Dijkstra and store result in data structure
-        for (Node pointOfInterest : initPoints.getPointsInterest()) {
-            Dijkstra algoPointI = new Dijkstra();
-            algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointOfInterest.getId());
-            Set<Node> results = algoPointI.getPointsInterest();
-            dijkstras.put(algoPointI.findNodeGraph(pointOfInterest.getId()), algoPointI);
-            shortestPaths.put(algoPointI.findNodeGraph(pointOfInterest.getId()), results);
+    public static void loadData(){
+        Variable.cityPlan = XMLmap.readData("");
+        Variable.tour = XMLrequest.readData("");
+        for(Request request: Variable.tour.getRequests())
+            Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
+    }
+
+    public static void computeDijkstra(){
+        //Obtains all points of interest + departure address
+        Variable.pointsInterestId.add(Variable.tour.getAddressDeparture().getId());
+        for(Request request: Variable.tour.getRequests()){
+            Variable.pointsInterestId.add(request.getPickupAddress().getId());
+            Variable.pointsInterestId.add(request.getDeliveryAddress().getId());
         }
+        //Executes dijkstra
+        for(long pointInterestId: Variable.pointsInterestId){
+            doDijkstra(pointInterestId);
+        }
+    }
+
+    public static void doDijkstra(long pointInterestId){
+        Dijkstra algoPointI = new Dijkstra();
+        algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointInterestId);
+        Set<Node> results = algoPointI.getPointsInterest();
+        Variable.dijkstras.put(algoPointI.findNodeGraph(pointInterestId), algoPointI);
+        Variable.shortestPaths.put(algoPointI.findNodeGraph(pointInterestId), results);
+    }
+
+    public static void addRequest(Request request){
+        long pickupId = request.getPickupAddress().getId();
+        long deliveryId = request.getDeliveryAddress().getId();
+        Variable.pickUpDeliveryCouplesId.put(pickupId, deliveryId);
+        Variable.pointsInterestId.add(pickupId);
+        Variable.pointsInterestId.add(deliveryId);
+        //Updates old Dijkstras
+        for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet()){
+            entry.getValue().addRequest(pickupId, deliveryId);
+        }
+        //Executes dijkstra for added request
+        doDijkstra(pickupId);
+        doDijkstra(deliveryId);
+    }
+
+
+    public static List<Segment> getSolution() {
         //Initializes complete graph and launch TSP algo
-        int nbVertices = initPoints.getPointsInterest().size();
-        Graph g = new CompleteGraph(nbVertices, shortestPaths);
+        int nbVertices = Variable.pointsInterestId.size();
+        Graph g = new CompleteGraph(nbVertices, Variable.shortestPaths);
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
-        tsp.searchSolution(20000, g);
-        System.out.print("Solution found in "
-					+ (System.currentTimeMillis() - startTime)+"ms : ");
-
+        tsp.searchSolution(Config.TIME_LIMIT, g);
+        System.out.print("Solution found in " + (System.currentTimeMillis() - startTime)+"ms : ");
         //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
         LinkedList<Node> shortestPath = new LinkedList<>();
         //Stores index and id given by tsp (solution for optimal tour)
@@ -95,7 +128,7 @@ public class RunTSP {
             idSolution.add(idIndexTSP);
             Node source = g.findNodeById(idIndexTSP);
             //Finds corresponding dijkstra graph
-            Dijkstra graph = dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null).getValue();
+            Dijkstra graph = Variable.dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null).getValue();
             Node destination;
             //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
             if (i == (nbVertices - 1))

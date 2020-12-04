@@ -154,7 +154,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                List<Segment> solution = controller.findBestTour(tour);
+                List<Segment> solution = controller.findBestTour();
                 map = new MapGui(this, plan, tour, controller, solution);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);

@@ -1,6 +1,7 @@
 package tsp;
 
 import config.Config;
+import config.Variable;
 import dijkstra.Dijkstra;
 import dijkstra.Node;
 
@@ -46,14 +47,14 @@ public class SeqIter implements Iterator<Integer> {
 				assert curNode != null;
 				//if node is a delivery checks if corresponding pickup is visited
 				if(curNode.getTypeOfNode().equals(Config.Type_Request.DELIVERY)){
-					Node pickup = null;
-					for(Map.Entry<Node,Node> entry: Dijkstra.getPickUpDeliveryCouples().entrySet())
-						if(entry.getValue().getId() == curNode.getId()){
-							pickup = entry.getKey();
+					long pickupId = -1;
+					for(Map.Entry<Long,Long> entry: Variable.pickUpDeliveryCouplesId.entrySet())
+						if(entry.getValue() == curNode.getId()){
+							pickupId = entry.getKey();
 							break;
 						}
 					//retrieves index of pickup point
-					int pickupIndex = nodeAsInteger.get(pickup.getId());
+					int pickupIndex = nodeAsInteger.get(pickupId);
 					if(visited.contains(pickupIndex))
 						candidates[nbCandidates++] = s;
 				}else{

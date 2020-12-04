@@ -25,8 +25,6 @@ public class Dijkstra{
      */
     private Set<Node> pointsInterest;
 
-    private static Map<Node,Node> pickUpDeliveryCouples;
-
 
     /**
      * Instantiates Dijkstra and fill its variables given Tour and Plan object
@@ -35,7 +33,6 @@ public class Dijkstra{
         this.graphPlan = new HashSet<>();
         this.parentNode = new HashMap<>();
         this.pointsInterest = new HashSet<>();
-        Dijkstra.pickUpDeliveryCouples = new HashMap<>();
         fillDijkstra();
     }
 
@@ -45,15 +42,14 @@ public class Dijkstra{
      */
     private void fillDijkstra(){
         //Stores all intersections in graphPlan
-        HashMap<Long,Intersection> intersections = Variable.cityPlan.getIntersections();
-        for(Map.Entry<Long,Intersection> entry: intersections.entrySet()){
+        for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
             Intersection intersection = entry.getValue();
             Node originNode = new Node(intersection.getId());
             this.graphPlan.add(originNode);
         }
 
         //Set adjacent Nodes for each segments
-        for(Map.Entry<Long,Intersection> entry: intersections.entrySet()){
+        for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
             Intersection intersection = entry.getValue();
             Node originNode = findNodeGraph(intersection.getId());
             //Iterates over all segment from Plan and adds adjacent nodes
@@ -66,23 +62,19 @@ public class Dijkstra{
                 }
             }
         }
-
         //Stores all points of interest and pickup/delivery couple
         //Stores departure address
         Node addressDeparture = findNodeGraph(Variable.tour.getAddressDeparture().getId());
         addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
         this.pointsInterest.add(addressDeparture);
-        List<Request> requests = Variable.tour.getRequests();
         //Stores pickup and delivery addresses
-        for(Request request: requests){
-            Node pickupAddress = findNodeGraph(request.getPickupAddress().getId());
-            Node deliveryAddress = findNodeGraph(request.getDeliveryAddress().getId());
+        for(Map.Entry<Long,Long> entry: Variable.pickUpDeliveryCouplesId.entrySet()){
+            Node pickupAddress = findNodeGraph(entry.getKey());
+            Node deliveryAddress = findNodeGraph(entry.getValue());
             pickupAddress.setTypeOfNode(Type_Request.PICK_UP);
             deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
             this.pointsInterest.add(pickupAddress);
             this.pointsInterest.add(deliveryAddress);
-            //Adds couple to structure
-            Dijkstra.pickUpDeliveryCouples.put(pickupAddress, deliveryAddress);
         }
     }
 
@@ -237,8 +229,12 @@ public class Dijkstra{
         return null;
     }
 
-    public void addRequest(List<Node> addedNodes){
-        this.pointsInterest.addAll(addedNodes);
+    public void addRequest(long pickupId, long deliveryId){
+        Node pickup = findNodeGraph(pickupId);
+        pickup.setTypeOfNode(Type_Request.PICK_UP);
+        Node delivery = findNodeGraph(deliveryId);
+        delivery.setTypeOfNode(Type_Request.DELIVERY);
+        this.pointsInterest.addAll(Arrays.asList(pickup, delivery));
         for(Node node: this.pointsInterest){
             this.calculateShortestPathFromSource(this, node.getId());
         }
@@ -254,9 +250,5 @@ public class Dijkstra{
 
     public Set<Node> getPointsInterest() {
         return pointsInterest;
-    }
-
-    public static Map<Node, Node> getPickUpDeliveryCouples() {
-        return pickUpDeliveryCouples;
     }
 }

@@ -24,8 +24,8 @@ public class Controller {
         return XMLrequest.readData(file);
     }
 
-    public List<Segment> findBestTour(Tour tour) {
-        return RunTSP.getSolution(tour);
+    public List<Segment> findBestTour() {
+        return RunTSP.getSolution();
     }
 
 

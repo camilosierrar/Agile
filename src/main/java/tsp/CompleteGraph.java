@@ -55,6 +55,12 @@ public class CompleteGraph implements Graph {
 		}
 	}
 
+	public void prettyPrint(){
+		System.out.println("nbVerticies: " + this.nbVertices + " \n");
+		for(int i = 0; i < cost.length; i++)
+
+	}
+
     /**
      * TODO
      * @param shortestPathsAddedRequest
