@@ -1,7 +1,6 @@
 package dijkstra;
 
 import config.Variable;
-import model.*;
 import java.util.*;
 import config.Config.Type_Request;
 

@@ -2,10 +2,8 @@ package tsp;
 
 import config.Config;
 import config.Variable;
-import dijkstra.Dijkstra;
 import dijkstra.Node;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
