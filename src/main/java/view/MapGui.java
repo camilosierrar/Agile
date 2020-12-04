@@ -30,9 +30,10 @@ public class MapGui  extends JPanel implements MouseListener{
     private List<Point> points;
     private Controller controller;
     private List<Segment> solution = null;
+    private double zoom;
 
 
-    public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution) {
+    public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution, int zoom) {
         //this.plan = plan;
         this.gui = gui;
         this.controller = controller;
@@ -49,12 +50,16 @@ public class MapGui  extends JPanel implements MouseListener{
         points = new ArrayList<>();
         pickUpTable = new HashMap<>();
         deliveryTable = new HashMap<>();
+        this.zoom = zoom;
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.intersections != null && this.segments!=null) {
             dim = this.getSize();
+            //Zoom
+            dim.setSize(dim.getWidth()*(1+(zoom/10)), dim.getHeight()*(1+(zoom/10)));
+            this.setPreferredSize(dim);
             System.out.println(dim);
             double minLat = Double.MAX_VALUE, maxLat = Double.MIN_VALUE, minLong = Double.MAX_VALUE, maxLong = Double.MIN_VALUE;
             //Collections.min(intersections.getLatitude().values());
