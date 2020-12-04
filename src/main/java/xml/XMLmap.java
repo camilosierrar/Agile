@@ -19,11 +19,12 @@ public class XMLmap {
     public static Plan readData(String fileName) {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
         ArrayList<Segment> segmentsList = new ArrayList<>();
-        Plan plan;
+        Plan plan = null;
 
         try {
 
             File fXmlFile = new File("resources/" + fileName);
+            System.out.println(fXmlFile);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -31,7 +32,7 @@ public class XMLmap {
 
             // READ INTERSECTIONS
             NodeList intersections = doc.getElementsByTagName("intersection");
-
+            System.out.println(intersections.getLength());
             for (int temp = 0; temp < intersections.getLength(); temp++) {
                 Node intersection = intersections.item(temp);
 
@@ -64,8 +65,8 @@ public class XMLmap {
                     String name = elem.getAttribute("name");
                     long origin = Long.parseLong(elem.getAttribute("origin"));
 
-                    Intersection destinationObj = new Intersection(destination);
-                    Intersection originObj = new Intersection(origin);
+                    Intersection destinationObj = intersectionsList.get(destination);
+                    Intersection originObj = intersectionsList.get(origin);
 
                     Segment segmentObj = new Segment(originObj, destinationObj, name, length);
                     segmentsList.add(segmentObj);
@@ -73,11 +74,11 @@ public class XMLmap {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
 
-
+        System.out.println(intersectionsList.size());
         plan = Plan.createPlan(intersectionsList, segmentsList);
+        System.out.println(plan.getIntersections().size());
         return plan;
     }
 }

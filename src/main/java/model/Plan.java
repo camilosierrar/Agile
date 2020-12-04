@@ -17,13 +17,8 @@ public class Plan {
     }
 
     public static Plan createPlan(HashMap<Long, Intersection> intersections, List<Segment> segments){
-        if (!created) {
-            plan = new Plan(intersections, segments);
-            return plan;
-        }
-        else {
-            return plan;
-        }
+        plan = new Plan(intersections, segments);
+        return plan;
     }
 
     public HashMap<Long, Intersection> getIntersections() {
