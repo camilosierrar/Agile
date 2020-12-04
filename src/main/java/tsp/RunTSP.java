@@ -17,12 +17,6 @@ public class RunTSP {
         long endTime = System.currentTimeMillis();
         computeDijkstra();
         System.out.println("ça a mis : " + (endTime-startTime) + " ms");
-        Request request = new Request(
-                Variable.cityPlan.getIntersectionById(26079654),
-                Variable.cityPlan.getIntersectionById(33066313),
-                20,
-                40);
-        addRequest(request);
         List<Segment> segmentsSolution = getSolution();
         for(Segment segment: segmentsSolution) {
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
@@ -108,7 +102,28 @@ public class RunTSP {
         //Initializes complete graph and launch TSP algo
         int nbVertices = Variable.pointsInterestId.size();
         Graph g = new CompleteGraph(nbVertices, Variable.shortestPaths);
+        //TEST ADD REQUEST
+        Request request = new Request(
+                Variable.cityPlan.getIntersectionById(26079654),
+                Variable.cityPlan.getIntersectionById(33066313),
+                20,
+                40);
+        addRequest(request);
+        long pickupId = request.getPickupAddress().getId();
+        long deliveryId = request.getDeliveryAddress().getId();
+        Node pickup = g.findNodeById(pickupId);
+        Node delivery = g.findNodeById(deliveryId);
+        List<Node> addedNodes = Arrays.asList(pickup,delivery);
+        Map<Node,Set<Node>> addedShortestPath = new HashMap<>();
+        for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()){
+            if(entry.getKey().getId() == pickupId || entry.getKey().getId() == deliveryId)
+                addedShortestPath.put(entry.getKey(), entry.getValue());
+        }
+        System.out.println(addedShortestPath);
+        System.out.println(addedNodes);
+        g.addRequest(addedShortestPath, addedNodes);
         g.prettyPrint();
+        //END TEST
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
         tsp.searchSolution(Config.TIME_LIMIT, g);
