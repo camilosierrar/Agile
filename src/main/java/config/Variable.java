@@ -12,6 +12,18 @@ public class Variable {
     public static Tour tour;
     public static Map<Node, Dijkstra> dijkstras = new HashMap<>();
     public static Map<Node, Set<Node>> shortestPaths = new HashMap<>();
-    public static List<Long> pointsInterestId = new LinkedList<>();
-    public static Map<Long,Long> pickUpDeliveryCouplesId = new HashMap<>(); // key: pickup, value: delivery
+    // key: pickup, value: delivery
+    public static Map<Long,Long> pickUpDeliveryCouplesId = new HashMap<>();
+    public static Set<Node> graph = new HashSet<>();
+    public static Set<Node> pointsInterest = new HashSet<>();
+
+
+    public static Node findNodeInFirstGraph(long id){
+        for(Node node: Variable.graph){
+            if(node.getId() == id){
+                return node;
+            }
+        }
+        return null;
+    }
 }

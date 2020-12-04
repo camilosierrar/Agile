@@ -65,18 +65,19 @@ public class RunTSP {
         Variable.tour = XMLrequest.readData("");
         for(Request request: Variable.tour.getRequests())
             Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
+        fillGraph();
     }
 
     public static void computeDijkstra(){
         //Obtains all points of interest + departure address
-        Variable.pointsInterestId.add(Variable.tour.getAddressDeparture().getId());
+        Variable.pointsInterest.add(Variable.findNodeInFirstGraph(Variable.tour.getAddressDeparture().getId()));
         for(Request request: Variable.tour.getRequests()){
-            Variable.pointsInterestId.add(request.getPickupAddress().getId());
-            Variable.pointsInterestId.add(request.getDeliveryAddress().getId());
+            Variable.pointsInterest.add(Variable.findNodeInFirstGraph(request.getPickupAddress().getId()));
+            Variable.pointsInterest.add(Variable.findNodeInFirstGraph(request.getDeliveryAddress().getId()));
         }
         //Executes dijkstra
-        for(long pointInterestId: Variable.pointsInterestId){
-            doDijkstra(pointInterestId);
+        for(Node pointInterest: Variable.pointsInterest){
+            doDijkstra(pointInterest.getId());
         }
     }
 
@@ -92,11 +93,14 @@ public class RunTSP {
         long pickupId = request.getPickupAddress().getId();
         long deliveryId = request.getDeliveryAddress().getId();
         Variable.pickUpDeliveryCouplesId.put(pickupId, deliveryId);
-        Variable.pointsInterestId.add(pickupId);
-        Variable.pointsInterestId.add(deliveryId);
+        Variable.pointsInterest.add(Variable.findNodeInFirstGraph(pickupId));
+        Variable.pointsInterest.add(Variable.findNodeInFirstGraph(deliveryId));
         //Updates old Dijkstras
         for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet()){
-            entry.getValue().addRequest(pickupId, deliveryId);
+            entry.getValue().addRequest(pickupId, deliveryId, entry.getKey().getId());
+            Variable.dijkstras.replace(entry.getKey(), entry.getValue());
+            Set<Node> newPointsOfInterest = entry.getValue().getPointsInterest();
+            Variable.shortestPaths.replace(entry.getKey(), newPointsOfInterest);
         }
         //Executes dijkstra for added request
         doDijkstra(pickupId);
@@ -106,7 +110,7 @@ public class RunTSP {
 
     public static List<Segment> getSolution() {
         //Initializes complete graph and launch TSP algo
-        int nbVertices = Variable.pointsInterestId.size();
+        int nbVertices = Variable.pointsInterest.size();
         Graph g = new CompleteGraph(nbVertices, Variable.shortestPaths);
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
@@ -123,12 +127,14 @@ public class RunTSP {
         for (int i = 0; i < nbVertices; i++) {
             int indexTsp = tsp.getSolution(i);
             long idIndexTSP = g.findIdNodeByIndex(indexTsp);
+            System.out.println(idIndexTSP);
             //adds solution
             indexSolution.add(indexTsp);
             idSolution.add(idIndexTSP);
             Node source = g.findNodeById(idIndexTSP);
             //Finds corresponding dijkstra graph
             Dijkstra graph = Variable.dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null).getValue();
+            System.out.println(graph.getPointsInterest());
             Node destination;
             //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
             if (i == (nbVertices - 1))
@@ -172,5 +178,47 @@ public class RunTSP {
         }
         printGraphInformation(shortestPath,indexSolution, idSolution);
         return solution;
+    }
+
+    /**
+     * From a Plan and a Tour object, retrieves and stores all informations as nodes
+     * Fills graphPlan, pickup/delivery couples and points of interest
+     */
+    private static void fillGraph(){
+        //Stores all intersections in graphPlan
+        for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
+            Intersection intersection = entry.getValue();
+            Node originNode = new Node(intersection.getId());
+            Variable.graph.add(originNode);
+        }
+
+        //Set adjacent Nodes for each segments
+        for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
+            Intersection intersection = entry.getValue();
+            Node originNode = Variable.findNodeInFirstGraph(intersection.getId());
+            //Iterates over all segment from Plan and adds adjacent nodes
+            for(Segment segment: Variable.cityPlan.getSegments()){
+                Intersection origin = segment.getOrigin();
+                if(originNode.getId() == origin.getId()){
+                    Intersection dest = segment.getDestination();
+                    Node destination = Variable.findNodeInFirstGraph(dest.getId());
+                    originNode.addDestination(destination, segment.getLength());
+                }
+            }
+        }
+        //Stores all points of interest and pickup/delivery couple
+        //Stores departure address
+        Node addressDeparture = Variable.findNodeInFirstGraph(Variable.tour.getAddressDeparture().getId());
+        addressDeparture.setTypeOfNode(Config.Type_Request.DEPARTURE_ADDRESS);
+        Variable.pointsInterest.add(addressDeparture);
+        //Stores pickup and delivery addresses
+        for(Map.Entry<Long,Long> entry: Variable.pickUpDeliveryCouplesId.entrySet()){
+            Node pickupAddress = Variable.findNodeInFirstGraph(entry.getKey());
+            Node deliveryAddress = Variable.findNodeInFirstGraph(entry.getValue());
+            pickupAddress.setTypeOfNode(Config.Type_Request.PICK_UP);
+            deliveryAddress.setTypeOfNode(Config.Type_Request.DELIVERY);
+            Variable.pointsInterest.add(pickupAddress);
+            Variable.pointsInterest.add(deliveryAddress);
+        }
     }
 }

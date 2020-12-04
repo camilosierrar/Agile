@@ -9,6 +9,7 @@ import config.Config.Type_Request;
  * Implements Dijkstra's algorithm and computes for every point of interest shortest path to other points of interest
  */
 public class Dijkstra{
+    public boolean debug = false;
     /**
      * Value node is key Node's parent with the shortest path
      */
@@ -31,51 +32,22 @@ public class Dijkstra{
      */
     public Dijkstra() {
         this.graphPlan = new HashSet<>();
-        this.parentNode = new HashMap<>();
-        this.pointsInterest = new HashSet<>();
-        fillDijkstra();
-    }
-
-    /**
-     * From a Plan and a Tour object, retrieves and stores all informations as nodes
-     * Fills graphPlan, pickup/delivery couples and points of interest
-     */
-    private void fillDijkstra(){
-        //Stores all intersections in graphPlan
-        for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
-            Intersection intersection = entry.getValue();
-            Node originNode = new Node(intersection.getId());
-            this.graphPlan.add(originNode);
+        for(Node node : Variable.graph) {
+            Node newNode = new Node(node.getId());
+            this.graphPlan.add(newNode);
         }
-
-        //Set adjacent Nodes for each segments
-        for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
-            Intersection intersection = entry.getValue();
-            Node originNode = findNodeGraph(intersection.getId());
-            //Iterates over all segment from Plan and adds adjacent nodes
-            for(Segment segment: Variable.cityPlan.getSegments()){
-                Intersection origin = segment.getOrigin();
-                if(originNode.getId() == origin.getId()){
-                    Intersection dest = segment.getDestination();
-                    Node destination = findNodeGraph(dest.getId());
-                    originNode.addDestination(destination, segment.getLength());
-                }
+        for(Node node : Variable.graph) {
+            Node nodeInInstance = findNodeGraph(node.getId());
+            for(Map.Entry<Node,Double> adjacent: node.getAdjacentNodes().entrySet()) {
+                nodeInInstance.addDestination(findNodeGraph(adjacent.getKey().getId()), adjacent.getValue());
             }
         }
-        //Stores all points of interest and pickup/delivery couple
-        //Stores departure address
-        Node addressDeparture = findNodeGraph(Variable.tour.getAddressDeparture().getId());
-        addressDeparture.setTypeOfNode(Type_Request.DEPARTURE_ADDRESS);
-        this.pointsInterest.add(addressDeparture);
-        //Stores pickup and delivery addresses
-        for(Map.Entry<Long,Long> entry: Variable.pickUpDeliveryCouplesId.entrySet()){
-            Node pickupAddress = findNodeGraph(entry.getKey());
-            Node deliveryAddress = findNodeGraph(entry.getValue());
-            pickupAddress.setTypeOfNode(Type_Request.PICK_UP);
-            deliveryAddress.setTypeOfNode(Type_Request.DELIVERY);
-            this.pointsInterest.add(pickupAddress);
-            this.pointsInterest.add(deliveryAddress);
+
+        this.pointsInterest = new HashSet<>();
+        for(Node node : Variable.pointsInterest) {
+            this.pointsInterest.add(findNodeGraph(node.getId()));
         }
+        this.parentNode = new HashMap<>();
     }
 
     /**
@@ -87,8 +59,16 @@ public class Dijkstra{
      * @return Dijkstra instance with variables containing proper data (i.e, distances) starting from source node
      */
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
+        System.out.println("source : " + source_Id + "\n");
         Node source = findNodeGraph(source_Id);
+        System.out.println("nous y sommes :" + findNodeGraph(source_Id) + "\n");
         source.setDistance(0);
+        System.out.println("nous y sommes :" + findNodeGraph(source_Id) + "\n");
+        /*
+        System.out.println("nous y sommes :" + findNodeGraph(208769039) + "\n");
+        System.out.println("nous y sommes :" + Variable.findNodeInFirstGraph(208769039) + "\n");
+        System.out.println("bis :" + findNodeGraph(25173820) + "\n");
+        System.out.println("bis :" + Variable.findNodeInFirstGraph(25173820) + "\n");*/
         parentNode.put(source,source);
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
@@ -229,15 +209,13 @@ public class Dijkstra{
         return null;
     }
 
-    public void addRequest(long pickupId, long deliveryId){
+    public void addRequest(long pickupId, long deliveryId, long sourceId){
         Node pickup = findNodeGraph(pickupId);
         pickup.setTypeOfNode(Type_Request.PICK_UP);
         Node delivery = findNodeGraph(deliveryId);
         delivery.setTypeOfNode(Type_Request.DELIVERY);
         this.pointsInterest.addAll(Arrays.asList(pickup, delivery));
-        for(Node node: this.pointsInterest){
-            this.calculateShortestPathFromSource(this, node.getId());
-        }
+        this.calculateShortestPathFromSource(this, sourceId);
     }
 
     public Set<Node> getGraphPlan() {
