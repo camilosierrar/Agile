@@ -1,19 +1,24 @@
 package main;
 
 import controller.Controller;
-import model.*;
+import model.Plan;
+import model.Tour;
+import main.Utils;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.util.List;
+import java.awt.*;
+import java.io.File;
+import javax.swing.filechooser.FileFilter;
+
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 
 
 public class Gui extends JFrame {
+
+    //Util
+    Boolean mapFromFile;
+    Boolean reqFromFile;
 
     //Plan
     Plan plan;
@@ -28,6 +33,8 @@ public class Gui extends JFrame {
     JPanel mapContainer;
     JButton mapRead;
     JButton reqRead;
+    JButton mapFile;
+    JButton reqFile;
     JButton getBestTour;
     JTextField mapPath;
     JTextField reqPath;
@@ -118,12 +125,14 @@ public class Gui extends JFrame {
         reqReadLabel.setForeground(Color.WHITE);
 
         //JTextField
-        mapPath = new JTextField(20);
-        reqPath = new JTextField(20);
+        mapPath = new JTextField(10);
+        reqPath = new JTextField(10);
 
         //Buttons
         mapRead = new JButton("Load Map");
         reqRead = new JButton("Load Requests");
+        mapFile = new JButton("Load Map file");
+        reqFile = new JButton("Load Requests file");
         getBestTour = new JButton("Find Best Tour");
 
         //Canvas
@@ -144,10 +153,12 @@ public class Gui extends JFrame {
         topBar.add(mapReadLabel);
         topBar.add(mapPath);
         topBar.add(mapRead);
+        topBar.add(mapFile);
             //ReqReading
         topBar.add(reqReadLabel);
         topBar.add(reqPath);
         topBar.add(reqRead);
+        topBar.add(reqFile);
             //getBestTour
         topBar.add(getBestTour);
 
@@ -155,10 +166,80 @@ public class Gui extends JFrame {
         info.add(temp);
 
         // Add button listeners
+
+        mapFile.addActionListener(event -> {
+            this.mapFromFile = true;
+
+
+            final JFileChooser fc = new JFileChooser("resources/");
+            FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "Map");
+            fc.setFileFilter( filter1);
+
+            int returnVal = fc.showOpenDialog(Gui.this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                System.out.println("Opening: " + file.getName() + ".");
+                this.plan = controller.loadMap(file.getName());
+                this.mapPath.setText(file.getName());
+            } else {
+                System.out.println("Opening nothing sad smiley face");
+            }
+
+            if (plan == null) {
+                JOptionPane.showMessageDialog(this,
+                        "File doesn't exist",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                mapContainer.removeAll();
+                map = new MapGui(plan, tour, controller);
+                map.setBackground(Color.lightGray);
+                mapContainer.add(map,BorderLayout.CENTER);
+                System.out.println("Map Loaded");
+                mapContainer.validate();
+                mapContainer.repaint();
+            }
+        });
+
         mapRead.addActionListener(event -> {
             this.plan = controller.loadMap(mapPath.getText());
 
             if (plan == null) {
+                JOptionPane.showMessageDialog(this,
+                        "File doesn't exist",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                mapContainer.removeAll();
+                map = new MapGui(plan, tour, controller);
+                map.setBackground(Color.lightGray);
+                mapContainer.add(map,BorderLayout.CENTER);
+                System.out.println("Map Loaded");
+                mapContainer.validate();
+                mapContainer.repaint();
+            }
+        });
+
+        reqFile.addActionListener(event -> {
+            this.reqFromFile = true;
+
+            final JFileChooser fc = new JFileChooser("resources/");
+            FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "requests");
+            fc.setFileFilter( filter1);
+
+            int returnVal = fc.showOpenDialog(Gui.this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                System.out.println("Opening: " + file.getName() + ".");
+                tour = controller.loadRequests(file.getName());
+                this.reqPath.setText(file.getName());
+            } else {
+                System.out.println("Opening nothing sad smiley face");
+            }
+
+            if (tour == null) {
                 JOptionPane.showMessageDialog(this,
                         "File doesn't exist",
                         "ERROR",
@@ -253,3 +334,4 @@ public class Gui extends JFrame {
         });
     }*/
 }
+
