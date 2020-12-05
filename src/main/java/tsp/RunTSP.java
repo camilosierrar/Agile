@@ -16,7 +16,7 @@ public class RunTSP {
         loadData();
         long endTime = System.currentTimeMillis();
         computeDijkstra();
-        System.out.println("ça a mis : " + (endTime-startTime) + " ms");
+        System.out.println("Temps de calcul pour les dijkstra : " + (endTime-startTime) + " ms");
         List<Segment> segmentsSolution = getSolution();
         for(Segment segment: segmentsSolution) {
             System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
@@ -100,8 +100,7 @@ public class RunTSP {
 
     public static List<Segment> getSolution() {
         //Initializes complete graph and launch TSP algo
-        int nbVertices = Variable.pointsInterestId.size();
-        Graph g = new CompleteGraph(nbVertices, Variable.shortestPaths);
+        Graph g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.shortestPaths);
         //TEST ADD REQUEST
         Request request = new Request(
                 Variable.cityPlan.getIntersectionById(26079654),
@@ -113,20 +112,17 @@ public class RunTSP {
         long deliveryId = request.getDeliveryAddress().getId();
         Node pickup = null;
         Node delivery = null;
-        Map<Node,Set<Node>> addedShortestPath = new HashMap<>();
         for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()){
             if(entry.getKey().getId() == pickupId){
-                addedShortestPath.put(entry.getKey(), entry.getValue());
                 pickup = entry.getKey();
             }if(entry.getKey().getId() == deliveryId){
-                addedShortestPath.put(entry.getKey(), entry.getValue());
                 delivery = entry.getKey();
             }
         }
         List<Node> addedNodes = Arrays.asList(pickup,delivery);
         g.addRequest(Variable.shortestPaths, addedNodes);
-        g.prettyPrint();
         //END TEST
+        g.prettyPrint();
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
         tsp.searchSolution(Config.TIME_LIMIT, g);
@@ -139,7 +135,7 @@ public class RunTSP {
         List<Long> idSolution = new LinkedList<>();
         //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
         double previousDistance = 0;
-        for (int i = 0; i < nbVertices; i++) {
+        for (int i = 0; i < Variable.pointsInterestId.size(); i++) {
             int indexTsp = tsp.getSolution(i);
             long idIndexTSP = g.findIdNodeByIndex(indexTsp);
             //adds solution
@@ -151,7 +147,7 @@ public class RunTSP {
                     .filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null)).getValue();
             Node destination;
             //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
-            if (i == (nbVertices - 1))
+            if (i == (Variable.pointsInterestId.size() - 1))
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(0)));
             else
                 destination = graph.findNodeInterest(g.findIdNodeByIndex(tsp.getSolution(i + 1)));
@@ -165,7 +161,7 @@ public class RunTSP {
             }
             shortestPath.addAll(sp);
             previousDistance = shortestPath.getLast().getDistance();
-            if (i != nbVertices - 1) {
+            if (i != Variable.pointsInterestId.size() - 1) {
                 shortestPath.removeLast();
             }
         }
