@@ -78,7 +78,9 @@ public class CompleteGraph implements Graph {
         double[][] newCost = new double[nbVertices][nbVertices];
         //Copy previous cost matrix
         for (int i = 0; i < this.cost.length; i++) {
-            newCost[i] = this.cost[i].clone();
+        	for(int j = 0; j < this.cost[i].length; j++){
+				newCost[i][j] = this.cost[i][j];
+			}
         }
         //Computes new cost from new points of interests to every old points of interest
         //And from old points of interests to newly added points of interest
@@ -91,6 +93,11 @@ public class CompleteGraph implements Graph {
                 newCost[x][y] = destination.getDistance();
             }
         }
+		//PRINTING TODO delete
+		for(int i = 0; i < newCost.length; i++){
+			System.out.println(Arrays.toString(newCost[i]));
+
+		}
         this.cost = newCost;
     }
 

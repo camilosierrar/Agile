@@ -111,17 +111,20 @@ public class RunTSP {
         addRequest(request);
         long pickupId = request.getPickupAddress().getId();
         long deliveryId = request.getDeliveryAddress().getId();
-        Node pickup = g.findNodeById(pickupId);
-        Node delivery = g.findNodeById(deliveryId);
-        List<Node> addedNodes = Arrays.asList(pickup,delivery);
+        Node pickup = null;
+        Node delivery = null;
         Map<Node,Set<Node>> addedShortestPath = new HashMap<>();
         for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()){
-            if(entry.getKey().getId() == pickupId || entry.getKey().getId() == deliveryId)
+            if(entry.getKey().getId() == pickupId){
                 addedShortestPath.put(entry.getKey(), entry.getValue());
+                pickup = entry.getKey();
+            }if(entry.getKey().getId() == deliveryId){
+                addedShortestPath.put(entry.getKey(), entry.getValue());
+                delivery = entry.getKey();
+            }
         }
-        System.out.println(addedShortestPath);
-        System.out.println(addedNodes);
-        g.addRequest(addedShortestPath, addedNodes);
+        List<Node> addedNodes = Arrays.asList(pickup,delivery);
+        g.addRequest(Variable.shortestPaths, addedNodes);
         g.prettyPrint();
         //END TEST
         TSP tsp = new TSPEnhanced();
@@ -144,7 +147,8 @@ public class RunTSP {
             idSolution.add(idIndexTSP);
             Node source = g.findNodeById(idIndexTSP);
             //Finds corresponding dijkstra graph
-            Dijkstra graph = Variable.dijkstras.entrySet().stream().filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null).getValue();
+            Dijkstra graph = Objects.requireNonNull(Variable.dijkstras.entrySet().stream()
+                    .filter(elem -> elem.getKey().getId() == source.getId()).findFirst().orElse(null)).getValue();
             Node destination;
             //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
             if (i == (nbVertices - 1))
