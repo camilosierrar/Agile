@@ -4,7 +4,6 @@ import config.Config;
 import config.Variable;
 import config.Config.Type_Request;
 import dijkstra.Dijkstra;
-import model.Node;
 import model.*;
 import xml.XMLmap;
 import xml.XMLrequest;
@@ -18,25 +17,17 @@ public class RunTSP {
         computeDijkstra();
         long endTime = System.currentTimeMillis();
         System.out.println("Temps de calcul pour les dijkstra : " + (endTime-startTime) + " ms");
-
         //Initializes complete graph and launch TSP algo
         Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.shortestPaths);
-
-        List<Segment> segmentsSolution = getSolution();
-
+        getSolution();
         //TEST ADD REQUEST
         Request request = new Request(
-                Variable.cityPlan.getIntersectionById(26079654),
-                Variable.cityPlan.getIntersectionById(33066313),
+                Variable.cityPlan.getIntersectionById(26086127),
+                Variable.cityPlan.getIntersectionById(26086128),
                 20,
                 40);
         addRequest(request);
         //END TEST
-
-        removeRequest(Variable.tour.getRequests().get(0));
-        addRequest(Variable.tour.getRequests().get(0));
-        removeRequest(request);
-        //for(Segment segment: segmentsSolution) System.out.println(segment.getOrigin().getId() + "\t" + segment.getDestination().getId() + "\t" + segment.getName());
     }
 
     public static List<Segment> runTSP() {
@@ -92,10 +83,10 @@ public class RunTSP {
         //Executes dijkstra for added request
         doDijkstra(pickupId);
         doDijkstra(deliveryId);
-
         //Update complete graph and launch TSP algo
         Node pickup = null;
         Node delivery = null;
+
         for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()){
             if(entry.getKey().getId() == pickupId)
                 pickup = entry.getKey();
@@ -104,7 +95,7 @@ public class RunTSP {
         }
         List<Node> addedNodes = Arrays.asList(pickup,delivery);
         Variable.g.addRequest(addedNodes);
-        //g.prettyPrint();
+        //Variable.g.prettyPrint();
         getSolution();
     }
 
@@ -117,7 +108,7 @@ public class RunTSP {
             Node pickupNode = Variable.g.findNodeById(pickupId);
             Node deliveryNode = Variable.g.findNodeById(deliveryId);
     
-            Variable.pickUpDeliveryCouplesId.remove(pickupId);
+            Variable.pickUpDeliveryCouplesId.remove(pickupId, deliveryId);
             Variable.pointsInterestId.remove(pickupId);
             Variable.pointsInterestId.remove(deliveryId);
             Variable.dijkstras.remove(pickupNode);

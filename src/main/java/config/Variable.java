@@ -1,5 +1,6 @@
 package config;
 
+import com.google.common.collect.Multimap;
 import dijkstra.Dijkstra;
 import model.Node;
 import model.Plan;

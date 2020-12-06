@@ -86,7 +86,6 @@ public class CompleteGraph implements Graph {
         }
         //Updates cost
 		double[][] newCost = new double[nbVertices][nbVertices];
-		
         //Computes new cost from new points of interests to every old points of interest
         //And from old points of interests to newly added points of interest
         for (Map.Entry<Node, Set<Node>> entry : Variable.shortestPaths.entrySet()) {
