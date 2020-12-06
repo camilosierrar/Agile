@@ -95,7 +95,7 @@ public class RunTSP {
         }
         List<Node> addedNodes = Arrays.asList(pickup,delivery);
         Variable.g.addRequest(addedNodes);
-        //Variable.g.prettyPrint();
+        Variable.g.prettyPrint();
         getSolution();
     }
 
