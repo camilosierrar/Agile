@@ -276,7 +276,7 @@ public class Gui extends JFrame {
 
         getBestTour.addActionListener(event -> {
             // TODO
-            controller.findBestTour(tour);
+            controller.findBestTour();
         });
 
         //Add panels
@@ -293,7 +293,6 @@ public class Gui extends JFrame {
     /**
      * In map.html file default zoom value is set to 13.
      */
-
 
    /* private void setMap(JPanel base) {
         System.setProperty("jxbrowser.license.key", "1BNDHFSC1FXEWE7VRF2L36BWMILQ32DMIU9ODTZZ9PT6OA9WADNKY3PV8JNUDYNG0CN370");
