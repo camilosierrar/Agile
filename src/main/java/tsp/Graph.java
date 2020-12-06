@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dijkstra.Node;
+import model.Node;
 
 public interface Graph {
 	/**
@@ -52,6 +52,8 @@ public interface Graph {
 
 	public void prettyPrint();
 
-	public void addRequest(Map<Node, Set<Node>> shortestPathsAddedRequest, List<Node> addedNodes);
+	public void addRequest(List<Node> addedNodes);
+
+	public void removeRequest(List<Node> nodesRemoved);
 
 	}

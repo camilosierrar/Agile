@@ -2,7 +2,7 @@ package tsp;
 
 import config.Config;
 import config.Variable;
-import dijkstra.Node;
+import model.Node;
 
 import java.util.Collection;
 import java.util.Iterator;

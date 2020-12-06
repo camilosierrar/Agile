@@ -3,6 +3,7 @@ package dijkstra;
 import config.Variable;
 import java.util.*;
 import config.Config.Type_Request;
+import model.Node;
 
 /**
  * Implements Dijkstra's algorithm and computes for every point of interest shortest path to other points of interest
@@ -14,7 +15,6 @@ public class Dijkstra{
      */
     private Map<Node,Node> parentNode;
 
-
     /**
      * All distinct intersections of Plan object
      */
@@ -24,7 +24,6 @@ public class Dijkstra{
      * Every pickup, delivery and departure addresses
      */
     private Set<Node> pointsInterest;
-
 
     /**
      * Instantiates Dijkstra and fill its variables given Tour and Plan object
@@ -59,17 +58,10 @@ public class Dijkstra{
      * @return Dijkstra instance with variables containing proper data (i.e, distances) starting from source node
      */
     public Dijkstra calculateShortestPathFromSource(Dijkstra graph, long source_Id) {
-        System.out.println("source : " + source_Id + "\n");
         Node source = findNodeGraph(source_Id);
-        System.out.println("nous y sommes :" + findNodeGraph(source_Id) + "\n");
         source.setDistance(0);
-        System.out.println("nous y sommes :" + findNodeGraph(source_Id) + "\n");
-        /*
-        System.out.println("nous y sommes :" + findNodeGraph(208769039) + "\n");
-        System.out.println("nous y sommes :" + Variable.findNodeInFirstGraph(208769039) + "\n");
-        System.out.println("bis :" + findNodeGraph(25173820) + "\n");
-        System.out.println("bis :" + Variable.findNodeInFirstGraph(25173820) + "\n");*/
         parentNode.put(source,source);
+
         Set<Node> visitedNodes = new HashSet<>();
         Set<Node> unvisitedNodes = new HashSet<>();
         unvisitedNodes.add(source);
@@ -181,6 +173,23 @@ public class Dijkstra{
         return shortestPath;
     }
 
+    public void addRequest(long pickupId, long deliveryId, long sourceId){
+        Node pickup = findNodeGraph(pickupId);
+        pickup.setTypeOfNode(Type_Request.PICK_UP);
+        Node delivery = findNodeGraph(deliveryId);
+        delivery.setTypeOfNode(Type_Request.DELIVERY);
+        
+        this.pointsInterest.addAll(Arrays.asList(pickup, delivery));
+        this.calculateShortestPathFromSource(this, sourceId);
+    }
+
+    public void removeRequest(long pickupId, long deliveryId, long sourceId){
+        Node pickup = findNodeGraph(pickupId);
+        Node delivery = findNodeGraph(deliveryId);
+        
+        this.pointsInterest.removeAll(Arrays.asList(pickup, delivery));
+    }
+
     /**
      * Finds points of interest given an id
      * @param id node's id
@@ -207,15 +216,6 @@ public class Dijkstra{
             }
         }
         return null;
-    }
-
-    public void addRequest(long pickupId, long deliveryId, long sourceId){
-        Node pickup = findNodeGraph(pickupId);
-        pickup.setTypeOfNode(Type_Request.PICK_UP);
-        Node delivery = findNodeGraph(deliveryId);
-        delivery.setTypeOfNode(Type_Request.DELIVERY);
-        this.pointsInterest.addAll(Arrays.asList(pickup, delivery));
-        this.calculateShortestPathFromSource(this, sourceId);
     }
 
     public Set<Node> getGraphPlan() {

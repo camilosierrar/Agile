@@ -1,8 +1,10 @@
 package tsp;
 
-import dijkstra.Node;
+import model.Node;
 
 import java.util.*;
+
+import config.Variable;
 
 import static config.Config.Type_Request.*;
 
@@ -73,7 +75,7 @@ public class CompleteGraph implements Graph {
      * @param shortestPathsAddedRequest
      * @param addedNodes
      */
-    public void addRequest(Map<Node, Set<Node>> shortestPathsAddedRequest, List<Node> addedNodes) {
+    public void addRequest(List<Node> addedNodes) {
         //Updates vertices
         this.nbVertices += 2;
         int addIndex = this.nbVertices - 2;
@@ -83,16 +85,45 @@ public class CompleteGraph implements Graph {
             this.nodeAsInteger.put(addNode.getId(), addIndex++);
         }
         //Updates cost
-        double[][] newCost = new double[nbVertices][nbVertices];
-        //Copy previous cost matrix
-        for (int i = 0; i < this.cost.length; i++) {
-        	for(int j = 0; j < this.cost[i].length; j++){
-				newCost[i][j] = this.cost[i][j];
-			}
-        }
+		double[][] newCost = new double[nbVertices][nbVertices];
+		
         //Computes new cost from new points of interests to every old points of interest
         //And from old points of interests to newly added points of interest
-        for (Map.Entry<Node, Set<Node>> entry : shortestPathsAddedRequest.entrySet()) {
+        for (Map.Entry<Node, Set<Node>> entry : Variable.shortestPaths.entrySet()) {
+            Node source = entry.getKey();
+            int x = findIndexNodeById(source.getId());
+            Set<Node> destinations = entry.getValue();
+            for (Node destination : destinations) {
+                int y = findIndexNodeById(destination.getId());
+                newCost[x][y] = destination.getDistance();
+            }
+        }
+        this.cost = newCost;
+	}
+	
+	/**
+     * TODO
+     * @param shortestPathsAddedRequest
+     * @param addedNodes
+     */
+    public void removeRequest(List<Node> nodesRemoved) {
+        //Updates vertices
+        this.nbVertices -= 2;
+        //Removes nodes to variables
+		this.nodes.removeAll(nodesRemoved);
+		this.nodeAsInteger.clear();
+		int i = 1;
+		for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()) 
+			if(entry.getKey().getTypeOfNode().equals(DEPARTURE_ADDRESS))
+				this.nodeAsInteger.put(entry.getKey().getId(), 0);
+			else
+				this.nodeAsInteger.put(entry.getKey().getId(), i++);
+		
+        //Updates cost
+		double[][] newCost = new double[nbVertices][nbVertices];
+		
+        //Update cost
+        for (Map.Entry<Node, Set<Node>> entry : Variable.shortestPaths.entrySet()) {
             Node source = entry.getKey();
             int x = findIndexNodeById(source.getId());
             Set<Node> destinations = entry.getValue();
@@ -104,11 +135,11 @@ public class CompleteGraph implements Graph {
         this.cost = newCost;
     }
 
-        /**
-         * Finds node index in nodeAsInteger given its id
-         * @param id node's id
-         * @return corresponding index for given id
-         */
+	/**
+	 * Finds node index in nodeAsInteger given its id
+	 * @param id node's id
+	 * @return corresponding index for given id
+	 */
 	public Integer findIndexNodeById(long id){
 		return nodeAsInteger.get(id);
 	}

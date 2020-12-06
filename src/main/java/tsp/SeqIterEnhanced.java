@@ -25,8 +25,8 @@ public class SeqIterEnhanced extends SeqIter {
 	 * Comparator class for graph of unvisited
 	 */
 	public class EdgeComparator implements Comparator<Integer> {
-		Graph unvisitedGraph;
-		int currentVertex;
+		private Graph unvisitedGraph;
+		private int currentVertex;
 
 		public EdgeComparator(Graph graph, int pCurrentVertex) {
 			this.unvisitedGraph = graph;
