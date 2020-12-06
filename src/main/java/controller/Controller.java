@@ -7,7 +7,6 @@ import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class Controller {
