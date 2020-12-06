@@ -110,7 +110,7 @@ public class RunTSP {
                 Variable.cityPlan.getIntersectionById(33066313),
                 20,
                 40);
-        addRequest(request);
+        //addRequest(request);
         //Initializes complete graph and launch TSP algo
         int nbVertices = Variable.pointsInterestId.size();
         Graph g = new CompleteGraph(nbVertices, Variable.shortestPaths);
