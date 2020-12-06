@@ -14,11 +14,11 @@ public class CompleteGraph implements Graph {
 	 * Assigns an index (integer) to a node's id
 	 * Used to store points of interest distance in cost variable (matrix)
 	 */
-	private Map<Long, Integer> nodeAsInteger;
+	private final Map<Long, Integer> nodeAsInteger;
 	/**
 	 * Points of interest of the graph - the distance is 0
 	 */
-	private Set<Node> nodes;
+	private final Set<Node> nodes;
 
 	/**
 	 * Creates a complete graph from all points of interests and shortest paths to every point of interest
@@ -56,8 +56,16 @@ public class CompleteGraph implements Graph {
 	}
 
 	public void prettyPrint(){
-		System.out.println("nbVertices: " + this.nbVertices + " \n");
+		System.out.println("-----START PRINTING COMPLETE GRAPH INFOS-----");
+		System.out.println("nbVertices: " + this.nbVertices);
+		System.out.println("Cost table: ");
 		for (double[] doubles : cost) System.out.println(Arrays.toString(doubles));
+		System.out.println("Points of interest : ");
+		for(Node node: this.nodes) System.out.println(node.getId());
+		for(Map.Entry<Long, Integer> entry: this.nodeAsInteger.entrySet())
+			System.out.println("id: " + entry.getKey() + " index:" + entry.getValue());
+		System.out.println("-----END PRINTING COMPLETE GRAPH INFOS--------");
+
 	}
 
     /**
@@ -78,7 +86,9 @@ public class CompleteGraph implements Graph {
         double[][] newCost = new double[nbVertices][nbVertices];
         //Copy previous cost matrix
         for (int i = 0; i < this.cost.length; i++) {
-            newCost[i] = this.cost[i].clone();
+        	for(int j = 0; j < this.cost[i].length; j++){
+				newCost[i][j] = this.cost[i][j];
+			}
         }
         //Computes new cost from new points of interests to every old points of interest
         //And from old points of interests to newly added points of interest
