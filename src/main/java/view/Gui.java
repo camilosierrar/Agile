@@ -276,7 +276,7 @@ public class Gui extends JFrame {
 
         getBestTour.addActionListener(event -> {
             // TODO
-            controller.findBestTour(tour);
+            controller.findBestTour();
         });
 
         //Add panels
