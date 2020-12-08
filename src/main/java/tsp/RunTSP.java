@@ -114,6 +114,7 @@ public class RunTSP {
             Variable.sPathOfPointsInterests.add(pickupId);
             Variable.sPathOfPointsInterests.add(deliveryId);
             Variable.sPathOfPointsInterests.add(idLast);
+            computeFullShortestPath();
         }
     }
 
@@ -156,7 +157,6 @@ public class RunTSP {
 
     /**
      * 
-     * 
      * @param newPath
      * @return
      */
@@ -180,6 +180,7 @@ public class RunTSP {
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();
         //Store the id of the Nodes solution
+        Variable.sPathOfPointsInterests.clear();
 
         for (int i = 0; i < Variable.pointsInterestId.size(); i++) {
             int indexTsp = Variable.tsp.getSolution(i);
