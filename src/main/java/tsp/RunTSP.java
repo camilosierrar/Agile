@@ -132,15 +132,62 @@ public class RunTSP {
         }
     }
 
+    public static List<Segment> modifyOrderOfTour(LinkedList<Long> newPath) {
+        double previousDistance = 0;
+        Variable.shortestPath.clear();
+
+        for (int i = 0; i < newPath.size(); i++) {
+            Node currentSource = Variable.g.findNodeById(newPath.get(i));
+            Dijkstra graph = Objects.requireNonNull(Variable.dijkstras.entrySet().stream()
+                    .filter(elem -> elem.getKey().getId() == currentSource.getId()).findFirst().orElse(null)).getValue();
+            Node destination = graph.findNodeInterest((newPath.get(i + 1)));
+            Node sourceDijkstra = graph.findNodeInterest(currentSource.getId());
+            LinkedList<Node> sp = graph.getShortestPath(sourceDijkstra, destination);
+            for (Node node : sp) {
+                Node temp = new Node(node.getId());
+                temp.setTypeOfNode(node.getTypeOfNode());
+                temp.setDistance(node.getDistance() + previousDistance);
+                sp.set(sp.indexOf(node), temp);
+            }
+            Variable.shortestPath.addAll(sp);
+            previousDistance = Variable.shortestPath.getLast().getDistance();
+            if (i != newPath.size() - 1) {
+                Variable.shortestPath.removeLast();
+            }
+        }
+
+        List<Segment> solution = new LinkedList<>();
+        List<Segment> segments = Variable.cityPlan.getSegments();
+        Map<Long, Intersection> intersections = Variable.cityPlan.getIntersections();
+        for (int i = 0; i < Variable.shortestPath.size(); ++i) {
+            long indexStart = Variable.shortestPath.get(i).getId();
+            long indexEnd;
+            if (i != Variable.shortestPath.size() - 1) 
+                indexEnd = Variable.shortestPath.get(i + 1).getId();
+             else 
+                indexEnd = Variable.shortestPath.get(0).getId();
+            
+            Intersection start = intersections.get(indexStart);
+            Intersection end = intersections.get(indexEnd);
+            for (Segment segment : segments) {
+                if (segment.getOrigin().getId() == start.getId() && segment.getDestination().getId() == end.getId()) {
+                    solution.add(segment);
+                    break;
+                }
+            }
+        }
+
+        return solution;
+    }
+
     public static List<Segment> getSolution() {
         
         TSP tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
         tsp.searchSolution(Config.TIME_LIMIT, Variable.g);
         System.out.print("Solution found in " + (System.currentTimeMillis() - startTime)+"ms. \n");
-
-        //Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
-        LinkedList<Node> shortestPath = new LinkedList<>();
+        
+        Variable.shortestPath.clear();
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();
         //Store the id of the Nodes solution
@@ -173,23 +220,23 @@ public class RunTSP {
                 temp.setDistance(node.getDistance() + previousDistance);
                 sp.set(sp.indexOf(node), temp);
             }
-            shortestPath.addAll(sp);
-            previousDistance = shortestPath.getLast().getDistance();
+            Variable.shortestPath.addAll(sp);
+            previousDistance = Variable.shortestPath.getLast().getDistance();
             if (i != Variable.pointsInterestId.size() - 1) {
-                shortestPath.removeLast();
+                Variable.shortestPath.removeLast();
             }
         }
 
         List<Segment> solution = new LinkedList<>();
         List<Segment> segments = Variable.cityPlan.getSegments();
         Map<Long, Intersection> intersections = Variable.cityPlan.getIntersections();
-        for (int i = 0; i < shortestPath.size(); ++i) {
-            long indexStart = shortestPath.get(i).getId();
+        for (int i = 0; i < Variable.shortestPath.size(); ++i) {
+            long indexStart = Variable.shortestPath.get(i).getId();
             long indexEnd;
-            if (i != shortestPath.size() - 1) {
-                indexEnd = shortestPath.get(i + 1).getId();
+            if (i != Variable.shortestPath.size() - 1) {
+                indexEnd = Variable.shortestPath.get(i + 1).getId();
             } else {
-                indexEnd = shortestPath.get(0).getId();
+                indexEnd = Variable.shortestPath.get(0).getId();
             }
             Intersection start = intersections.get(indexStart);
             Intersection end = intersections.get(indexEnd);
@@ -200,7 +247,7 @@ public class RunTSP {
                 }
             }
         }
-        printGraphInformation(shortestPath,indexSolution, idSolution);
+        printGraphInformation(Variable.shortestPath,indexSolution, idSolution);
         return solution;
     }
 
