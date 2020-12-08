@@ -39,6 +39,11 @@ public abstract class TemplateTSP implements TSP {
 			return bestSolCost;
 		return -1;
 	}
+
+	@Override
+	public Integer[] getArraySolution() {
+		return bestSol;
+	}
 	
 	/**
 	 * Method that must be defined in TemplateTSP subclasses

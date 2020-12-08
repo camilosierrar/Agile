@@ -7,6 +7,7 @@ import model.Plan;
 import model.Segment;
 import model.Tour;
 import tsp.Graph;
+import tsp.TSP;
 
 import java.util.*;
 
@@ -24,9 +25,10 @@ public class Variable {
     /**
      *  Stores all nodes to traverse (from departure to departure) to obtain optimal tour (minimum distance)
      */
-    public static LinkedList<Node> shortestPath = new LinkedList<>();
+    public static LinkedList<Long> shortestPath = new LinkedList<>();
+    public static LinkedList<Long> sPathOfPointsInterests = new LinkedList<>();
     public static Graph g;
-
+    public static TSP tsp;
 
     public static Node findNodeInFirstGraph(long id){
         for(Node node: Variable.graph){

@@ -26,10 +26,14 @@ public class RunTSP {
                 Variable.cityPlan.getIntersectionById(26086128),
                 20,
                 40);
-        addRequest(request);
+        addRequest(request, true);
         //END TEST
     }
 
+    /**
+     * 
+     * @return
+     */
     public static List<Segment> runTSP() {
         loadData();
         computeDijkstra();
@@ -38,6 +42,9 @@ public class RunTSP {
         return segmentsSolution;
     }
 
+    /**
+     * 
+     */
     public static void loadData(){
         Variable.cityPlan = XMLmap.readData("");
         Variable.tour = XMLrequest.readData("");
@@ -46,6 +53,9 @@ public class RunTSP {
         fillGraph();
     }
 
+    /**
+     * 
+     */
     public static void computeDijkstra(){
         //Obtains all points of interest + departure address
         Variable.pointsInterestId.add(Variable.tour.getAddressDeparture().getId());
@@ -59,6 +69,10 @@ public class RunTSP {
         }
     }
 
+    /**
+     * 
+     * @param pointInterestId
+     */
     public static void doDijkstra(long pointInterestId){
         Dijkstra algoPointI = new Dijkstra();
         algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointInterestId);
@@ -67,7 +81,10 @@ public class RunTSP {
         Variable.shortestPaths.put(algoPointI.findNodeGraph(pointInterestId), results);
     }
 
-    public static void addRequest(Request request){
+    /**
+     * 
+     */
+    public static void addRequest(Request request, Boolean recalculatePath){
         long pickupId = request.getPickupAddress().getId();
         long deliveryId = request.getDeliveryAddress().getId();
         //Update modifications to Variable
@@ -77,29 +94,35 @@ public class RunTSP {
         Variable.pointsInterestId.add(pickupId);
         Variable.pointsInterestId.add(deliveryId);
         //Updates old Dijkstras
-        for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet()){
+        for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet())
             entry.getValue().addRequest(pickupId, deliveryId, entry.getKey().getId());
-        }
+        
         //Executes dijkstra for added request
         doDijkstra(pickupId);
         doDijkstra(deliveryId);
-        //Update complete graph and launch TSP algo
-        Node pickup = null;
-        Node delivery = null;
 
-        for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()){
-            if(entry.getKey().getId() == pickupId)
-                pickup = entry.getKey();
-            if(entry.getKey().getId() == deliveryId)
-                delivery = entry.getKey();
-        }
+        //Update complete graph
+        Node pickup = Variable.g.findNodeById(pickupId);
+        Node delivery = Variable.g.findNodeById(deliveryId);
         List<Node> addedNodes = Arrays.asList(pickup,delivery);
         Variable.g.addRequest(addedNodes);
-        Variable.g.prettyPrint();
-        getSolution();
+
+        if(recalculatePath)
+            getSolution();
+        else {
+            Long idLast = Variable.sPathOfPointsInterests.pollLast();
+            Variable.sPathOfPointsInterests.add(pickupId);
+            Variable.sPathOfPointsInterests.add(deliveryId);
+            Variable.sPathOfPointsInterests.add(idLast);
+        }
     }
 
-    public static void removeRequest(Request request) {
+    /**
+     * 
+     * @param request
+     * @param recalculatePath
+     */
+    public static void removeRequest(Request request, Boolean recalculatePath) {
         long pickupId = request.getPickupAddress().getId();
         long deliveryId = request.getDeliveryAddress().getId();
 
@@ -107,7 +130,7 @@ public class RunTSP {
             //System.out.println("----------STARTING REMOVING NODES ----------");
             Node pickupNode = Variable.g.findNodeById(pickupId);
             Node deliveryNode = Variable.g.findNodeById(deliveryId);
-    
+            
             Variable.pickUpDeliveryCouplesId.remove(pickupId, deliveryId);
             Variable.pointsInterestId.remove(pickupId);
             Variable.pointsInterestId.remove(deliveryId);
@@ -115,128 +138,99 @@ public class RunTSP {
             Variable.dijkstras.remove(deliveryNode);
             Variable.shortestPaths.remove(pickupNode);
             Variable.shortestPaths.remove(deliveryNode);
-
+            Variable.sPathOfPointsInterests.remove(pickupId);
+            Variable.sPathOfPointsInterests.remove(deliveryId);
             for (Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet()) 
                 entry.getValue().removeRequest(pickupId, deliveryId, entry.getKey().getId());
             
-            /*System.out.println("Couple pickup/delivery : " +Variable.pickUpDeliveryCouplesId + "\n\n");
-            System.out.println("Points d'intérêts : " +Variable.pointsInterestId + "\n\n");
-            System.out.println("Dijkstras : " +Variable.dijkstras + "\n\n");
-            System.out.println("+ Courts chemins : \n");
-            for (Map.Entry<Node, Set<Node>> entry : Variable.shortestPaths.entrySet()) 
-                System.out.println("--> " +entry.getKey() + "\n");*/
-            
             List<Node> nodesToRemove = Arrays.asList(pickupNode, deliveryNode);
             Variable.g.removeRequest(nodesToRemove);
-            getSolution();
+
+            Variable.shortestPath.clear();
+            if(recalculatePath)
+                getSolution();
+            else 
+                computeFullShortestPath();
         }
     }
 
+    /**
+     * 
+     * 
+     * @param newPath
+     * @return
+     */
     public static List<Segment> modifyOrderOfTour(LinkedList<Long> newPath) {
-        double previousDistance = 0;
-        Variable.shortestPath.clear();
-
-        for (int i = 0; i < newPath.size(); i++) {
-            Node currentSource = Variable.g.findNodeById(newPath.get(i));
-            Dijkstra graph = Objects.requireNonNull(Variable.dijkstras.entrySet().stream()
-                    .filter(elem -> elem.getKey().getId() == currentSource.getId()).findFirst().orElse(null)).getValue();
-            Node destination = graph.findNodeInterest((newPath.get(i + 1)));
-            Node sourceDijkstra = graph.findNodeInterest(currentSource.getId());
-            LinkedList<Node> sp = graph.getShortestPath(sourceDijkstra, destination);
-            for (Node node : sp) {
-                Node temp = new Node(node.getId());
-                temp.setTypeOfNode(node.getTypeOfNode());
-                temp.setDistance(node.getDistance() + previousDistance);
-                sp.set(sp.indexOf(node), temp);
-            }
-            Variable.shortestPath.addAll(sp);
-            previousDistance = Variable.shortestPath.getLast().getDistance();
-            if (i != newPath.size() - 1) {
-                Variable.shortestPath.removeLast();
-            }
-        }
-
-        List<Segment> solution = new LinkedList<>();
-        List<Segment> segments = Variable.cityPlan.getSegments();
-        Map<Long, Intersection> intersections = Variable.cityPlan.getIntersections();
-        for (int i = 0; i < Variable.shortestPath.size(); ++i) {
-            long indexStart = Variable.shortestPath.get(i).getId();
-            long indexEnd;
-            if (i != Variable.shortestPath.size() - 1) 
-                indexEnd = Variable.shortestPath.get(i + 1).getId();
-             else 
-                indexEnd = Variable.shortestPath.get(0).getId();
-            
-            Intersection start = intersections.get(indexStart);
-            Intersection end = intersections.get(indexEnd);
-            for (Segment segment : segments) {
-                if (segment.getOrigin().getId() == start.getId() && segment.getDestination().getId() == end.getId()) {
-                    solution.add(segment);
-                    break;
-                }
-            }
-        }
-
-        return solution;
+        Variable.sPathOfPointsInterests = newPath;
+        computeFullShortestPath();
+        return getSegmentsSolution();
     }
 
+    /**
+     * 
+     * @return
+     */
     public static List<Segment> getSolution() {
         
-        TSP tsp = new TSPEnhanced();
+        Variable.tsp = new TSPEnhanced();
         long startTime = System.currentTimeMillis();
-        tsp.searchSolution(Config.TIME_LIMIT, Variable.g);
+        Variable.tsp.searchSolution(Config.TIME_LIMIT, Variable.g);
         System.out.print("Solution found in " + (System.currentTimeMillis() - startTime)+"ms. \n");
         
-        Variable.shortestPath.clear();
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();
         //Store the id of the Nodes solution
-        List<Long> idSolution = new LinkedList<>();
-        //Each shortest path start from 0, hence we must add last distance value of previous index shortestPath
-        double previousDistance = 0;
 
         for (int i = 0; i < Variable.pointsInterestId.size(); i++) {
-            int indexTsp = tsp.getSolution(i);
+            int indexTsp = Variable.tsp.getSolution(i);
             long idIndexTSP = Variable.g.findIdNodeByIndex(indexTsp);
             //adds solution
             indexSolution.add(indexTsp);
-            idSolution.add(idIndexTSP);
-            Node currentSource = Variable.g.findNodeById(idIndexTSP);
+            Variable.sPathOfPointsInterests.add(idIndexTSP);            
+        }
+        Variable.sPathOfPointsInterests.add(Variable.g.findIdNodeByIndex(Variable.tsp.getSolution(0)));
+        computeFullShortestPath();
+
+        printGraphInformation(Variable.shortestPath,indexSolution);
+        return getSegmentsSolution();
+    }
+
+    public static void computeFullShortestPath() {
+        Variable.shortestPath.clear();
+        for(int i = 0; i<Variable.sPathOfPointsInterests.size() -1 ; i++) {
+            Long curId = Variable.sPathOfPointsInterests.get(i);
+            Long nextId = Variable.sPathOfPointsInterests.get(i+1);
             //Finds corresponding dijkstra graph
             Dijkstra graph = Objects.requireNonNull(Variable.dijkstras.entrySet().stream()
-                    .filter(elem -> elem.getKey().getId() == currentSource.getId()).findFirst().orElse(null)).getValue();
-            Node destination;
-            //Destination is following index in tsp solution or departure address if we're on last index of tsp solution
-            if (i == (Variable.pointsInterestId.size() - 1))
-                destination = graph.findNodeInterest(Variable.g.findIdNodeByIndex(tsp.getSolution(0)));
-            else
-                destination = graph.findNodeInterest(Variable.g.findIdNodeByIndex(tsp.getSolution(i + 1)));
-            Node sourceDijkstra = graph.findNodeInterest(currentSource.getId());
-
-            LinkedList<Node> sp = graph.getShortestPath(sourceDijkstra, destination);
-            for (Node node : sp) {
-                Node temp = new Node(node.getId());
-                temp.setTypeOfNode(node.getTypeOfNode());
-                temp.setDistance(node.getDistance() + previousDistance);
-                sp.set(sp.indexOf(node), temp);
-            }
-            Variable.shortestPath.addAll(sp);
-            previousDistance = Variable.shortestPath.getLast().getDistance();
-            if (i != Variable.pointsInterestId.size() - 1) {
+                    .filter(elem -> elem.getKey().getId() == curId).findFirst().orElse(null)).getValue();
+            Node source = graph.findNodeInterest(curId);
+            Node destination = graph.findNodeInterest(nextId);
+            LinkedList<Node> sp = graph.getShortestPath(source, destination);
+            List<Long> spId = new LinkedList<>();
+            for (Node node : sp) 
+                spId.add(node.getId());
+            
+            Variable.shortestPath.addAll(spId);
+            if (i != Variable.pointsInterestId.size() - 1) 
                 Variable.shortestPath.removeLast();
-            }
         }
+    }
 
+    /**
+     * 
+     * @return
+     */
+    public static List<Segment> getSegmentsSolution() {
         List<Segment> solution = new LinkedList<>();
         List<Segment> segments = Variable.cityPlan.getSegments();
         Map<Long, Intersection> intersections = Variable.cityPlan.getIntersections();
         for (int i = 0; i < Variable.shortestPath.size(); ++i) {
-            long indexStart = Variable.shortestPath.get(i).getId();
+            long indexStart = Variable.shortestPath.get(i);
             long indexEnd;
             if (i != Variable.shortestPath.size() - 1) {
-                indexEnd = Variable.shortestPath.get(i + 1).getId();
+                indexEnd = Variable.shortestPath.get(i + 1);
             } else {
-                indexEnd = Variable.shortestPath.get(0).getId();
+                indexEnd = Variable.shortestPath.get(0);
             }
             Intersection start = intersections.get(indexStart);
             Intersection end = intersections.get(indexEnd);
@@ -247,7 +241,6 @@ public class RunTSP {
                 }
             }
         }
-        printGraphInformation(Variable.shortestPath,indexSolution, idSolution);
         return solution;
     }
 
@@ -293,7 +286,7 @@ public class RunTSP {
         }
     }
 
-    public static void printGraphInformation(LinkedList<Node> solutionNodes, List<Integer> indexSolution, List<Long> idSolution) {
+    public static void printGraphInformation(LinkedList<Long> solutionNodes, List<Integer> indexSolution) {
         System.out.println("SOLUTION");
         for (int i = 0; i < indexSolution.size(); ++i) {
             //To Print the couple
@@ -309,13 +302,13 @@ public class RunTSP {
                 else if(pairOfCur.getValue().getId() == cur.getId())
                     nodePair = pairOfCur.getKey();
             }*/
-            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " + idSolution.get(i) );
+            System.out.println("Index : " + indexSolution.get(i) + "\t\tID : " +  Variable.sPathOfPointsInterests.get(i) );
                             /*+ "\t\t Type : " + cur.getTypeOfNode() + "\t\t Couple : " + ((nodePair!=null)?nodePair.getId():"null")
                             + " : "  + ((nodePair!=null)?nodePair.getTypeOfNode():""));*/
         }
         //index solution doesn't contain departure address twice
-        System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " + idSolution.get(0));
-        System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
+        System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " +  Variable.sPathOfPointsInterests.get(0));
+        //System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
         /*System.out.println("\n\n SOLUTION IN DETAILS");
         for (Node node : solutionNodes) {
             System.out.println("ID : " + node.getId() + "\t\tDISTANCE : " + node.getDistance());

@@ -16,11 +16,16 @@ public interface TSP {
 	 * (-1 if <code>searchSolution</code> has not been called yet, or if i < 0 or i >= g.getNbVertices())
 	 */
 	public Integer getSolution(int i);
+
+	/**
+	 * @param i
+	 * @return the index of each vertex to be visited in order to get minimal computed tour
+	 */
+	public Integer[] getArraySolution();
 	
 	/** 
 	 * @return the total cost of the solution computed by <code>searchSolution</code> 
 	 * (-1 if <code>searcheSolution</code> has not been called yet).
 	 */
 	public double getSolutionCost();
-
 }
