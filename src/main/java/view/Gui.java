@@ -2,6 +2,7 @@ package view;
 
 import controller.Controller;
 import model.Plan;
+import model.Segment;
 import model.Tour;
 
 
@@ -34,7 +35,8 @@ public class Gui extends JFrame {
 
     //Graphic Elements
     JPanel base;
-    JPanel info;
+    JTextArea info;
+    //JPanel info;
     JPanel topBar;
     MapGui map;
     JPanel toolbar;
@@ -78,7 +80,7 @@ public class Gui extends JFrame {
 
         map = new MapGui(this, null,null, null, null, 1, null);
         info = new JTextArea(5,30);
-
+    /*
         inter.put((long) 25175791, new Intersection((long)25175791,45.75406,4.857418));
         inter.put((long) 26057064, new Intersection((long)26057064,45.75704,4.8625107));
         inter.put((long) 26317229, new Intersection((long)26317229,45.75465,4.8674865));
@@ -125,14 +127,15 @@ public class Gui extends JFrame {
 
         Plan plantest = Plan.createPlan(inter, seg);
         */
-        map = new MapGui(null,null, null, null, null);
-        info = new JPanel();
+        map = new MapGui(null,null, null, null, null,1,null);
+        //info = new JPanel();
 
         //JLabel
         JLabel mapReadLabel = new JLabel("Path To Map");
         JLabel reqReadLabel = new JLabel("Path To Requests");
-        JLabel temp = new JLabel("If you Click on the Map you will receive information here");
-        temp.setForeground(Color.WHITE);
+        //JLabel temp = new JLabel("If you Click on the Map you will receive information here");
+        String temp = "If you Click on the Map you will receive information here";
+        //temp.setForeground(Color.WHITE);
         mapReadLabel.setForeground(Color.WHITE);
         reqReadLabel.setForeground(Color.WHITE);
 
@@ -220,7 +223,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(this, plan, tour, controller,null );
+                map = new MapGui(this, plan, tour, controller,null, 1,mapScroll.getViewport().getSize());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -292,7 +295,8 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                solution = controller.findBestTour(tour);
+                //solution = controller.findBestTour(tour);
+                solution = controller.findBestTour();
                 map = new MapGui(this, plan, tour, controller, solution,zoom,mapScroll.getViewport().getSize());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
