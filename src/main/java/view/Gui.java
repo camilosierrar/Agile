@@ -24,7 +24,7 @@ public class Gui extends JFrame {
     JPanel base;
     JTextArea info;
     JPanel topBar;
-    JPanel map;
+    MapGui map;
     JPanel toolbar;
     JPanel mapContainer;
     JScrollPane mapScroll;
@@ -70,7 +70,7 @@ public class Gui extends JFrame {
         mapContainer = new JPanel(new BorderLayout());
         toolbar = new JPanel();
 
-        map = new MapGui(this, null,null, null, null, 1);
+        map = new MapGui(this, null,null, null, null, 1, null);
         info = new JTextArea(5,30);
 
         //JLabel
@@ -129,6 +129,9 @@ public class Gui extends JFrame {
         
         //Add to Toolbar
         toolbar.add(zoomSlide);
+
+        //Scroll
+        mapScroll = new JScrollPane(mapContainer, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         
         // Add button listeners
         mapRead.addActionListener(event -> {
@@ -141,7 +144,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(this, plan, tour, controller, null,zoom);
+                map = new MapGui(this, plan, tour, controller, null,zoom,mapScroll.getViewport().getSize());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -159,7 +162,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(this, plan, tour, controller, null,zoom);
+                map = new MapGui(this, plan, tour, controller, null,zoom,mapScroll.getViewport().getSize());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -178,7 +181,7 @@ public class Gui extends JFrame {
             } else {
                 mapContainer.removeAll();
                 solution = controller.findBestTour(tour);
-                map = new MapGui(this, plan, tour, controller, solution,zoom);
+                map = new MapGui(this, plan, tour, controller, solution,zoom,mapScroll.getViewport().getSize());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -189,20 +192,20 @@ public class Gui extends JFrame {
 
         zoomSlide.addChangeListener( changeEvent -> {
             if (!zoomSlide.getValueIsAdjusting()) {
-
                 zoom = (int)zoomSlide.getValue();
-                System.out.println("Zoom = "+zoom);
+                Dimension tmp = map.getNewDim(zoom);
+                //System.out.println("Zoom = "+zoom);
                 mapContainer.removeAll();
-                map = new MapGui(this, plan, tour, controller, solution,zoom);
+                map = new MapGui(this, plan, tour, controller, solution,zoom,mapScroll.getViewport().getSize());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
-                System.out.println("Map Loaded");
+                mapContainer.setPreferredSize(tmp);
+                mapContainer.setSize(tmp);
                 mapContainer.validate();
                 mapContainer.repaint();
             }
         });
-        //Scroll
-        mapScroll = new JScrollPane(mapContainer, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
         //Add panels
         base.add(mapScroll,BorderLayout.CENTER);
         base.add(topBar, BorderLayout.PAGE_START);
