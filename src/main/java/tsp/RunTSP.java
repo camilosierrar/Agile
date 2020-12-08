@@ -26,7 +26,13 @@ public class RunTSP {
                 Variable.cityPlan.getIntersectionById(26086128),
                 20,
                 40);
-        addRequest(request, true);
+        addRequest(request, false);
+        System.out.println();
+        System.out.println("Total distance : " + getDistanceOfShortestPath() + " meters");
+        removeRequest(request, false);
+
+        System.out.println();
+        System.out.println("Total distance : " + getDistanceOfShortestPath() + " meters");
         //END TEST
     }
 
@@ -102,8 +108,15 @@ public class RunTSP {
         doDijkstra(deliveryId);
 
         //Update complete graph
-        Node pickup = Variable.g.findNodeById(pickupId);
-        Node delivery = Variable.g.findNodeById(deliveryId);
+        Node pickup = null;
+        Node delivery = null;
+        for(Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet())
+            if(entry.getKey().getId() == pickupId)
+                pickup = entry.getKey();
+            else if(entry.getKey().getId() == deliveryId)
+                delivery = entry.getKey();
+            
+        
         List<Node> addedNodes = Arrays.asList(pickup,delivery);
         Variable.g.addRequest(addedNodes);
 
@@ -245,6 +258,15 @@ public class RunTSP {
         return solution;
     }
 
+    private static double getDistanceOfShortestPath() {
+        double fullDistance = 0.0;
+        List<Segment> segmentsSolution = getSegmentsSolution();
+        for (Segment segment : segmentsSolution) {
+            fullDistance += segment.getLength();
+        }
+        return fullDistance;
+    }
+
     /**
      * From a Plan and a Tour object, retrieves and stores all informations as nodes
      * Fills graphPlan, pickup/delivery couples and points of interest
@@ -309,7 +331,7 @@ public class RunTSP {
         }
         //index solution doesn't contain departure address twice
         System.out.println("Index : " + indexSolution.get(0) + "\t\tID : " +  Variable.sPathOfPointsInterests.get(0));
-        //System.out.println("Total distance : " + solutionNodes.getLast().getDistance() + " meters");
+        System.out.println("Total distance : " + getDistanceOfShortestPath() + " meters");
         /*System.out.println("\n\n SOLUTION IN DETAILS");
         for (Node node : solutionNodes) {
             System.out.println("ID : " + node.getId() + "\t\tDISTANCE : " + node.getDistance());
