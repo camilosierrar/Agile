@@ -27,12 +27,22 @@ public class RunTSP {
                 20,
                 40);
         addRequest(request, false);
-        System.out.println();
-        System.out.println("Total distance : " + getDistanceOfShortestPath() + " meters");
-        removeRequest(request, false);
+        printSolutionInformations();
 
-        System.out.println();
-        System.out.println("Total distance : " + getDistanceOfShortestPath() + " meters");
+        LinkedList<Long> testList = new LinkedList<>();
+        testList.add((long) 342873658);
+        testList.add((long) 26086127);
+        testList.add((long) 208769039);
+        testList.add((long) 25173820);
+        testList.add((long) 26086128);
+        testList.add((long) 342873658);
+
+        modifyOrderOfTour(testList);
+        printSolutionInformations();
+
+        removeRequest(request, false);
+        printSolutionInformations();
+
         //END TEST
     }
 
@@ -307,6 +317,15 @@ public class RunTSP {
             Variable.pointsInterestId.add(pickupAddress.getId());
             Variable.pointsInterestId.add(deliveryAddress.getId());
         }
+    }
+
+    public static void printSolutionInformations() {
+        System.out.println();
+        System.out.println("---------SOLUTION---------");
+        for (Long id : Variable.sPathOfPointsInterests)
+            System.out.println("\tID : " +  id );
+        System.out.println("Total distance : " + getDistanceOfShortestPath() + " meters");
+        System.out.println("---------END----------");
     }
 
     public static void printGraphInformation(LinkedList<Long> solutionNodes, List<Integer> indexSolution) {
