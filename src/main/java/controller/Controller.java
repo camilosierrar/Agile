@@ -10,7 +10,19 @@ import xml.XMLrequest;
 import java.util.LinkedList;
 import java.util.List;
 
+import command.ListOfCommands;
+
 public class Controller {
+
+    private ListOfCommands l;
+
+    public void undo() {
+
+    }
+
+    public void redo() {
+
+    }
 
     public Controller() {
         // TODO constructor
