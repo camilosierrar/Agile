@@ -18,15 +18,17 @@ public class RunTSP {
         long endTime = System.currentTimeMillis();
         System.out.println("Temps de calcul pour les dijkstra : " + (endTime-startTime) + " ms");
         //Initializes complete graph and launch TSP algo
-        Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.shortestPaths);
+        Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.dijkstras);
         getSolution();
+        printSolutionInformations();
+        
         //TEST ADD REQUEST
         Request request = new Request(
                 Variable.cityPlan.getIntersectionById(26086127),
                 Variable.cityPlan.getIntersectionById(26086128),
                 20,
                 40);
-        addRequest(request, false);
+        addRequest(request, true);
         printSolutionInformations();
 
         LinkedList<Long> testList = new LinkedList<>();
@@ -40,7 +42,7 @@ public class RunTSP {
         modifyOrderOfTour(testList);
         printSolutionInformations();
 
-        removeRequest(request, false);
+        removeRequest(request, true);
         printSolutionInformations();
 
         //END TEST
@@ -53,7 +55,7 @@ public class RunTSP {
     public static List<Segment> runTSP() {
         loadData();
         computeDijkstra();
-        Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.shortestPaths);
+        Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.dijkstras);
         List<Segment> segmentsSolution = getSolution();
         return segmentsSolution;
     }
@@ -92,13 +94,13 @@ public class RunTSP {
     public static void doDijkstra(long pointInterestId){
         Dijkstra algoPointI = new Dijkstra();
         algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointInterestId);
-        Set<Node> results = algoPointI.getPointsInterest();
         Variable.dijkstras.put(algoPointI.findNodeGraph(pointInterestId), algoPointI);
-        Variable.shortestPaths.put(algoPointI.findNodeGraph(pointInterestId), results);
     }
 
     /**
      * 
+     * @param request
+     * @param recalculatePath
      */
     public static void addRequest(Request request, Boolean recalculatePath){
         long pickupId = request.getPickupAddress().getId();
@@ -160,8 +162,6 @@ public class RunTSP {
             Variable.pointsInterestId.remove(deliveryId);
             Variable.dijkstras.remove(pickupNode);
             Variable.dijkstras.remove(deliveryNode);
-            Variable.shortestPaths.remove(pickupNode);
-            Variable.shortestPaths.remove(deliveryNode);
             Variable.sPathOfPointsInterests.remove(pickupId);
             Variable.sPathOfPointsInterests.remove(deliveryId);
             for (Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet()) 
@@ -215,7 +215,7 @@ public class RunTSP {
         Variable.sPathOfPointsInterests.add(Variable.g.findIdNodeByIndex(Variable.tsp.getSolution(0)));
         computeFullShortestPath();
 
-        printGraphInformation(Variable.shortestPath,indexSolution);
+        //printGraphInformation(Variable.shortestPath,indexSolution);
         return getSegmentsSolution();
     }
 

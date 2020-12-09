@@ -5,6 +5,7 @@ import model.Node;
 import java.util.*;
 
 import config.Variable;
+import dijkstra.Dijkstra;
 
 import static config.Config.Type_Request.*;
 
@@ -28,7 +29,7 @@ public class CompleteGraph implements Graph {
 	 * @param nbVertices number of points of interest
 	 * @param shortestPaths shortest paths to every point of interest, for every point of interest
 	 */
-	public CompleteGraph(int nbVertices, Map<Node, Set<Node>> shortestPaths){
+	public CompleteGraph(int nbVertices, Map<Node, Dijkstra> shortestPaths){
 		//Initialized variables
 		this.nbVertices = nbVertices;
 		this.nodeAsInteger = new HashMap<>();
@@ -38,7 +39,7 @@ public class CompleteGraph implements Graph {
 		//Adds departure address with index set at 0 (first value in the matrix)
 		//Important as it enables TSP to start with departure address
 		int i = 1;
-		for(Map.Entry<Node,Set<Node>> entry: shortestPaths.entrySet()) {
+		for(Map.Entry<Node, Dijkstra> entry: shortestPaths.entrySet()) {
 			if(entry.getKey().getTypeOfNode().equals(DEPARTURE_ADDRESS))
 				this.nodeAsInteger.put(entry.getKey().getId(), 0);
 			else
@@ -46,9 +47,9 @@ public class CompleteGraph implements Graph {
 			nodes.add(entry.getKey());
 		}
 
-		for(Map.Entry<Node, Set<Node>> entry: shortestPaths.entrySet()){
+		for(Map.Entry<Node, Dijkstra> entry: shortestPaths.entrySet()){
 			Node source = entry.getKey();
-			Set<Node> destinations = entry.getValue();
+			Set<Node> destinations = entry.getValue().getPointsInterest();
 			int x = findIndexNodeById(source.getId());
 			for(Node destination: destinations){
 				int y = findIndexNodeById(destination.getId());
@@ -88,10 +89,10 @@ public class CompleteGraph implements Graph {
 		double[][] newCost = new double[nbVertices][nbVertices];
         //Computes new cost from new points of interests to every old points of interest
         //And from old points of interests to newly added points of interest
-        for (Map.Entry<Node, Set<Node>> entry : Variable.shortestPaths.entrySet()) {
+        for (Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet()) {
             Node source = entry.getKey();
             int x = findIndexNodeById(source.getId());
-            Set<Node> destinations = entry.getValue();
+            Set<Node> destinations = entry.getValue().getPointsInterest();
             for (Node destination : destinations) {
                 int y = findIndexNodeById(destination.getId());
                 newCost[x][y] = destination.getDistance();
@@ -112,7 +113,7 @@ public class CompleteGraph implements Graph {
 		this.nodes.removeAll(nodesRemoved);
 		this.nodeAsInteger.clear();
 		int i = 1;
-		for(Map.Entry<Node,Set<Node>> entry: Variable.shortestPaths.entrySet()) 
+		for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet()) 
 			if(entry.getKey().getTypeOfNode().equals(DEPARTURE_ADDRESS))
 				this.nodeAsInteger.put(entry.getKey().getId(), 0);
 			else
@@ -122,10 +123,10 @@ public class CompleteGraph implements Graph {
 		double[][] newCost = new double[nbVertices][nbVertices];
 		
         //Update cost
-        for (Map.Entry<Node, Set<Node>> entry : Variable.shortestPaths.entrySet()) {
+        for (Map.Entry<Node,  Dijkstra> entry : Variable.dijkstras.entrySet()) {
             Node source = entry.getKey();
             int x = findIndexNodeById(source.getId());
-            Set<Node> destinations = entry.getValue();
+            Set<Node> destinations = entry.getValue().getPointsInterest();
             for (Node destination : destinations) {
                 int y = findIndexNodeById(destination.getId());
                 newCost[x][y] = destination.getDistance();
