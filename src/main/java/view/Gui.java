@@ -29,6 +29,9 @@ public class Gui extends JFrame {
 
     int zoom;
 
+    //Selected intersections
+    long selId1, selId2;
+
     //Solution
     List<Segment> solution;
 
@@ -55,6 +58,8 @@ public class Gui extends JFrame {
     JTextField reqPath;
     JSlider zoomSlide;
 
+    TableContent tableCont;
+
     Controller controller;
 
     //Constructor
@@ -76,6 +81,8 @@ public class Gui extends JFrame {
     private void setGui() {
         zoom = 0;
         solution = null;
+        selId1 = 0;
+        selId2 = 0;
         //Dimensions and layout
         this.setSize(1000,600);
         this.setMinimumSize(new Dimension(1200, 600));
@@ -93,7 +100,7 @@ public class Gui extends JFrame {
         tableSection = new JPanel(new BorderLayout());
         table = new JTable(new TableContent());
 
-        map = new MapGui(this, null,null, null, null, 1, null);
+        map = new MapGui(this, null,null, null, null, 1, null, 0,0);
         info = new JTextArea(5,30);
     /*
         inter.put((long) 25175791, new Intersection((long)25175791,45.75406,4.857418));
@@ -246,7 +253,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller,null, 1,mapScroll.getViewport().getSize());
+                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller,null, 1,mapScroll.getViewport().getSize(), selId1, selId2);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -281,7 +288,7 @@ public class Gui extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 mapContainer.removeAll();
-                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize());
+                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
@@ -294,18 +301,18 @@ public class Gui extends JFrame {
         getBestTour.addActionListener(event -> {
             mapContainer.removeAll();
             solution = controller.findBestTour();
-            map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution, zoom, mapScroll.getViewport().getSize());
+            map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution, zoom, mapScroll.getViewport().getSize(), selId1, selId2);
             map.setBackground(Color.lightGray);
             mapContainer.add(map,BorderLayout.CENTER);
             System.out.println("Map Loaded");
             mapContainer.validate();
             mapContainer.repaint();
-
+            //List
             controlFlagSelectionEvent = false;
-            TableContent table = new TableContent(solution, Variable.tour);
+            tableCont = new TableContent(solution, Variable.tour, controller);
             // System.out.println("tableContent = "+tableContent);
-            if (this.table == null){ this.table = new JTable(table); }
-            else{ this.table.setModel(table); }
+            if (this.table == null){ this.table = new JTable(tableCont); }
+            else{ this.table.setModel(tableCont); }
             tableSection.validate();
             tableSection.repaint();
             controlFlagSelectionEvent = true;
@@ -317,7 +324,7 @@ public class Gui extends JFrame {
                 Dimension tmp = map.getNewDim(zoom);
                 //System.out.println("Zoom = "+zoom);
                 mapContainer.removeAll();
-                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize());
+                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 mapContainer.setPreferredSize(tmp);
@@ -327,6 +334,7 @@ public class Gui extends JFrame {
             }
         });
 
+        //Selection sur Liste des Trajets
         this.table.getSelectionModel().addListSelectionListener(event -> {
             if(controlFlagSelectionEvent && this.table.getSelectionModel().getAnchorSelectionIndex() != -1) {
                 controlFlagSelectionEvent = false;
@@ -336,6 +344,8 @@ public class Gui extends JFrame {
                     int indexCouple = controller.findCoupleIndex(lsm.getAnchorSelectionIndex());
                     this.table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                     boolean includes = false;
+                    selId1 = tableCont.getIDbyIndex(lsm.getAnchorSelectionIndex());
+                    selId2 = tableCont.getIDbyIndex(indexCouple);
                     for (int index : this.table.getSelectedRows()) {
                         if (index == indexCouple) {
                             includes = true;
@@ -347,6 +357,15 @@ public class Gui extends JFrame {
                         this.table.validate();
                         this.table.repaint();
                     }
+
+                    //Redraw Map with markers
+                    mapContainer.removeAll();
+                    map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+                    map.setBackground(Color.lightGray);
+                    mapContainer.add(map,BorderLayout.CENTER);
+                    System.out.println("Map Loaded");
+                    mapContainer.validate();
+                    mapContainer.repaint();
                 }
                 controlFlagSelectionEvent = true;
             }

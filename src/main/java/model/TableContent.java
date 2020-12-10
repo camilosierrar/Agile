@@ -1,5 +1,7 @@
 package model;
 
+import controller.Controller;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,27 +17,32 @@ public class TableContent extends AbstractTableModel {
 
     }
 
-    public TableContent(List<Segment> tableContent, Tour tour){
+    public TableContent(List<Segment> tableContent, Tour tour, Controller controller){
         data.clear();
         totalDuration = tour.getTimeDeparture();
         for(Segment s: tableContent){
             if(s.getOrigin().getId() == tour.getAddressDeparture().getId()){
-                data.add(new Step(s.getOrigin().getId(), s.getName(), totalDuration, "Depot start", s.getOrigin().getId()));
+                data.add(new Step(s.getOrigin().getId(), controller.getAddress(s.getOrigin().getLatitude(),s.getOrigin().getLongitude())
+                        , totalDuration, "Depot start", s.getOrigin().getId()));
             }
             else {
                 for (Request request : tour.getRequests()) {
                     if (s.getOrigin().getId() == request.getPickupAddress().getId()) {
-                        data.add(new Step(request.getPickupAddress().getId(),s.getName(), totalDuration, "PickUp",request.getDeliveryAddress().getId()));
+                        data.add(new Step(request.getPickupAddress().getId(),controller.getAddress(s.getOrigin().getLatitude(),s.getOrigin().getLongitude()),
+                                totalDuration, "PickUp",request.getDeliveryAddress().getId()));
                         totalDuration = addSecondsToDate(totalDuration, request.getPickupDuration());
                     } else if (s.getOrigin().getId() == request.getDeliveryAddress().getId()) {
-                        data.add(new Step(request.getDeliveryAddress().getId(),s.getName(), totalDuration, "Delivery",request.getPickupAddress().getId()));
+                        data.add(new Step(request.getDeliveryAddress().getId(),controller.getAddress(s.getOrigin().getLatitude(),s.getOrigin().getLongitude()),
+                                totalDuration, "Delivery",request.getPickupAddress().getId()));
                         totalDuration = addSecondsToDate(totalDuration, request.getDeliveryDuration());
                     }
                 }
             }
             totalDuration = addSecondsToDate(totalDuration, (int)(s.length));
         }
-        data.add(new Step(tableContent.get(0).getOrigin().getId(),tableContent.get(0).getName(), totalDuration, "Depot arrival",tableContent.get(0).getOrigin().getId()));
+        data.add(new Step(tableContent.get(0).getOrigin().getId(),controller.getAddress(tableContent.get(0).getOrigin().getLatitude(),tableContent.get(0).getOrigin().getLongitude()), totalDuration, "Depot arrival",tableContent.get(0).getOrigin().getId()));
+
+        //data.add(new Step(tableContent.get(0).getOrigin().getId(),tableContent.get(0).getName(), totalDuration, "Depot arrival",tableContent.get(0).getOrigin().getId()));
         fireTableDataChanged ();
     }
 
@@ -65,14 +72,26 @@ public class TableContent extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch(columnIndex){
             case 0:
-                return data.get(rowIndex).getId();
+                return data.get(rowIndex).getName();
             case 1:
                 return data.get(rowIndex).getType();
             case 2:
-                return data.get(rowIndex).getDate();
+
+                String res = data.get(rowIndex).getDate().getHours() + ":";
+                int x = data.get(rowIndex).getDate().getMinutes();
+                if (x<10) {
+                    res += "0"+x;
+                } else {
+                    res += x;
+                }
+                return res;
             default:
                 return null;
         }
+    }
+
+    public long getIDbyIndex(int index) {
+        return data.get(index).getId();
     }
 
     public static int getCoupleIndex(int index){
