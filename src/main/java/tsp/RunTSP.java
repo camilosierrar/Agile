@@ -23,7 +23,8 @@ public class RunTSP {
         Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.dijkstras);
         Scanner scan = new Scanner(System.in);
         getSolution();
-
+        printSolutionInformations();
+        System.out.println();
         //TEST REQUEST
         Request request = new Request(
                 Variable.cityPlan.getIntersectionById(26086127),
@@ -32,14 +33,17 @@ public class RunTSP {
                 40);
         
         Controller c = new Controller();
+        Boolean loop = true;
 
-        while(true) {
+        while(loop) {
             System.out.println("Que faire ?");
             System.out.println("1 - Add Request");
             System.out.println("2 - Remove Reques");
             System.out.println("3 - Modify Order (after added new request)");
             System.out.println("4 - Undo");
             System.out.println("5 - Redo");
+            System.out.println("q - quit");
+            System.out.println();
             String choice = scan.nextLine();
             switch(choice) {
                 case "1": {
@@ -50,13 +54,16 @@ public class RunTSP {
                     switch(choice2) {
                         case "1": {
                             c.addRequest(request, false);
+                            break;
                         }
                         case "2": {
                             c.addRequest(Variable.tour.getRequests().get(0), false);
+                            break;
                         }
                         default:
                             break;
                     }
+                    break;
                 }
                 case "2": {
                     System.out.println("Which request");
@@ -66,13 +73,16 @@ public class RunTSP {
                     switch(choice2) {
                         case "1": {
                             c.removeRequest(request, false);
+                            break;
                         }
                         case "2": {
                             c.removeRequest(Variable.tour.getRequests().get(0), false);
+                            break;
                         }
                         default:
                             break;
                     }
+                    break;
                 }
                 case "3": {
                     LinkedList<Long> testList = new LinkedList<>();
@@ -83,19 +93,24 @@ public class RunTSP {
                     testList.add((long) 26086128);
                     testList.add((long) 342873658);
                     c.modifyOrder(testList);
+                    break;
                 }
                 case "4": {
                     c.undo();
+                    break;
                 }
                 case "5": {
                     c.redo();
+                    break;
                 }
-                default:
+                case "q":
+                    loop = false;
                     break;
             }
             printSolutionInformations();
+            System.out.println();
         }
-
+        scan.close();
         //END TEST
     }
 

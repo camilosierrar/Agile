@@ -20,6 +20,7 @@ public class Controller {
     private ListOfMementos l;
 
     public Controller() {
+        l = new ListOfMementos();
     }
     
     public void undo() {

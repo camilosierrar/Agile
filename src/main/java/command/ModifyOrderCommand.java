@@ -26,6 +26,6 @@ public class ModifyOrderCommand implements MementoableCommand {
     @Override
     public Memento takeSnapshot() {
         return new Memento(Variable.pickUpDeliveryCouplesId, Variable.shortestPath, Variable.sPathOfPointsInterests,
-                           Variable.dijkstras, Variable.graph, Variable.pointsInterestId, Variable.g, Variable.tsp );
+                           Variable.dijkstras, Variable.graph, Variable.pointsInterestId, Variable.g );
     }
 }
