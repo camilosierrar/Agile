@@ -7,13 +7,43 @@ import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
 
-import java.util.LinkedList;
 import java.util.List;
+
+import command.InitialState;
+import command.ListOfCommands;
+import command.State;
 
 public class Controller {
 
+    private ListOfCommands l;
+    private State currentState;
+
     public Controller() {
-        // TODO constructor
+        currentState = new InitialState();
+    }
+
+    public void setCurrentState(State s){
+        this.currentState = s;
+    }
+    
+    public void undo() {
+        currentState.undo();
+    }
+
+    public void redo() {
+        currentState.redo();
+    }
+
+    public void addRequest() {
+        currentState.addRequest();
+    }
+
+    public void removeRequest() {
+        currentState.removeRequest();
+    }
+
+    public void modifyOrder() {
+        currentState.modifyOrder();
     }
 
     public void loadMap(String file) {
@@ -27,6 +57,5 @@ public class Controller {
     public List<Segment> findBestTour() {
         return RunTSP.runTSP();
     }
-
 
 }

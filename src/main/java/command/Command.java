@@ -1,5 +1,8 @@
 package command;
 
 public interface Command {
-    void execute();
+    
+    public default void doCommand() {};
+    public default void undoCommand() {};
+    
 }
