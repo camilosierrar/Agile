@@ -233,8 +233,16 @@ public class Gui extends JFrame {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 System.out.println("Opening: " + file.getName() + ".");
-                controller.loadMap(file.getName());
-                this.mapPath.setText(file.getName());
+                if (!file.canRead()) {
+                    JOptionPane.showMessageDialog(this,
+                            "The file requested for the map is not valid, please choose another one",
+                            "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    controller.loadMap(file.getName());
+                    this.mapPath.setText(file.getName());
+                }
             } else {
                 System.out.println("Opening nothing sad smiley face");
             }
@@ -268,8 +276,16 @@ public class Gui extends JFrame {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 System.out.println("Opening: " + file.getName() + ".");
-                controller.loadRequests(file.getName());
-                this.reqPath.setText(file.getName());
+                if (!file.canRead()) {
+                    JOptionPane.showMessageDialog(this,
+                            "The file requested for the map is not valid, please choose another one",
+                            "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    controller.loadRequests(file.getName());
+                    this.reqPath.setText(file.getName());
+                }
             } else {
                 System.out.println("Opening nothing sad smiley face");
             }
