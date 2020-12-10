@@ -339,6 +339,7 @@ public class Gui extends JFrame {
             } else {
                 mapContainer.removeAll();
                 map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize());
+                System.out.println("Requests before mapgui: " +Variable.tour.getRequests().toString());
                 map.setBackground(Color.lightGray);
                 mapContainer.add(map,BorderLayout.CENTER);
                 System.out.println("Map Loaded");
