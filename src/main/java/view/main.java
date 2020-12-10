@@ -2,11 +2,19 @@ package view;
 
 import controller.Controller;
 
+import java.io.IOException;
+
 public class main {
     public static void main (String[] args){
-        System.out.println("Bye world");
         Controller controller = new Controller();
         Gui gui = new Gui(controller);
+        /*try {
+            controller.getAddress(45.7,4.8790674);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 }
 
