@@ -78,8 +78,8 @@ public class Node implements Serializable {
         return "{" +
             " id='" + getId() + "'" +
             ", distance='" + getDistance() + "'" +
-            ", adjacentNodes='" + printAdjacentNodes()  + "'" +
-            ", typeOfNode='" + getTypeOfNode() + "'" +
+            //", adjacentNodes='" + printAdjacentNodes()  + "'" +
+            //", typeOfNode='" + getTypeOfNode() + "'" +
             "}";
     }
 

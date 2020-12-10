@@ -19,10 +19,11 @@ public class ListOfMementos {
     public void add(MementoableCommand c) {
         if(c != null) {
             Memento before = c.takeSnapshot();
+            //System.out.print(before.dijkstras+ "\n\n");
             c.execute();
             Memento after = c.takeSnapshot();
-            //System.out.print(before.sPathOfPointsInterests);
-            //System.out.print(after.sPathOfPointsInterests);
+            //System.out.print(before.dijkstras+ "\n\n");
+            System.out.print(after.dijkstras);
             undos.push(new BeforeAfter(before, after));
             redos.clear();
         }
