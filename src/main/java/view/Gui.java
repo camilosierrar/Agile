@@ -219,6 +219,7 @@ public class Gui extends JFrame {
         
         // Add button listeners
 
+        //Load map action listenner
         mapFile.addActionListener(event -> {
             this.mapFromFile = true;
 
@@ -254,7 +255,7 @@ public class Gui extends JFrame {
             }
         });
 
-
+        //Load Requests Action Listenner
         reqFile.addActionListener(event -> {
             this.reqFromFile = true;
 
@@ -289,10 +290,10 @@ public class Gui extends JFrame {
             }
         });
 
-
+        //Calculate Best Tour Listenner
         getBestTour.addActionListener(event -> {
             mapContainer.removeAll();
-            List<Segment> solution = controller.findBestTour();
+            solution = controller.findBestTour();
             map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution, zoom, mapScroll.getViewport().getSize());
             map.setBackground(Color.lightGray);
             mapContainer.add(map,BorderLayout.CENTER);
@@ -309,7 +310,7 @@ public class Gui extends JFrame {
             tableSection.repaint();
             controlFlagSelectionEvent = true;
         });
-
+        //Changing Zoom listenner
         zoomSlide.addChangeListener( changeEvent -> {
             if (!zoomSlide.getValueIsAdjusting()) {
                 zoom = (int)zoomSlide.getValue();
