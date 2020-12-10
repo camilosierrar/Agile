@@ -23,6 +23,7 @@ public class MapGui  extends JPanel implements MouseListener{
     private HashMap<Point, Intersection> pickUpTable;
     private HashMap<Point, Intersection> deliveryTable;
     private Gui gui;
+    private long id1, id2;
 
     private double ratioHeight, ratioWidth;
 
@@ -34,7 +35,7 @@ public class MapGui  extends JPanel implements MouseListener{
     private double zoom;
 
 
-    public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution, int zoom, Dimension screenSize) {
+    public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution, int zoom, Dimension screenSize, long id1, long id2) {
         //this.plan = plan;
         this.gui = gui;
         this.controller = controller;
@@ -52,6 +53,8 @@ public class MapGui  extends JPanel implements MouseListener{
         pickUpTable = new HashMap<>();
         deliveryTable = new HashMap<>();
         this.zoom = zoom;
+        this.id1=id1;
+        this.id2=id2;
         dim = new Dimension(0,0);
         this.screenSize = screenSize;
     }
@@ -117,9 +120,22 @@ public class MapGui  extends JPanel implements MouseListener{
             
             if (requests != null) {
                 //Pickup Marker
+                g.setColor(Color.blue);
+                if (id1 != 0) {
+                    Intersection tmp = intersections.get(id1);
+                    int x = (int) ((tmp.getLongitude() - minLong) * ratioWidth);
+                    int y = dim.height - (int) ((tmp.getLatitude() - minLat) * ratioHeight);
+                    g.fillOval(x-DOT_RADIUS, y-10-DOT_RADIUS, DOT_RADIUS * 4, DOT_RADIUS * 4);
+                }
+                if (id2 != 0) {
+                    Intersection tmp = intersections.get(id2);
+                    int x = (int) ((tmp.getLongitude() - minLong) * ratioWidth);
+                    int y = dim.height - (int) ((tmp.getLatitude() - minLat) * ratioHeight);
+                    g.fillOval(x-DOT_RADIUS, y-10-DOT_RADIUS, DOT_RADIUS * 4, DOT_RADIUS * 4);
+                }
                 g.setColor(Color.red);
                 for (Request r : requests) {
-                    System.out.println(r.toString());
+                    //System.out.println(r.toString());
                     int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
                     int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y-10, DOT_RADIUS * 2, DOT_RADIUS * 2);

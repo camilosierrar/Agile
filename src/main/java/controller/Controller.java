@@ -1,5 +1,6 @@
 package controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import model.Plan;
 import model.Segment;
@@ -77,7 +78,7 @@ public class Controller {
 
     public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { tableContent.removeCouple(indexMax, indexMin); }
 
-    public String getAddress(double lat, double lng) throws IOException, InterruptedException {
+    public String getAddress(double lat, double lng) {
         String address = "";
         // create a client
         var client = HttpClient.newHttpClient();
@@ -90,10 +91,23 @@ public class Controller {
                 .build();
 
         // use the client to send the request
-        var response = client.send(request,HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // the response:
-        final JsonNode node = new ObjectMapper().readTree(response.body());
+        final JsonNode node;
+        try {
+            node = new ObjectMapper().readTree(response.body());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "-";
+        }
         address = node.get("features").get(0).get("properties").get("label").asText();
         System.out.println("The address: " + address);
         return address;
