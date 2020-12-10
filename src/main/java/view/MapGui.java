@@ -14,6 +14,8 @@ import java.util.List;
 
 public class MapGui  extends JPanel implements MouseListener{
 
+    private boolean adding = false;
+
     private HashMap<Long, Intersection> intersections;
     private List<Segment> segments;
     private Dimension dim; //Dimesion of whole Map
@@ -22,6 +24,10 @@ public class MapGui  extends JPanel implements MouseListener{
     private Intersection departureAddress;
     private HashMap<Point, Intersection> pickUpTable;
     private HashMap<Point, Intersection> deliveryTable;
+    private HashMap<Point, Intersection> allIntersections;
+    private Intersection pickup;
+    private int counter=1;
+
     private Gui gui;
     private long id1, id2;
 
@@ -52,6 +58,7 @@ public class MapGui  extends JPanel implements MouseListener{
         points = new ArrayList<>();
         pickUpTable = new HashMap<>();
         deliveryTable = new HashMap<>();
+        allIntersections = new HashMap<>();
         this.zoom = zoom;
         this.id1=id1;
         this.id2=id2;
@@ -85,6 +92,14 @@ public class MapGui  extends JPanel implements MouseListener{
             //Ratios (scaling)
             ratioHeight = (dim.height -10) / coordHeight;
             ratioWidth = (dim.width -10) / coordWidth;
+
+            for(Intersection i: intersections.values()) {
+                int x1 = (int) ((i.getLongitude() - minLong) * ratioWidth);
+                int y1 = dim.height - (int) ((i.getLatitude() - minLat) * ratioHeight);
+                Point point = new Point(x1,y1);
+                points.add(point);
+                allIntersections.put(point,i);
+            }
 
             for (int i = 0; i < segments.size(); i++) {
                 g.setColor(Color.white);
@@ -197,8 +212,16 @@ public class MapGui  extends JPanel implements MouseListener{
                     System.out.println("Delivery point");
                     System.out.println(intersection.toString());
                 }
-                else{
-                    temp = "Departure Point\n" + this.departureAddress.toString();
+                else if (allIntersections.containsKey(point)) {
+                    if (adding) {
+                        if ( counter == 2 ) {
+                            gui.addRequest(pickup, allIntersections.get(point));
+                            counter = 1;
+                        } else if (counter == 1) {
+                            pickup = allIntersections.get(point);
+                            counter++;
+                        }
+                    }
                 }
 
                 //this.gui.setInfo(temp);
@@ -225,5 +248,9 @@ public class MapGui  extends JPanel implements MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void setAdding(boolean adding) {
+        this.adding = adding;
     }
 }

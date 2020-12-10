@@ -2,10 +2,8 @@ package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import model.Plan;
-import model.Segment;
-import model.TableContent;
-import model.Tour;
+import config.Config;
+import model.*;
 import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
@@ -111,5 +109,18 @@ public class Controller {
         address = node.get("features").get(0).get("properties").get("label").asText();
         System.out.println("The address: " + address);
         return address;
+    }
+
+    public Request makeRequest (Intersection pickup, Intersection delivery) {
+        Request req = new Request(pickup, delivery, Config.DURATION,Config.DURATION);
+        return req;
+    }
+
+    public Tour addRequestToTour(Request req, Tour tour) {
+        return tour.addRequest(req);
+    }
+
+    public Tour remRequest(Tour tour, long id) {
+        return tour.removeRequest(id);
     }
 }

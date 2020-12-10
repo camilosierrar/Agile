@@ -2,8 +2,7 @@ package view;
 
 import controller.Controller;
 import errorTesting.SimpleErrorHandler;
-import model.Request;
-import model.Segment;
+import model.*;
 
 
 import javax.swing.*;
@@ -13,7 +12,6 @@ import javax.swing.filechooser.FileFilter;
 
 import config.Variable;
 import org.w3c.dom.Document;
-import model.TableContent;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -417,7 +415,7 @@ public class Gui extends JFrame {
 
                     //Redraw Map with markers
                     mapContainer.removeAll();
-                    map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+                    map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
                     map.setBackground(Color.lightGray);
                     mapContainer.add(map,BorderLayout.CENTER);
                     System.out.println("Map Loaded");
@@ -436,8 +434,20 @@ public class Gui extends JFrame {
                         "Warning",
                         JOptionPane.WARNING_MESSAGE);
             } else {
+                int maxSelection = table.getSelectionModel().getMaxSelectionIndex();
+                long id = tableCont.getIDbyIndex(maxSelection);
                 controller.deleteSelection(table.getSelectionModel().getMaxSelectionIndex(), table.getSelectionModel().getMinSelectionIndex(), (TableContent) this.table.getModel());
                 System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
+                Tour tour = controller.remRequest(Variable.tour,id);
+
+                //Redraw Map
+                mapContainer.removeAll();
+                map = new MapGui(this, Variable.cityPlan, tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+                map.setBackground(Color.lightGray);
+                mapContainer.add(map,BorderLayout.CENTER);
+                System.out.println("Map Loaded");
+                mapContainer.validate();
+                mapContainer.repaint();
             }
         });
 
@@ -447,7 +457,7 @@ public class Gui extends JFrame {
                     "Please click where you want to pickup a package",
                     "Create Pick-up",
                     JOptionPane.WARNING_MESSAGE);
-            isPickup = true;
+            map.setAdding(true);
 
             //controller.addRequest(Request r = new Request(), false);
             System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
@@ -468,6 +478,23 @@ public class Gui extends JFrame {
 
         //END of Constructor
         this.setVisible(true);
+    }
+
+    public void addRequest(Intersection pickup, Intersection delivery) {
+        Request req = controller.makeRequest(pickup,delivery);
+        Variable.tour = controller.addRequestToTour(req,Variable.tour);
+
+        //Add to Table
+        controlFlagSelectionEvent = false;
+        tableCont = new TableContent(solution, Variable.tour, controller);
+        // System.out.println("tableContent = "+tableContent);
+        if (this.table == null){ this.table = new JTable(tableCont); }
+        else{ this.table.setModel(tableCont); }
+        tableSection.validate();
+        tableSection.repaint();
+        controlFlagSelectionEvent = true;
+        //Draw
+
     }
 
 
