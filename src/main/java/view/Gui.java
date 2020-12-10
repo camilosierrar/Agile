@@ -2,6 +2,7 @@ package view;
 
 import controller.Controller;
 import errorTesting.SimpleErrorHandler;
+import model.Request;
 import model.Segment;
 
 
@@ -382,6 +383,7 @@ public class Gui extends JFrame {
             }
         });
 
+
         this.table.getSelectionModel().addListSelectionListener(event -> {
             if(controlFlagSelectionEvent && this.table.getSelectionModel().getAnchorSelectionIndex() != -1) {
                 controlFlagSelectionEvent = false;
@@ -407,6 +409,7 @@ public class Gui extends JFrame {
             }
         });
 
+        //Deleting a couple of Delivery and pickup
         this.deleteSel.addActionListener(event -> {
             if (this.table.getSelectionModel().isSelectionEmpty()) {
                 JOptionPane.showMessageDialog(this,
@@ -417,6 +420,18 @@ public class Gui extends JFrame {
                 controller.deleteSelection(table.getSelectionModel().getMaxSelectionIndex(), table.getSelectionModel().getMinSelectionIndex(), (TableContent) this.table.getModel());
                 System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
             }
+        });
+
+        //Adding a couple of Delivery and pickup
+        this.addStep.addActionListener(event -> {
+            JOptionPane.showMessageDialog(this,
+                    "Please click where you want to pickup a package",
+                    "Create Pick-up",
+                    JOptionPane.WARNING_MESSAGE);
+
+            //controller.addRequest(Request r = new Request(), false);
+            System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
+
         });
 
         //Add panels
