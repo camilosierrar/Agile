@@ -66,7 +66,7 @@ public class Controller {
     }
 
 
-    public Tour undo() {
+    /*public Tour undo() {
         // TODO CHECK IF EMPTY
         System.out.println("Stack size when undoing" + undoStack.size());
         Tour tour = undoStack.pop();
@@ -80,7 +80,7 @@ public class Controller {
         Tour tour = redoStack.pop();
         undoStack.push(tour);
         return tour;
-    }
+    }*/
 
     public Tour removeRequest(Tour tour, Intersection intersection) {
         System.out.println("Tour being added to undoStack is: " + tour.getRequests().toString());
