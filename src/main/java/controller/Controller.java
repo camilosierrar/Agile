@@ -1,8 +1,6 @@
 package controller;
 
-import model.Plan;
 import model.Segment;
-import model.Tour;
 import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
@@ -19,7 +17,6 @@ public class Controller {
     private State currentState;
 
     public Controller() {
-        currentState = new InitialState();
     }
 
     public void setCurrentState(State s){
@@ -55,6 +52,7 @@ public class Controller {
     }
 
     public List<Segment> findBestTour() {
+        setCurrentState(new InitialState());
         return RunTSP.runTSP();
     }
 

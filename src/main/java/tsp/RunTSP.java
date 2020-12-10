@@ -28,7 +28,7 @@ public class RunTSP {
                 Variable.cityPlan.getIntersectionById(26086128),
                 20,
                 40);
-        addRequest(request, true);
+        //addRequest(request, true);
         printSolutionInformations();
 
         LinkedList<Long> testList = new LinkedList<>();
@@ -91,52 +91,6 @@ public class RunTSP {
         Dijkstra algoPointI = new Dijkstra();
         algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointInterestId);
         Variable.dijkstras.put(algoPointI.findNodeGraph(pointInterestId), algoPointI);
-    }
-
-    /**
-     * Adds a request at the end of the current best tour or recalculates complete
-     * tour if recalculatePath is true
-     * @param request request to be added
-     * @param recalculatePath
-     */
-    public static void addRequest(Request request, Boolean recalculatePath){
-        long pickupId = request.getPickupAddress().getId();
-        long deliveryId = request.getDeliveryAddress().getId();
-        //Update modifications to Variable
-        Variable.findNodeInFirstGraph(pickupId).setTypeOfNode(Type_Request.PICK_UP);
-        Variable.findNodeInFirstGraph(deliveryId).setTypeOfNode(Type_Request.DELIVERY);
-        Variable.pickUpDeliveryCouplesId.put(pickupId, deliveryId);
-        Variable.pointsInterestId.add(pickupId);
-        Variable.pointsInterestId.add(deliveryId);
-        //Updates old Dijkstras
-        for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet())
-            entry.getValue().addRequest(pickupId, deliveryId, entry.getKey().getId());
-        
-        //Executes dijkstra for added request
-        doDijkstra(pickupId);
-        doDijkstra(deliveryId);
-
-        //Updates complete graph
-        Node pickup = null;
-        Node delivery = null;
-        for(Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet())
-            if(entry.getKey().getId() == pickupId)
-                pickup = entry.getKey();
-            else if(entry.getKey().getId() == deliveryId)
-                delivery = entry.getKey();
-        
-        List<Node> addedNodes = Arrays.asList(pickup,delivery);
-        Variable.g.addRequest(addedNodes);
-
-        if(recalculatePath)
-            getSolution();
-        else {
-            Long idLast = Variable.sPathOfPointsInterests.pollLast();
-            Variable.sPathOfPointsInterests.add(pickupId);
-            Variable.sPathOfPointsInterests.add(deliveryId);
-            Variable.sPathOfPointsInterests.add(idLast);
-            computeFullShortestPath();
-        }
     }
 
     /**
