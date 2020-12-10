@@ -128,7 +128,6 @@ public class RunTSP {
                 pickup = entry.getKey();
             else if(entry.getKey().getId() == deliveryId)
                 delivery = entry.getKey();
-            
         
         List<Node> addedNodes = Arrays.asList(pickup,delivery);
         Variable.g.addRequest(addedNodes);
@@ -155,7 +154,6 @@ public class RunTSP {
         long deliveryId = request.getDeliveryAddress().getId();
 
         if(Variable.pointsInterestId.contains(pickupId) && Variable.pointsInterestId.contains(deliveryId)) {
-            //System.out.println("----------STARTING REMOVING NODES ----------");
             Node pickupNode = Variable.g.findNodeById(pickupId);
             Node deliveryNode = Variable.g.findNodeById(deliveryId);
             
