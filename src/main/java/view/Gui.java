@@ -10,6 +10,7 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 import config.Variable;
+import model.TableContent;
 
 import java.util.List;
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class Gui extends JFrame {
     //Util
     Boolean mapFromFile;
     Boolean reqFromFile;
+    boolean controlFlagSelectionEvent = true;
 
     int zoom;
 
@@ -34,20 +36,24 @@ public class Gui extends JFrame {
     JPanel base;
     JTextArea info;
     //JPanel info;
+    JTable table;
+    JPanel leftSection;
+    JPanel leftButtonBar;
+    JPanel tableSection;
     JPanel topBar;
     MapGui map;
     JPanel toolbar;
     JPanel mapContainer;
     JScrollPane mapScroll;
-    JButton mapRead;
-    JButton reqRead;
     JButton mapFile;
     JButton reqFile;
+    JButton deleteSel;
+    JButton addStep;
+    JButton recalculate;
     JButton getBestTour;
     JTextField mapPath;
     JTextField reqPath;
     JSlider zoomSlide;
-    Canvas mapCanvas;
 
     Controller controller;
 
@@ -57,6 +63,14 @@ public class Gui extends JFrame {
         super("Delivelov");
         this.controller = controller;
         setGui();
+    }
+
+    public void setInfo(String info) {
+        this.info.setText(info);
+        this.info.setForeground(Color.white);
+
+        this.info.validate();
+        this.info.repaint();
     }
 
     private void setGui() {
@@ -74,6 +88,10 @@ public class Gui extends JFrame {
         topBar = new JPanel();
         mapContainer = new JPanel(new BorderLayout());
         toolbar = new JPanel();
+        leftSection = new JPanel(new BorderLayout());
+        leftButtonBar = new JPanel();
+        tableSection = new JPanel(new BorderLayout());
+        table = new JTable(new TableContent());
 
         map = new MapGui(this, null,null, null, null, 1, null);
         info = new JTextArea(5,30);
@@ -124,8 +142,6 @@ public class Gui extends JFrame {
 
         Plan plantest = Plan.createPlan(inter, seg);
         */
-        map = new MapGui(null,null, null, null, null,1,null);
-        //info = new JPanel();
 
         //JLabel
         JLabel mapReadLabel = new JLabel("Path To Map");
@@ -141,11 +157,12 @@ public class Gui extends JFrame {
         reqPath = new JTextField(10);
 
         //Buttons
-        mapRead = new JButton("Load Map");
-        reqRead = new JButton("Load Requests");
         mapFile = new JButton("Load Map file");
         reqFile = new JButton("Load Requests file");
         getBestTour = new JButton("Find Best Tour");
+        deleteSel = new JButton("Delete selection");
+        addStep = new JButton("Add a step");
+        recalculate = new JButton("Recalculate itinerary");
 
         //Slider (Zoom)
         zoomSlide = new JSlider();
@@ -164,28 +181,36 @@ public class Gui extends JFrame {
         //map.setBackground(new Color(0,51,102));
         topBar.setBackground(Color.BLACK);
         info.setBackground(Color.DARK_GRAY);
-        info.setMaximumSize(new Dimension(300,Integer.MAX_VALUE));
+        leftSection.setBackground(Color.LIGHT_GRAY);
+        leftSection.setSize(300,Integer.MAX_VALUE);
+        info.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+        info.setForeground(Color.WHITE);
 
         //Add to mapContainer
         mapContainer.add(map,BorderLayout.CENTER);
+
+        //Add to leftButtonBar
+        leftButtonBar.add(deleteSel);
+        leftButtonBar.add(addStep);
+        leftButtonBar.add(recalculate);
 
         //Add to topBar
             //MapReading
         topBar.add(mapReadLabel);
         topBar.add(mapPath);
-        topBar.add(mapRead);
         topBar.add(mapFile);
             //ReqReading
         topBar.add(reqReadLabel);
         topBar.add(reqPath);
-        topBar.add(reqRead);
         topBar.add(reqFile);
             //getBestTour
         topBar.add(getBestTour);
 
         //Add to info
         info.setText(temp);
-        
+        tableSection.setMaximumSize(new Dimension(Integer.MAX_VALUE,300));
+        table.setBackground(Color.GRAY);
+
         //Add to Toolbar
         toolbar.add(zoomSlide);
 
@@ -194,6 +219,7 @@ public class Gui extends JFrame {
         
         // Add button listeners
 
+        //Load map action listenner
         mapFile.addActionListener(event -> {
             this.mapFromFile = true;
 
@@ -229,25 +255,7 @@ public class Gui extends JFrame {
             }
         });
 
-        mapRead.addActionListener(event -> {
-            controller.loadMap(mapPath.getText());
-
-            if (Variable.cityPlan == null) {
-                JOptionPane.showMessageDialog(this,
-                        "File doesn't exist",
-                        "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } else {
-                mapContainer.removeAll();
-                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize());
-                map.setBackground(Color.lightGray);
-                mapContainer.add(map,BorderLayout.CENTER);
-                System.out.println("Map Loaded");
-                mapContainer.validate();
-                mapContainer.repaint();
-            }
-        });
-
+        //Load Requests Action Listenner
         reqFile.addActionListener(event -> {
             this.reqFromFile = true;
 
@@ -282,32 +290,27 @@ public class Gui extends JFrame {
             }
         });
 
-        reqRead.addActionListener(event -> {
-            controller.loadRequests(reqPath.getText());
-
-            if (Variable.tour == null) {
-                JOptionPane.showMessageDialog(this,
-                        "File doesn't exist",
-                        "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-            } else {
-                mapContainer.removeAll();
-                //solution = controller.findBestTour(tour);
-                solution = controller.findBestTour();
-                map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize());
-                map.setBackground(Color.lightGray);
-                mapContainer.add(map,BorderLayout.CENTER);
-                System.out.println("Map Loaded");
-                mapContainer.validate();
-                mapContainer.repaint();
-            }
-        });
-
+        //Calculate Best Tour Listenner
         getBestTour.addActionListener(event -> {
-            // TODO
-            controller.findBestTour();
-        });
+            mapContainer.removeAll();
+            solution = controller.findBestTour();
+            map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution, zoom, mapScroll.getViewport().getSize());
+            map.setBackground(Color.lightGray);
+            mapContainer.add(map,BorderLayout.CENTER);
+            System.out.println("Map Loaded");
+            mapContainer.validate();
+            mapContainer.repaint();
 
+            controlFlagSelectionEvent = false;
+            TableContent table = new TableContent(solution, Variable.tour);
+            // System.out.println("tableContent = "+tableContent);
+            if (this.table == null){ this.table = new JTable(table); }
+            else{ this.table.setModel(table); }
+            tableSection.validate();
+            tableSection.repaint();
+            controlFlagSelectionEvent = true;
+        });
+        //Changing Zoom listenner
         zoomSlide.addChangeListener( changeEvent -> {
             if (!zoomSlide.getValueIsAdjusting()) {
                 zoom = (int)zoomSlide.getValue();
@@ -324,11 +327,52 @@ public class Gui extends JFrame {
             }
         });
 
+        this.table.getSelectionModel().addListSelectionListener(event -> {
+            if(controlFlagSelectionEvent && this.table.getSelectionModel().getAnchorSelectionIndex() != -1) {
+                controlFlagSelectionEvent = false;
+                this.table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                if (!event.getValueIsAdjusting()) {
+                    ListSelectionModel lsm = (ListSelectionModel) event.getSource();
+                    int indexCouple = controller.findCoupleIndex(lsm.getAnchorSelectionIndex());
+                    this.table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                    boolean includes = false;
+                    for (int index : this.table.getSelectedRows()) {
+                        if (index == indexCouple) {
+                            includes = true;
+                            break;
+                        }
+                    }
+                    if (!includes) {
+                        this.table.addRowSelectionInterval(indexCouple, indexCouple);
+                        this.table.validate();
+                        this.table.repaint();
+                    }
+                }
+                controlFlagSelectionEvent = true;
+            }
+        });
+
+        this.deleteSel.addActionListener(event -> {
+            if (this.table.getSelectionModel().isSelectionEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "0 element selected",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                controller.deleteSelection(table.getSelectionModel().getMaxSelectionIndex(), table.getSelectionModel().getMinSelectionIndex(), (TableContent) this.table.getModel());
+            }
+        });
+
         //Add panels
         base.add(mapScroll,BorderLayout.CENTER);
         base.add(topBar, BorderLayout.PAGE_START);
         base.add(info, BorderLayout.WEST);
         base.add(toolbar,BorderLayout.PAGE_END);
+        leftSection.add(info, BorderLayout.NORTH);
+        leftSection.add(tableSection, BorderLayout.CENTER);
+        tableSection.add(new JScrollPane(this.table),BorderLayout.CENTER);
+        leftSection.add(leftButtonBar, BorderLayout.SOUTH);
+        base.add(leftSection, BorderLayout.WEST);
         this.add(base);
 
         //END of Constructor

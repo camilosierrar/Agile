@@ -3,6 +3,7 @@ package controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import model.Plan;
 import model.Segment;
+import model.TableContent;
 import model.Tour;
 import tsp.RunTSP;
 import xml.XMLmap;
@@ -69,6 +70,12 @@ public class Controller {
     public List<Segment> findBestTour() {
         return RunTSP.runTSP();
     }
+
+    public int findCoupleIndex(int index) {
+        return TableContent.getCoupleIndex(index);
+    }
+
+    public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { tableContent.removeCouple(indexMax, indexMin); }
 
     public String getAddress(double lat, double lng) throws IOException, InterruptedException {
         String address = "";
