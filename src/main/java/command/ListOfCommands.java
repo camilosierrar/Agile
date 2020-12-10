@@ -15,18 +15,18 @@ public class ListOfCommands {
     public void add(Command c) {
         i++;
         l.add(i,c);
-        c.doCommand();
+        c.execute();
     }
 
     public void undo() {
         if(i>=0) {
-            l.get(i).undoCommand(); 
+            //l.get(i).undoCommand(); 
             i--;
         }
     }
 
     public void redo() {
         i++;
-        l.get(i).doCommand(); 
+        l.get(i).execute(); 
     }
 }
