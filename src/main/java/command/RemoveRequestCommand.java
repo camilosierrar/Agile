@@ -37,8 +37,8 @@ public class RemoveRequestCommand implements MementoableCommand{
             Variable.pickUpDeliveryCouplesId.remove(pickupId, deliveryId);
             Variable.pointsInterestId.remove(pickupId);
             Variable.pointsInterestId.remove(deliveryId);
-            Variable.dijkstras.remove(pickupNode);
-            Variable.dijkstras.remove(deliveryNode);
+            Variable.removeNodeFromDijktrasById(pickupNode.getId());
+            Variable.removeNodeFromDijktrasById(deliveryNode.getId());
             System.out.print("ICI-----\n"+Variable.dijkstras+ "\n\n");
             Variable.sPathOfPointsInterests.remove(pickupId);
             Variable.sPathOfPointsInterests.remove(deliveryId);

@@ -63,4 +63,13 @@ public class Variable {
         }
         return null;
     }
+
+    public static void removeNodeFromDijktrasById(long id){
+        for(Map.Entry<Node, Dijkstra> entry: dijkstras.entrySet()){
+            if(entry.getKey().getId() == id){
+                dijkstras.remove(entry.getKey());
+                return;
+            }
+        }
+    }
 }
