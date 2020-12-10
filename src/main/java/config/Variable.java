@@ -1,6 +1,8 @@
 package config;
 
 import com.google.common.collect.Multimap;
+
+import command.Memento;
 import dijkstra.Dijkstra;
 import model.Node;
 import model.Plan;
@@ -45,6 +47,9 @@ public class Variable {
      * Instance of TSP
      */
     public static TSP tsp;
+
+    public static ArrayDeque<Memento> undos = new ArrayDeque<>();
+    public static ArrayDeque<Memento> redos = new ArrayDeque<>();
 
     /**
      * @param id

@@ -1,99 +1,67 @@
 package controller;
 
-import model.Intersection;
+import java.util.LinkedList;
+import java.util.List;
+
+import command.ListOfMementos;
+import command.AddRequestCommand;
+import command.ModifyOrderCommand;
+import command.RemoveRequestCommand;
+
+import model.Request;
 import model.Segment;
 import model.TableContent;
-import model.Tour;
 import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
 
-import java.util.List;
-import java.util.Stack;
-
-import command.InitialState;
-import command.ListOfCommands;
-import command.State;
-
 public class Controller {
 
-    private ListOfCommands l;
-    private State currentState;
-
-    private Stack<Tour> undoStack;
-    private Stack<Tour> redoStack;
+    private ListOfMementos l;
 
     public Controller() {
     }
-
-    public void setCurrentState(State s){
-        this.currentState = s;
-    }
     
-    /*public void undo() {
-        currentState.undo();
+    public void undo() {
+        l.undo();
     }
 
     public void redo() {
-        currentState.redo();
-    }*/
-
-    public void addRequest() {
-        currentState.addRequest();
+        l.redo();
     }
 
-    public void removeRequest() {
-        currentState.removeRequest();
+    public void addRequest(Request request, Boolean recalculatePath) {
+        l.add(new AddRequestCommand(request, recalculatePath));
     }
 
-    public void modifyOrder() {
-        currentState.modifyOrder();
-        /*undoStack = new Stack<>();
-        redoStack = new Stack<>();*/
+    public void removeRequest(Request request, Boolean recalculatePath) {
+        l.add(new RemoveRequestCommand(request, recalculatePath));
+    }
+
+    public void modifyOrder(LinkedList<Long> newPath) {
+        l.add(new ModifyOrderCommand(newPath));
     }
 
     public void loadMap(String file) {
+        l.clearLists();
         XMLmap.readData(file);
     }
 
     public void loadRequests(String file) {
+        l.clearLists();
         XMLrequest.readData(file);
     }
 
     public List<Segment> findBestTour() {
-        setCurrentState(new InitialState());
         return RunTSP.runTSP();
-    }
-
-
-    /*public Tour undo() {
-        // TODO CHECK IF EMPTY
-        System.out.println("Stack size when undoing" + undoStack.size());
-        Tour tour = undoStack.pop();
-        System.out.println("Tour being poped from undoStack is: " + tour.toString());
-        redoStack.push(tour);
-        return tour;
-    }
-
-    public Tour redo() {
-        // TODO CHECK IF EMPTY
-        Tour tour = redoStack.pop();
-        undoStack.push(tour);
-        return tour;
-    }*/
-
-    public Tour removeRequest(Tour tour, Intersection intersection) {
-        System.out.println("Tour being added to undoStack is: " + tour.getRequests().toString());
-        Tour stackTour = new Tour(tour);
-        undoStack.push(stackTour);
-        System.out.println("Stack size " + undoStack.size());
-        return tour.removeRequest(tour.getRequestbyIntersection(intersection));
     }
 
     public int findCoupleIndex(int index) {
         return TableContent.getCoupleIndex(index);
     }
 
-    public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { tableContent.removeCouple(indexMax, indexMin); }
+    public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { 
+        tableContent.removeCouple(indexMax, indexMin);
+    }
 
 }

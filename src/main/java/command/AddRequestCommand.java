@@ -15,7 +15,7 @@ public class AddRequestCommand implements MementoableCommand {
 
     private Request request;
     private Boolean recalculatePath;
-
+    
     public AddRequestCommand(Request pRequest, Boolean pRecalculatePath) {
         this.request = pRequest;
         this.recalculatePath = pRecalculatePath;        
@@ -27,6 +27,7 @@ public class AddRequestCommand implements MementoableCommand {
      * @param request request to be added
      * @param recalculatePath
      */
+    @Override
     public void execute() {
         long pickupId = request.getPickupAddress().getId();
         long deliveryId = request.getDeliveryAddress().getId();
@@ -69,6 +70,8 @@ public class AddRequestCommand implements MementoableCommand {
 
     @Override
     public Memento takeSnapshot() {
-        return null;
+        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.shortestPath, Variable.sPathOfPointsInterests,
+                           Variable.dijkstras, Variable.graph, Variable.pointsInterestId, Variable.g, Variable.tsp );
     }
+
 }
