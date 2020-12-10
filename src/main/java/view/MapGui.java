@@ -36,12 +36,7 @@ public class MapGui extends JPanel implements MouseListener{
     private double zoom;
 
 
-<<<<<<< HEAD
-    public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution, int zoom, Dimension screenSize) {
-        //this.plan = plan;
-=======
     public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution) {
->>>>>>> 6efcd1bc44e3c4dcd01dcc93a555cd0ba8285d2e
         this.gui = gui;
         this.plan = plan;
         this.tour = tour;
@@ -74,13 +69,6 @@ public class MapGui extends JPanel implements MouseListener{
 
         if (this.intersections != null && this.segments!=null) {
             dim = this.getSize();
-<<<<<<< HEAD
-            //Zoom
-            dim.setSize(screenSize.getWidth()*(1+(zoom/10)), screenSize.getHeight()*(1+(zoom/10)));
-            this.setPreferredSize(dim);
-            //System.out.println("2 : "+dim);
-=======
->>>>>>> 6efcd1bc44e3c4dcd01dcc93a555cd0ba8285d2e
             double minLat = Double.MAX_VALUE, maxLat = Double.MIN_VALUE, minLong = Double.MAX_VALUE, maxLong = Double.MIN_VALUE;
             //Collections.min(intersections.getLatitude().values());
             //Size of Real Map
@@ -90,17 +78,9 @@ public class MapGui extends JPanel implements MouseListener{
                 if (i.getLongitude() > maxLong) maxLong = i.getLongitude();
                 if (i.getLongitude() < minLong) minLong = i.getLongitude();
             }
-<<<<<<< HEAD
-            //System.out.println(maxLat + " " + minLat + " " + maxLong + " " + minLong);
-=======
->>>>>>> 6efcd1bc44e3c4dcd01dcc93a555cd0ba8285d2e
             //TODO Rajouter Une Marge de Chaque Cote
             double coordHeight = maxLat - minLat;
             double coordWidth = maxLong - minLong;
-
-            //Ratios (scaling)
-            ratioHeight = (dim.height - 10) / coordHeight;
-            ratioWidth = (dim.width - 10) / coordWidth;
 
             for (int i = 0; i < segments.size(); i++) {
                 g.setColor(Color.white);

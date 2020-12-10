@@ -1,6 +1,9 @@
 package controller;
 
+import model.Intersection;
 import model.Segment;
+import model.TableContent;
+import model.Tour;
 import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
@@ -17,8 +20,8 @@ public class Controller {
     private ListOfCommands l;
     private State currentState;
 
-    //private Stack<Tour> undoStack;
-    //private Stack<Tour> redoStack;
+    private Stack<Tour> undoStack;
+    private Stack<Tour> redoStack;
 
     public Controller() {
     }
@@ -27,13 +30,13 @@ public class Controller {
         this.currentState = s;
     }
     
-    public void undo() {
+    /*public void undo() {
         currentState.undo();
     }
 
     public void redo() {
         currentState.redo();
-    }
+    }*/
 
     public void addRequest() {
         currentState.addRequest();
@@ -63,7 +66,7 @@ public class Controller {
     }
 
 
-    /*public Tour undo() {
+    public Tour undo() {
         // TODO CHECK IF EMPTY
         System.out.println("Stack size when undoing" + undoStack.size());
         Tour tour = undoStack.pop();
@@ -85,5 +88,12 @@ public class Controller {
         undoStack.push(stackTour);
         System.out.println("Stack size " + undoStack.size());
         return tour.removeRequest(tour.getRequestbyIntersection(intersection));
-    }*/
+    }
+
+    public int findCoupleIndex(int index) {
+        return TableContent.getCoupleIndex(index);
+    }
+
+    public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { tableContent.removeCouple(indexMax, indexMin); }
+
 }
