@@ -8,10 +8,10 @@ public class ReverseCommand implements Command {
     }
 
     public void doCommand() {
-        cmd.doCommand();
+        //cmd.execute();
     }
 
     public void undoCommand() {
-        cmd.undoCommand();
+        //cmd.undoCommand();
     }
 }
