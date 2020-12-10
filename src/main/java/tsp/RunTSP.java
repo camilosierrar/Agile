@@ -64,8 +64,8 @@ public class RunTSP {
      * Loads the map and requests
      */
     public static void loadData(){
-        //Variable.cityPlan = XMLmap.readData("");
-        //Variable.tour = XMLrequest.readData("");
+        //XMLmap.readData("smallMap.xml");
+        //XMLrequest.readData("requestsSmall1.xml");
         Variable.pickUpDeliveryCouplesId.clear();
         for(Request request: Variable.tour.getRequests())
             Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
@@ -76,13 +76,8 @@ public class RunTSP {
      * Computes Dijkstra for each point of interest and store results in Variable.dijkstras
      */
     public static void computeDijkstra(){
-        //Obtains all points of interest + departure address
-        Variable.pointsInterestId.add(Variable.tour.getAddressDeparture().getId());
-        for(Request request: Variable.tour.getRequests()){
-            Variable.pointsInterestId.add(request.getPickupAddress().getId());
-            Variable.pointsInterestId.add(request.getDeliveryAddress().getId());
-        }
         //Executes dijkstra
+        Variable.dijkstras.clear();
         for(Long pointInterestId: Variable.pointsInterestId){
             doDijkstra(pointInterestId);
         }
