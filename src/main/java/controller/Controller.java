@@ -3,9 +3,17 @@ package controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import model.Plan;
+import java.util.LinkedList;
+import java.util.List;
+
+import command.ListOfMementos;
+import command.AddRequestCommand;
+import command.ModifyOrderCommand;
+import command.RemoveRequestCommand;
+
+import model.Request;
 import model.Segment;
 import model.TableContent;
-import model.Tour;
 import tsp.RunTSP;
 import xml.XMLmap;
 import xml.XMLrequest;
@@ -18,53 +26,41 @@ import java.net.URI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-
-import java.util.List;
-
-import command.InitialState;
-import command.ListOfCommands;
-import command.State;
-
-
 public class Controller {
 
-    private ListOfCommands l;
-    private State currentState;
+    private ListOfMementos l;
 
     public Controller() {
-        currentState = new InitialState();
-    }
-
-    public void setCurrentState(State s){
-        this.currentState = s;
+        l = new ListOfMementos();
     }
     
     public void undo() {
-        currentState.undo();
+        l.undo();
     }
 
     public void redo() {
-        currentState.redo();
+        l.redo();
     }
 
-    public void addRequest() {
-        currentState.addRequest();
+    public void addRequest(Request request, Boolean recalculatePath) {
+        l.add(new AddRequestCommand(request, recalculatePath));
     }
 
-    public void removeRequest() {
-        currentState.removeRequest();
+    public void removeRequest(Request request, Boolean recalculatePath) {
+        l.add(new RemoveRequestCommand(request, recalculatePath));
     }
 
-    public void modifyOrder() {
-        currentState.modifyOrder();
+    public void modifyOrder(LinkedList<Long> newPath) {
+        l.add(new ModifyOrderCommand(newPath));
     }
 
     public void loadMap(String file) {
+        l.clearLists();
         XMLmap.readData(file);
     }
 
     public void loadRequests(String file) {
+        l.clearLists();
         XMLrequest.readData(file);
     }
 
@@ -76,7 +72,9 @@ public class Controller {
         return TableContent.getCoupleIndex(index);
     }
 
-    public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { tableContent.removeCouple(indexMax, indexMin); }
+    public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { 
+        tableContent.removeCouple(indexMax, indexMin);
+    }
 
     public String getAddress(double lat, double lng) {
         String address = "";

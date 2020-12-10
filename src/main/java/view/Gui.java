@@ -2,7 +2,6 @@ package view;
 
 import controller.Controller;
 import errorTesting.SimpleErrorHandler;
-import model.Request;
 import model.Segment;
 
 
@@ -10,22 +9,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
+import java.util.List;
 
 import config.Variable;
 import org.w3c.dom.Document;
 import model.TableContent;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 

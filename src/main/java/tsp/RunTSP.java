@@ -3,6 +3,7 @@ package tsp;
 import config.Config;
 import config.Variable;
 import config.Config.Type_Request;
+import controller.Controller;
 import dijkstra.Dijkstra;
 import model.*;
 import xml.XMLmap;
@@ -17,34 +18,99 @@ public class RunTSP {
         computeDijkstra();
         long endTime = System.currentTimeMillis();
         System.out.println("Temps de calcul pour les dijkstra : " + (endTime-startTime) + " ms");
+
         //Initializes complete graph and launch TSP algo
         Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.dijkstras);
+        Scanner scan = new Scanner(System.in);
         getSolution();
         printSolutionInformations();
-
-        //TEST ADD REQUEST
+        System.out.println();
+        //TEST REQUEST
         Request request = new Request(
                 Variable.cityPlan.getIntersectionById(26086127),
                 Variable.cityPlan.getIntersectionById(26086128),
                 20,
                 40);
-        addRequest(request, true);
-        printSolutionInformations();
+        
+        Controller c = new Controller();
+        Boolean loop = true;
 
-        LinkedList<Long> testList = new LinkedList<>();
-        testList.add((long) 342873658);
-        testList.add((long) 26086127);
-        testList.add((long) 208769039);
-        testList.add((long) 25173820);
-        testList.add((long) 26086128);
-        testList.add((long) 342873658);
-
-        modifyOrderOfTour(testList);
-        printSolutionInformations();
-
-        removeRequest(request, true);
-        printSolutionInformations();
-
+        while(loop) {
+            System.out.println("Que faire ?");
+            System.out.println("1 - Add Request");
+            System.out.println("2 - Remove Reques");
+            System.out.println("3 - Modify Order (after added new request)");
+            System.out.println("4 - Undo");
+            System.out.println("5 - Redo");
+            System.out.println("q - quit");
+            System.out.println();
+            String choice = scan.nextLine();
+            switch(choice) {
+                case "1": {
+                    System.out.println("Which request");
+                    System.out.println("1 - New Request");
+                    System.out.println("2 - First of tour");
+                    String choice2 = scan.nextLine();
+                    switch(choice2) {
+                        case "1": {
+                            c.addRequest(request, false);
+                            break;
+                        }
+                        case "2": {
+                            c.addRequest(Variable.tour.getRequests().get(0), false);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case "2": {
+                    System.out.println("Which request");
+                    System.out.println("1 - New Request");
+                    System.out.println("2 - First of tour");
+                    String choice2 = scan.nextLine();
+                    switch(choice2) {
+                        case "1": {
+                            c.removeRequest(request, false);
+                            break;
+                        }
+                        case "2": {
+                            c.removeRequest(Variable.tour.getRequests().get(0), false);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case "3": {
+                    LinkedList<Long> testList = new LinkedList<>();
+                    testList.add((long) 342873658);
+                    testList.add((long) 26086127);
+                    testList.add((long) 208769039);
+                    testList.add((long) 25173820);
+                    testList.add((long) 26086128);
+                    testList.add((long) 342873658);
+                    c.modifyOrder(testList);
+                    break;
+                }
+                case "4": {
+                    c.undo();
+                    break;
+                }
+                case "5": {
+                    c.redo();
+                    break;
+                }
+                case "q":
+                    loop = false;
+                    break;
+            }
+            printSolutionInformations();
+            System.out.println();
+        }
+        scan.close();
         //END TEST
     }
 
@@ -91,98 +157,6 @@ public class RunTSP {
         Dijkstra algoPointI = new Dijkstra();
         algoPointI = algoPointI.calculateShortestPathFromSource(algoPointI, pointInterestId);
         Variable.dijkstras.put(algoPointI.findNodeGraph(pointInterestId), algoPointI);
-    }
-
-    /**
-     * Adds a request at the end of the current best tour or recalculates complete
-     * tour if recalculatePath is true
-     * @param request request to be added
-     * @param recalculatePath
-     */
-    public static void addRequest(Request request, Boolean recalculatePath){
-        long pickupId = request.getPickupAddress().getId();
-        long deliveryId = request.getDeliveryAddress().getId();
-        //Update modifications to Variable
-        Variable.findNodeInFirstGraph(pickupId).setTypeOfNode(Type_Request.PICK_UP);
-        Variable.findNodeInFirstGraph(deliveryId).setTypeOfNode(Type_Request.DELIVERY);
-        Variable.pickUpDeliveryCouplesId.put(pickupId, deliveryId);
-        Variable.pointsInterestId.add(pickupId);
-        Variable.pointsInterestId.add(deliveryId);
-        //Updates old Dijkstras
-        for(Map.Entry<Node, Dijkstra> entry: Variable.dijkstras.entrySet())
-            entry.getValue().addRequest(pickupId, deliveryId, entry.getKey().getId());
-        
-        //Executes dijkstra for added request
-        doDijkstra(pickupId);
-        doDijkstra(deliveryId);
-
-        //Updates complete graph
-        Node pickup = null;
-        Node delivery = null;
-        for(Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet())
-            if(entry.getKey().getId() == pickupId)
-                pickup = entry.getKey();
-            else if(entry.getKey().getId() == deliveryId)
-                delivery = entry.getKey();
-        
-        List<Node> addedNodes = Arrays.asList(pickup,delivery);
-        Variable.g.addRequest(addedNodes);
-
-        if(recalculatePath)
-            getSolution();
-        else {
-            Long idLast = Variable.sPathOfPointsInterests.pollLast();
-            Variable.sPathOfPointsInterests.add(pickupId);
-            Variable.sPathOfPointsInterests.add(deliveryId);
-            Variable.sPathOfPointsInterests.add(idLast);
-            computeFullShortestPath();
-        }
-    }
-
-    /**
-     * Removes a request from the current best tour. Recalculates complete
-     * tour if recalculatePath is true
-     * @param request request to be removed
-     * @param recalculatePath
-     */
-    public static void removeRequest(Request request, Boolean recalculatePath) {
-        long pickupId = request.getPickupAddress().getId();
-        long deliveryId = request.getDeliveryAddress().getId();
-
-        if(Variable.pointsInterestId.contains(pickupId) && Variable.pointsInterestId.contains(deliveryId)) {
-            Node pickupNode = Variable.g.findNodeById(pickupId);
-            Node deliveryNode = Variable.g.findNodeById(deliveryId);
-            
-            Variable.pickUpDeliveryCouplesId.remove(pickupId, deliveryId);
-            Variable.pointsInterestId.remove(pickupId);
-            Variable.pointsInterestId.remove(deliveryId);
-            Variable.dijkstras.remove(pickupNode);
-            Variable.dijkstras.remove(deliveryNode);
-            Variable.sPathOfPointsInterests.remove(pickupId);
-            Variable.sPathOfPointsInterests.remove(deliveryId);
-            for (Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet()) 
-                entry.getValue().removeRequest(pickupId, deliveryId, entry.getKey().getId());
-            
-            List<Node> nodesToRemove = Arrays.asList(pickupNode, deliveryNode);
-            Variable.g.removeRequest(nodesToRemove);
-
-            Variable.shortestPath.clear();
-            if(recalculatePath)
-                getSolution();
-            else 
-                computeFullShortestPath();
-        }
-    }
-
-    /**
-     * Modify the tour with provided
-     * @param newPath
-     * @return
-     */
-    public static List<Segment> modifyOrderOfTour(LinkedList<Long> newPath) {
-        Variable.sPathOfPointsInterests = newPath;
-        computeFullShortestPath();
-        return getSegmentsSolution();
     }
 
     /**

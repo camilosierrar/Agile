@@ -1,6 +1,8 @@
 package dijkstra;
 
 import config.Variable;
+
+import java.io.Serializable;
 import java.util.*;
 import config.Config.Type_Request;
 import model.Node;
@@ -8,7 +10,7 @@ import model.Node;
 /**
  * Implements Dijkstra's algorithm and computes for every point of interest shortest path to other points of interest
  */
-public class Dijkstra{
+public class Dijkstra implements Serializable{
     public boolean debug = false;
     /**
      * Value node is key Node's parent with the shortest path
