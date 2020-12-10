@@ -16,12 +16,12 @@ public class Controller {
         // TODO constructor
     }
 
-    public Plan loadMap(String file) {
-        return XMLmap.readData(file);
+    public void loadMap(String file) {
+        XMLmap.readData(file);
     }
 
-    public Tour loadRequests(String file) {
-        return XMLrequest.readData(file);
+    public void loadRequests(String file) {
+        XMLrequest.readData(file);
     }
 
     public List<Segment> findBestTour() {

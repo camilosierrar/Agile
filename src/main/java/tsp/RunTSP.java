@@ -39,8 +39,9 @@ public class RunTSP {
     }
 
     public static void loadData(){
-        Variable.cityPlan = XMLmap.readData("");
-        Variable.tour = XMLrequest.readData("");
+        //Variable.cityPlan = XMLmap.readData("");
+        //Variable.tour = XMLrequest.readData("");
+        Variable.pickUpDeliveryCouplesId.clear();
         for(Request request: Variable.tour.getRequests())
             Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
         fillGraph();
@@ -209,6 +210,8 @@ public class RunTSP {
      * Fills graphPlan, pickup/delivery couples and points of interest
      */
     private static void fillGraph(){
+        Variable.graph.clear();
+        Variable.pointsInterestId.clear();
         //Stores all intersections in graphPlan
         for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
             Intersection intersection = entry.getValue();

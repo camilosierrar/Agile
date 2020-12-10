@@ -8,6 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import config.Variable;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -16,14 +18,13 @@ import java.util.HashMap;
 
 public class XMLmap {
 
-    public static Plan readData(String fileName) {
+    public static void readData(String fileName) {
         HashMap<Long, Intersection> intersectionsList = new HashMap<>();
         ArrayList<Segment> segmentsList = new ArrayList<>();
-        Plan plan = null;
 
         try {
 
-            File fXmlFile = new File("resources/" + "smallMap.xml" );//fileName);
+            File fXmlFile = new File("resources/" + fileName );//fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -74,7 +75,7 @@ public class XMLmap {
             e.printStackTrace();
         }
 
-        plan = Plan.createPlan(intersectionsList, segmentsList);
-        return plan;
+        Variable.cityPlan = Plan.createPlan(intersectionsList, segmentsList);
+        return;
     }
 }
