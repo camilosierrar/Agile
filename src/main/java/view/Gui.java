@@ -36,6 +36,7 @@ public class Gui extends JFrame {
     Boolean mapFromFile;
     Boolean reqFromFile;
     boolean controlFlagSelectionEvent = true;
+    boolean  isPickup = false;
 
     int zoom;
 
@@ -428,6 +429,7 @@ public class Gui extends JFrame {
                     "Please click where you want to pickup a package",
                     "Create Pick-up",
                     JOptionPane.WARNING_MESSAGE);
+            isPickup = true;
 
             //controller.addRequest(Request r = new Request(), false);
             System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
