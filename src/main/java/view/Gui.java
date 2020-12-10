@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import errorTesting.SimpleErrorHandler;
 import model.Segment;
 
 
@@ -10,11 +11,19 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 import config.Variable;
+import org.w3c.dom.Document;
 import model.TableContent;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
@@ -229,19 +238,34 @@ public class Gui extends JFrame {
             fc.setFileFilter( filter1);
 
             int returnVal = fc.showOpenDialog(Gui.this);
-
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                System.out.println("Opening: " + file.getName() + ".");
-                if (!file.canRead()) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setValidating(false);
+                factory.setNamespaceAware(true);
+
+                DocumentBuilder builder = null;
+                Document document = null;
+                try {
+                    builder = factory.newDocumentBuilder();
+                    builder.setErrorHandler(new SimpleErrorHandler());
+                    document =  builder.parse(new InputSource("resources/" + file.getName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                if (document == null) {
                     JOptionPane.showMessageDialog(this,
                             "The file requested for the map is not valid, please choose another one",
                             "ERROR",
                             JOptionPane.ERROR_MESSAGE);
                 }
                 else {
+                    System.out.println("Opening: " + file.getName() + ".");
                     controller.loadMap(file.getName());
                     this.mapPath.setText(file.getName());
+                    System.out.println("Map Loading");
                 }
             } else {
                 System.out.println("Opening nothing sad smiley face");
@@ -275,8 +299,23 @@ public class Gui extends JFrame {
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setValidating(false);
+                factory.setNamespaceAware(true);
+
+                DocumentBuilder builder = null;
+                Document document = null;
+                try {
+                    builder = factory.newDocumentBuilder();
+                    builder.setErrorHandler(new SimpleErrorHandler());
+                    document = builder.parse(new InputSource("resources/" + file.getName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
                 System.out.println("Opening: " + file.getName() + ".");
-                if (!file.canRead()) {
+                if (document == null) {
                     JOptionPane.showMessageDialog(this,
                             "The file requested for the map is not valid, please choose another one",
                             "ERROR",
