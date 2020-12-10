@@ -125,6 +125,7 @@ public class MapGui  extends JPanel implements MouseListener{
                                         "select a bigger map",
                                 "ERROR",
                                 JOptionPane.ERROR_MESSAGE);
+                        break;
                     }
                     else {
                         System.out.println("Requests line 118 : " + r.toString());

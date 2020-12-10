@@ -360,7 +360,7 @@ public class Gui extends JFrame {
             mapContainer.repaint();
 
             controlFlagSelectionEvent = false;
-            TableContent table = new TableContent(solution, Variable.tour);
+            TableContent table = new TableContent(solution, Variable.tour, controller);
             // System.out.println("tableContent = "+tableContent);
             if (this.table == null){ this.table = new JTable(table); }
             else{ this.table.setModel(table); }
