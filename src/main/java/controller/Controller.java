@@ -42,16 +42,19 @@ public class Controller {
         l.redo();
     }
 
-    public void addRequest(Request request, Boolean recalculatePath) {
+    public List<Segment> addRequest(Request request, Boolean recalculatePath) {
         l.add(new AddRequestCommand(request, recalculatePath));
+        return RunTSP.getSegmentsSolution();
     }
 
-    public void removeRequest(Request request, Boolean recalculatePath) {
+    public List<Segment> removeRequest(Request request, Boolean recalculatePath) {
         l.add(new RemoveRequestCommand(request, recalculatePath));
+        return RunTSP.getSegmentsSolution();
     }
 
-    public void modifyOrder(LinkedList<Long> newPath) {
+    public List<Segment> modifyOrder(LinkedList<Long> newPath) {
         l.add(new ModifyOrderCommand(newPath));
+        return RunTSP.getSegmentsSolution();
     }
 
     public void loadMap(String file) {
