@@ -1,13 +1,20 @@
 package view;
 
 import controller.Controller;
+<<<<<<< HEAD
 import model.Segment;
+=======
+import model.Plan;
+import model.Segment;
+import model.Tour;
+>>>>>>> 6efcd1bc44e3c4dcd01dcc93a555cd0ba8285d2e
 
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
+import java.util.List;
 
 import config.Variable;
 
@@ -304,8 +311,15 @@ public class Gui extends JFrame {
         });
 
         getBestTour.addActionListener(event -> {
-            // TODO
-            controller.findBestTour();
+            mapContainer.removeAll();
+            List<Segment> solution = controller.findBestTour();
+            map = new MapGui(this, plan, tour, controller, solution);
+            map.setBackground(Color.lightGray);
+            mapContainer.add(map,BorderLayout.CENTER);
+            System.out.println("Map Loaded");
+            mapContainer.validate();
+            mapContainer.repaint();
+
         });
 
         zoomSlide.addChangeListener( changeEvent -> {
