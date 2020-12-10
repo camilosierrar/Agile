@@ -95,6 +95,7 @@ public class TableContent extends AbstractTableModel {
     }
 
     public static int getCoupleIndex(int index){
+        System.out.println("Index getCoupleIndex : " +index);
         long coupleId = data.get(index).getCouple();
         int coupleIndex = index;
         for(Step step: data){
