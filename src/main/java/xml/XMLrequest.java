@@ -51,6 +51,7 @@ public class XMLrequest {
 
                     Request requestObj = new Request(pickupIntersection, deliveryIntersection, pickupDuration, deliveryDuration);
                     requestsList.add(requestObj);
+                    System.out.println("Requete ajoute : "+requestObj);
                 }
             }
 

@@ -1,12 +1,13 @@
 package tsp;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import model.Node;
 
-public interface Graph {
+public interface Graph extends Serializable {
 	/**
 	 * @return the number of vertices in <code>this</code>
 	 */

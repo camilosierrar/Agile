@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import config.Config.Type_Request;
 /**
  * Encapsulates model information (intersections, segments,...) in a data structure adapted to graphs (complete graph, Dijkstra)
  */
-public class Node {
+public class Node implements Serializable {
     private long id;
     private Double distance = Double.MAX_VALUE;
     private Map<Node, Double> adjacentNodes = new HashMap<>();
@@ -77,8 +78,8 @@ public class Node {
         return "{" +
             " id='" + getId() + "'" +
             ", distance='" + getDistance() + "'" +
-            ", adjacentNodes='" + printAdjacentNodes()  + "'" +
-            ", typeOfNode='" + getTypeOfNode() + "'" +
+            //", adjacentNodes='" + printAdjacentNodes()  + "'" +
+            //", typeOfNode='" + getTypeOfNode() + "'" +
             "}";
     }
 

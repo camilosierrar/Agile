@@ -150,13 +150,23 @@ public class MapGui  extends JPanel implements MouseListener{
                 }
                 g.setColor(Color.red);
                 for (Request r : requests) {
-                    //System.out.println(r.toString());
-                    int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
-                    int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
-                    g.fillOval(x, y-10, DOT_RADIUS * 2, DOT_RADIUS * 2);
-                    Point point = new Point(x,y);
-                    points.add(point);
-                    pickUpTable.put(point, r.getPickupAddress());
+                    if(r.getPickupAddress()==null) {
+                        JOptionPane.showMessageDialog(this,
+                                "The file requested for the requests contains Delivery points that are out of the limits of the map, please " +
+                                        "select a bigger map",
+                                "ERROR",
+                                JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    else {
+                        System.out.println("Requests line 118 : " + r.toString());
+                        int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
+                        int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
+                        g.fillOval(x, y - 10, DOT_RADIUS * 2, DOT_RADIUS * 2);
+                        Point point = new Point(x, y);
+                        points.add(point);
+                        pickUpTable.put(point, r.getPickupAddress());
+                    }
                 }
 
                 //Delivery Marker
