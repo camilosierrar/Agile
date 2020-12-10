@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,12 @@ public class Tour {
         this.requests = requests;
     }
 
+    public Tour(Tour newTour) {
+        this.addressDeparture = newTour.addressDeparture;
+        this.timeDeparture = newTour.timeDeparture;
+        this.requests = newTour.requests;
+    }
+
     public Intersection getAddressDeparture() {
         return addressDeparture;
     }
@@ -24,6 +31,27 @@ public class Tour {
 
     public List<Request> getRequests() {
         return requests;
+    }
+
+
+    public Request getRequestbyIntersection(Intersection intersection) {
+        for (Request request: requests) {
+            if (intersection.equals(request.getDeliveryAddress()) || intersection.equals(request.getPickupAddress())) {
+                return request;
+            }
+        }
+        return null;
+    }
+
+
+    public Tour removeRequest(Request request) {
+        List<Request> newRequests = new ArrayList<>();
+        for (Request req: requests) {
+            if (!req.equals(request)) {
+                newRequests.add(req);
+            }
+        }
+        return new Tour(addressDeparture, timeDeparture, newRequests);
     }
 
     @Override

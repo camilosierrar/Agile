@@ -64,8 +64,8 @@ public class RunTSP {
      * Loads the map and requests
      */
     public static void loadData(){
-        Variable.cityPlan = XMLmap.readData("");
-        Variable.tour = XMLrequest.readData("");
+        //Variable.cityPlan = XMLmap.readData("");
+        //Variable.tour = XMLrequest.readData("");
         for(Request request: Variable.tour.getRequests())
             Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
         fillGraph();
