@@ -6,14 +6,12 @@ import java.util.List;
 public class Plan {
     private HashMap<Long, Intersection> intersections;
     private List<Segment> segments;
-    private static boolean created = false;
     public static Plan plan;
 
 
     private Plan(HashMap<Long, Intersection> intersections, List<Segment> segments) {
         this.intersections = intersections;
         this.segments = segments;
-        Plan.created = true;
     }
 
     public static Plan createPlan(HashMap<Long, Intersection> intersections, List<Segment> segments){

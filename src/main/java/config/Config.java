@@ -7,4 +7,5 @@ public class Config {
         DELIVERY,
         DEPARTURE_ADDRESS
     };
+    public static final int TIME_LIMIT = 20000; //in ms
 }

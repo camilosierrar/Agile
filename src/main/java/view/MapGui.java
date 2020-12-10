@@ -97,22 +97,29 @@ public class MapGui  extends JPanel implements MouseListener{
             for (int i = 0; i < segments.size(); i++) {
                 g.setColor(Color.RED);
                 Segment s = segments.get(i);
+
+                if (solution == null) {
+                    break;
+                } else if (!solution.contains(s)) {
+                    continue;
+                }
+
                 Intersection origin = intersections.get(s.getOrigin().getId());
                 Intersection destination = intersections.get(s.getDestination().getId());
                 int x1 = (int) ((origin.getLongitude() - minLong) * ratioWidth);
                 int y1 = dim.height - (int) ((origin.getLatitude() - minLat) * ratioHeight);
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
                 int y2 = dim.height - (int) ((destination.getLatitude() - minLat) * ratioHeight);
-                if (solution != null && solution.contains(s)) {
-                    System.out.println(s.toString());
-                    g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS -10, x2 + DOT_RADIUS, y2 + DOT_RADIUS -10);
-                }
+                System.out.println(s.toString());
+                g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS -10, x2 + DOT_RADIUS, y2 + DOT_RADIUS -10);
+
             }
             
             if (requests != null) {
                 //Pickup Marker
                 g.setColor(Color.red);
                 for (Request r : requests) {
+                    System.out.println(r.toString());
                     int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
                     int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y-10, DOT_RADIUS * 2, DOT_RADIUS * 2);
@@ -124,6 +131,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 //Delivery Marker
                 g.setColor(Color.green);
                 for (Request r : requests) {
+                    System.out.println(r.toString());
                     int x = (int) ((r.getDeliveryAddress().getLongitude() - minLong) * ratioWidth);
                     int y = dim.height - (int) ((r.getDeliveryAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y-10, DOT_RADIUS * 2, DOT_RADIUS * 2);
@@ -177,7 +185,7 @@ public class MapGui  extends JPanel implements MouseListener{
                     temp = "Departure Point\n" + this.departureAddress.toString();
                 }
 
-                this.gui.setInfo(temp);
+                //this.gui.setInfo(temp);
             }
         }
 

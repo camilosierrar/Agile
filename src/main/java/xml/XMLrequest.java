@@ -9,6 +9,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import config.Variable;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -18,14 +20,12 @@ import java.util.LinkedList;
 
 public class XMLrequest {
 
-    public static Tour readData(String filename) {
-
-        Tour tour = null;
+    public static void readData(String filename) {
 
         try {
             LinkedList<Request> requestsList = new LinkedList<>();
 
-            File fXmlFile = new File("resources/" + "requestsLarge9.xml");// filename);
+            File fXmlFile = new File("resources/" + filename);// filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -74,13 +74,13 @@ public class XMLrequest {
                 cal.set(Calendar.SECOND, seconds);
                 Date departureDate = cal.getTime();
 
-                tour = new Tour(departureIntersection, departureDate, requestsList);
+                Variable.tour = new Tour(departureIntersection, departureDate, requestsList);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return tour;
+        return;
     }
 }

@@ -1,9 +1,10 @@
 package tsp;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dijkstra.Node;
+import model.Node;
 
 public interface Graph {
 	/**
@@ -38,7 +39,7 @@ public interface Graph {
 	/**
 	 * 
 	 * @param index
-	 * @return Node of the corresponding index
+	 * @return Id of Node of the corresponding index
 	 */
 	public abstract long findIdNodeByIndex(int index);
 
@@ -48,4 +49,11 @@ public interface Graph {
 	 * @return Node of corresponding id
 	 */
 	public abstract Node findNodeById(long id);
-}
+
+	public void prettyPrint();
+
+	public void addRequest(List<Node> addedNodes);
+
+	public void removeRequest(List<Node> nodesRemoved);
+
+	}

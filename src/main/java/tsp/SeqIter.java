@@ -1,8 +1,8 @@
 package tsp;
 
 import config.Config;
-import dijkstra.Dijkstra;
-import dijkstra.Node;
+import config.Variable;
+import model.Node;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,6 +28,7 @@ public class SeqIter implements Iterator<Integer> {
 	 * @param g Corresponding graph
 	 */
 	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g, Collection<Integer> visited){
+		nbCandidates = 0;
 		Map<Long, Integer> nodeAsInteger = g.getNodeAsInteger();
 		//Candidates to be visited after currentVertex
 		this.candidates = new Integer[unvisited.size()];
@@ -44,17 +45,16 @@ public class SeqIter implements Iterator<Integer> {
 				assert curNode != null;
 				//if node is a delivery checks if corresponding pickup is visited
 				if(curNode.getTypeOfNode().equals(Config.Type_Request.DELIVERY)){
-					Node pickup = null;
-					for(Map.Entry<Node,Node> entry: Dijkstra.getPickUpDeliveryCouples().entrySet())
-						if(entry.getValue().getId() == curNode.getId()){
-							pickup = entry.getKey();
+					long pickupId = -1;
+					for(Map.Entry<Long,Long> entry: Variable.pickUpDeliveryCouplesId.entrySet())
+						if(entry.getValue() == curNode.getId()){
+							pickupId = entry.getKey();
 							break;
 						}
 					//retrieves index of pickup point
-					int pickupIndex = nodeAsInteger.get(pickup.getId());
-					if(visited.contains(pickupIndex)){
+					int pickupIndex = nodeAsInteger.get(pickupId);
+					if(visited.contains(pickupIndex))
 						candidates[nbCandidates++] = s;
-					}
 				}else{
 					//Else adds anyway because it's either a departure address or a pickup
 					candidates[nbCandidates++] = s;

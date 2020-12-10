@@ -1,4 +1,4 @@
-package dijkstra;
+package model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,12 +63,21 @@ public class Node {
         return n.id == this.id;
     }
 
+    public String printAdjacentNodes() {
+        String msg ="{";
+        for (Map.Entry<Node, Double> node : this.getAdjacentNodes().entrySet()) {
+            msg += "id =" + node.getKey().id + " edge weight =" + node.getValue() +", ";
+        }
+        msg +="}";
+        return msg;
+    }
+
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
             ", distance='" + getDistance() + "'" +
-            //", adjacentNodes='" + getAdjacentNodes() + "'" +
+            ", adjacentNodes='" + printAdjacentNodes()  + "'" +
             ", typeOfNode='" + getTypeOfNode() + "'" +
             "}";
     }
