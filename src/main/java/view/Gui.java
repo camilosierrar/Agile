@@ -415,6 +415,7 @@ public class Gui extends JFrame {
                         JOptionPane.WARNING_MESSAGE);
             } else {
                 controller.deleteSelection(table.getSelectionModel().getMaxSelectionIndex(), table.getSelectionModel().getMinSelectionIndex(), (TableContent) this.table.getModel());
+                System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
             }
         });
 
