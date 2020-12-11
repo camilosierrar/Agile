@@ -53,11 +53,11 @@ public class RunTSP {
                     String choice2 = scan.nextLine();
                     switch(choice2) {
                         case "1": {
-                            c.addRequest(request, false);
+                            c.addRequest(request, true);
                             break;
                         }
                         case "2": {
-                            c.addRequest(Variable.tour.getRequests().get(0), false);
+                            c.addRequest(Variable.tour.getRequests().get(0), true);
                             break;
                         }
                         default:
@@ -72,11 +72,11 @@ public class RunTSP {
                     String choice2 = scan.nextLine();
                     switch(choice2) {
                         case "1": {
-                            c.removeRequest(request, false);
+                            c.removeRequest(request, true);
                             break;
                         }
                         case "2": {
-                            c.removeRequest(Variable.tour.getRequests().get(0), false);
+                            c.removeRequest(Variable.tour.getRequests().get(0), true);
                             break;
                         }
                         default:
