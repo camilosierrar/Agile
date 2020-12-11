@@ -361,6 +361,7 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
+                tableCont = new TableContent();
                 selId2 = selId1 = 0;
                 mapContainer.removeAll();
                 map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
