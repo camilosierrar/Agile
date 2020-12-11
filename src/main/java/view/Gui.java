@@ -520,7 +520,7 @@ public class Gui extends JFrame {
             mapContainer.repaint();
 
             controlFlagSelectionEvent = false;
-            tableCont = new TableContent(solution, tour, controller);
+            tableCont = new TableContent(solution, Variable.tour, controller);
             // System.out.println("tableContent = "+tableContent);
             if (this.table == null){ this.table = new JTable(tableCont); }
             else{ this.table.setModel(tableCont); }
@@ -540,6 +540,15 @@ public class Gui extends JFrame {
             System.out.println("Map Loaded");
             mapContainer.validate();
             mapContainer.repaint();
+
+            controlFlagSelectionEvent = false;
+            tableCont = new TableContent(solution, Variable.tour, controller);
+            // System.out.println("tableContent = "+tableContent);
+            if (this.table == null){ this.table = new JTable(tableCont); }
+            else{ this.table.setModel(tableCont); }
+            tableSection.validate();
+            tableSection.repaint();
+            controlFlagSelectionEvent = true;
         });
 
         //Add panels
