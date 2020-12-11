@@ -129,8 +129,8 @@ public class RunTSP {
      * Loads the map and requests
      */
     public static void loadData(){
-        XMLmap.readData("smallMap.xml");
-        XMLrequest.readData("requestsSmall1.xml");
+        //XMLmap.readData("smallMap.xml");
+        //XMLrequest.readData("requestsSmall1.xml");
         Variable.pickUpDeliveryCouplesId.clear();
         for(Request request: Variable.tour.getRequests())
             Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
