@@ -378,7 +378,6 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                tableCont = new TableContent();
                 selId2 = selId1 = 0;
                 mapContainer.removeAll();
                 map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
@@ -387,6 +386,7 @@ public class Gui extends JFrame {
                 System.out.println("Map Loaded");
                 mapContainer.validate();
                 mapContainer.repaint();
+                System.out.println("Gui 1.1");
             }
         });
 
