@@ -33,7 +33,7 @@ public class ListOfMementos {
         BeforeAfter latestMemento = undos.pollFirst();
         if(latestMemento != null) {
             Memento latestBefore = latestMemento.before;
-            //System.out.print(latestBefore.sPathOfPointsInterests+ "-----");
+            System.out.print(latestBefore.sPathOfPointsInterests+ "-----");
             latestBefore.restore();
             System.out.print(Variable.sPathOfPointsInterests);
             redos.push(latestMemento);

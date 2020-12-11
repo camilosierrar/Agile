@@ -22,6 +22,7 @@ public class MapGui  extends JPanel implements MouseListener{
     private Dimension screenSize; //Dimension of the part of the map that can be seen
     private List<Request> requests;
     private Intersection departureAddress;
+    private Point departurePoint;
     private HashMap<Point, Intersection> pickUpTable;
     private HashMap<Point, Intersection> deliveryTable;
     private HashMap<Point, Intersection> allIntersections;
@@ -135,14 +136,14 @@ public class MapGui  extends JPanel implements MouseListener{
             
             if (requests != null) {
                 //Pickup Marker
-                g.setColor(Color.blue);
-                if (id1 != 0) {
+                g.setColor(new Color(0, 100, 0, 100));
+                if (intersections.get(id2) != null && id1 != 0) {
                     Intersection tmp = intersections.get(id1);
                     int x = (int) ((tmp.getLongitude() - minLong) * ratioWidth);
                     int y = dim.height - (int) ((tmp.getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x-DOT_RADIUS, y-10-DOT_RADIUS, DOT_RADIUS * 4, DOT_RADIUS * 4);
                 }
-                if (id2 != 0) {
+                if (intersections.get(id2) != null && id2 != 0) {
                     Intersection tmp = intersections.get(id2);
                     int x = (int) ((tmp.getLongitude() - minLong) * ratioWidth);
                     int y = dim.height - (int) ((tmp.getLatitude() - minLat) * ratioHeight);
@@ -150,23 +151,13 @@ public class MapGui  extends JPanel implements MouseListener{
                 }
                 g.setColor(Color.red);
                 for (Request r : requests) {
-                    if(r.getPickupAddress()==null) {
-                        JOptionPane.showMessageDialog(this,
-                                "The file requested for the requests contains Delivery points that are out of the limits of the map, please " +
-                                        "select a bigger map",
-                                "ERROR",
-                                JOptionPane.ERROR_MESSAGE);
-                        break;
-                    }
-                    else {
-                        //System.out.println("Requests line 118 : " + r.toString());
-                        int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
-                        int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
-                        g.fillOval(x, y - 10, DOT_RADIUS * 2, DOT_RADIUS * 2);
-                        Point point = new Point(x, y);
-                        points.add(point);
-                        pickUpTable.put(point, r.getPickupAddress());
-                    }
+                    //System.out.println("Requests line 118 : " + r.toString());
+                    int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
+                    int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
+                    g.fillOval(x, y - 10, DOT_RADIUS * 2, DOT_RADIUS * 2);
+                    Point point = new Point(x, y);
+                    points.add(point);
+                    pickUpTable.put(point, r.getPickupAddress());
                 }
 
                 //Delivery Marker
@@ -189,6 +180,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 g.fillOval(x, y-10, DOT_RADIUS * 2, DOT_RADIUS * 2);
                 Point point = new Point(x,y);
                 points.add(point);
+                departurePoint = point;
             }
         }
     }
@@ -209,24 +201,31 @@ public class MapGui  extends JPanel implements MouseListener{
         System.out.println("209 Clear");
 
         if (e.getClickCount()==1) {
+            Intersection intersection = null;
             for (Point point: points) {
                 if ((e.getPoint().x > point.x - 10 && e.getPoint().x < point.x + 10) && (e.getPoint().y > point.y - 10 && e.getPoint().y < point.y + 10)) {
                     System.out.println("212 Clear");
                     String temp;
                     if (pickUpTable.containsKey(point)) {
                         // It is a pickup point
-                        Intersection intersection = pickUpTable.get(point);
+                        intersection = pickUpTable.get(point);
                         temp = "Pick up point\n" + intersection.toString();
                         System.out.println("Pick up point");
                         System.out.println(intersection.toString());
+                        gui.setSelection(intersection.getId());
                     } else if (deliveryTable.containsKey(point)) {
                         // It is a delivery point
-                        Intersection intersection = deliveryTable.get(point);
+                        intersection = deliveryTable.get(point);
                         temp = "Delivery point\n" + intersection.toString();
                         System.out.println("Delivery point");
                         System.out.println(intersection.toString());
-                    } else if (allIntersections.containsKey(point)) {
+                        gui.setSelection(intersection.getId());
+                    } else if (point == departurePoint){
+                        gui.setSelection(departureAddress.getId());
+                        intersection = departureAddress;
+                    } else if(allIntersections.containsKey(point)) {
                         System.out.println("228 Clear");
+                        intersection = allIntersections.get(point);
                         if (adding) {
                             if (counter == 2) {
                                 System.out.println("231 Clear");
@@ -248,6 +247,8 @@ public class MapGui  extends JPanel implements MouseListener{
 
                 }
             }
+            if(intersection != null) {this.gui.setInfo(controller.getAddress(intersection.getLatitude(),intersection.getLongitude()));}
+
         }
 
     }

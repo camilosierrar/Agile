@@ -89,6 +89,16 @@ public class Gui extends JFrame {
         this.info.repaint();
     }
 
+    public void setSelection(long id) {
+        int index = tableCont.getIndexbyId(id);
+        controlFlagSelectionEvent = false;
+        table.getSelectionModel().clearSelection();
+        controlFlagSelectionEvent = true;
+        table.getSelectionModel().setSelectionInterval(index, index);
+        table.validate();
+        table.repaint();
+    }
+
     private void setGui() {
         zoom = 0;
         solution = null;
@@ -190,6 +200,7 @@ public class Gui extends JFrame {
         zoomSlide.setMinorTickSpacing(5);
         zoomSlide.setSnapToTicks(true);
         zoomSlide.setValue(1);
+        zoomSlide.setEnabled(false);
         //zoomSlide.setPaintTicks(true);
         //zoomSlide.setPaintLabels(true);
         //Canvas
@@ -230,6 +241,7 @@ public class Gui extends JFrame {
         info.setText(temp);
         tableSection.setMaximumSize(new Dimension(Integer.MAX_VALUE,300));
         table.setBackground(Color.GRAY);
+        table.getColumnModel().getColumn(0).setPreferredWidth(300);
 
         //Add to Toolbar
         toolbar.add(zoomSlide);
@@ -244,7 +256,6 @@ public class Gui extends JFrame {
         //Load map action listenner
         mapFile.addActionListener(event -> {
             this.mapFromFile = true;
-
 
             final JFileChooser fc = new JFileChooser("resources/");
             FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "Map");
@@ -297,6 +308,7 @@ public class Gui extends JFrame {
                 System.out.println("Map Loaded");
                 mapContainer.validate();
                 mapContainer.repaint();
+                zoomSlide.setEnabled(true);
             }
         });
 
@@ -344,7 +356,7 @@ public class Gui extends JFrame {
 
             if (Variable.tour == null) {
                 JOptionPane.showMessageDialog(this,
-                        "File doesn't exist",
+                        "This requests file contains intersections out of map, please load another map or another requests file",
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
@@ -374,6 +386,7 @@ public class Gui extends JFrame {
             // System.out.println("tableContent = "+tableContent);
             if (this.table == null){ this.table = new JTable(tableCont); }
             else{ this.table.setModel(tableCont); }
+            table.getColumnModel().getColumn(0).setPreferredWidth(300);
             tableSection.validate();
             tableSection.repaint();
             controlFlagSelectionEvent = true;
@@ -402,11 +415,11 @@ public class Gui extends JFrame {
                 this.table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 if (!event.getValueIsAdjusting()) {
                     ListSelectionModel lsm = (ListSelectionModel) event.getSource();
+                    selId1 = tableCont.getIDbyIndex(lsm.getAnchorSelectionIndex());
+                    // ralenti beaucoup setInfo(controller.getAddress(Variable.cityPlan.getIntersectionById(selId1).getLatitude(), Variable.cityPlan.getIntersectionById(selId1).getLongitude()));
                     int indexCouple = controller.findCoupleIndex(lsm.getAnchorSelectionIndex());
                     this.table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                     boolean includes = false;
-                    selId1 = tableCont.getIDbyIndex(lsm.getAnchorSelectionIndex());
-                    selId2 = tableCont.getIDbyIndex(indexCouple);
                     for (int index : this.table.getSelectedRows()) {
                         if (index == indexCouple) {
                             includes = true;
@@ -415,21 +428,21 @@ public class Gui extends JFrame {
                     }
                     if (!includes) {
                         this.table.addRowSelectionInterval(indexCouple, indexCouple);
-                        this.table.validate();
-                        this.table.repaint();
+                        selId2 = tableCont.getIDbyIndex(indexCouple);
+                        //Redraw Map with markers
+                        mapContainer.removeAll();
+                        map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+                        map.setBackground(Color.lightGray);
+                        mapContainer.add(map,BorderLayout.CENTER);
+                        System.out.println("Map Loaded");
+                        mapContainer.validate();
+                        mapContainer.repaint();
                     }
-
-                    //Redraw Map with markers
-                    mapContainer.removeAll();
-                    map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
-                    map.setBackground(Color.lightGray);
-                    mapContainer.add(map,BorderLayout.CENTER);
-                    System.out.println("Map Loaded");
-                    mapContainer.validate();
-                    mapContainer.repaint();
                 }
                 controlFlagSelectionEvent = true;
             }
+            this.table.validate();
+            this.table.repaint();
         });
 
         //Deleting a couple of Delivery and pickup

@@ -28,10 +28,10 @@ public class Memento {
         this.pickUpDeliveryCouplesId =  SerializationUtils.clone( (HashMap<Long,Long>) pPickUpDeliveryCouplesId) ;
         this.shortestPath = SerializationUtils.clone(pShortestPath);
         this.sPathOfPointsInterests = SerializationUtils.clone(pSPathOfPointsInterests) ;
-        this.dijkstras = SerializationUtils.clone((HashMap<Node, Dijkstra>) pDijkstras);
-        this.graph = SerializationUtils.clone((HashSet<Node>) pGraph);
+        //this.dijkstras = SerializationUtils.clone((HashMap<Node, Dijkstra>) pDijkstras);
+        //this.graph = SerializationUtils.clone((HashSet<Node>) pGraph);
         this.pointsInterestId = SerializationUtils.clone((HashSet<Long>) pPointsInterestId);
-        this.g = SerializationUtils.clone(pG);
+        //this.g = SerializationUtils.clone(pG);
     }
 
 	void restore() {
