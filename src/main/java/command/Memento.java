@@ -23,7 +23,7 @@ public class Memento {
     public Memento(Map<Long,Long> pPickUpDeliveryCouplesId,
                    LinkedList<Long> pSPathOfPointsInterests, Map<Node, Dijkstra> pDijkstras, Set<Node> pGraph, 
                    Set<Long> pPointsInterestId, Graph pG) {
-        this.pickUpDeliveryCouplesId =  SerializationUtils.clone( (HashMap<Long,Long>) pPickUpDeliveryCouplesId) ;
+        this.pickUpDeliveryCouplesId =  SerializationUtils.clone((HashMap<Long,Long>) pPickUpDeliveryCouplesId);
         this.sPathOfPointsInterests = SerializationUtils.clone(pSPathOfPointsInterests) ;
         this.dijkstras = SerializationUtils.clone((HashMap<Node, Dijkstra>) pDijkstras);
         this.graph = SerializationUtils.clone((HashSet<Node>) pGraph);
@@ -32,12 +32,12 @@ public class Memento {
     }
 
 	void restore() {
-        Variable.pickUpDeliveryCouplesId = this.pickUpDeliveryCouplesId;
-        Variable.sPathOfPointsInterests = this.sPathOfPointsInterests;
-        Variable.dijkstras = this.dijkstras;
-        Variable.graph = this.graph;
-        Variable.pointsInterestId = this.pointsInterestId;
-        Variable.g = this.g;
+        Variable.pickUpDeliveryCouplesId = SerializationUtils.clone((HashMap<Long,Long>) this.pickUpDeliveryCouplesId);
+        Variable.sPathOfPointsInterests = SerializationUtils.clone(this.sPathOfPointsInterests);
+        Variable.dijkstras = SerializationUtils.clone((HashMap<Node,Dijkstra>) this.dijkstras);
+        Variable.graph = SerializationUtils.clone((HashSet<Node>) this.graph);
+        Variable.pointsInterestId = SerializationUtils.clone((HashSet<Long>) this.pointsInterestId);
+        Variable.g = SerializationUtils.clone(this.g);
         RunTSP.computeFullShortestPath();
     }
 }

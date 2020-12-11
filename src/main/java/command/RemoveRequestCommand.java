@@ -35,13 +35,14 @@ public class RemoveRequestCommand implements MementoableCommand{
             Node pickupNode = Variable.g.findNodeById(pickupId);
             Node deliveryNode = Variable.g.findNodeById(deliveryId);
             
-            Variable.pickUpDeliveryCouplesId.remove(pickupId, deliveryId);
             Variable.pointsInterestId.remove(pickupId);
             Variable.pointsInterestId.remove(deliveryId);
+            Variable.pickUpDeliveryCouplesId.remove(pickupId, deliveryId);
             Variable.removeNodeFromDijktrasById(pickupNode.getId());
             Variable.removeNodeFromDijktrasById(deliveryNode.getId());
             Variable.sPathOfPointsInterests.remove(pickupId);
             Variable.sPathOfPointsInterests.remove(deliveryId);
+
             for (Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet()) 
                 entry.getValue().removeRequest(pickupId, deliveryId, entry.getKey().getId());
             
@@ -49,6 +50,7 @@ public class RemoveRequestCommand implements MementoableCommand{
             Variable.g.removeRequest(nodesToRemove);
 
             Variable.shortestPath.clear();
+            
             if(this.recalculatePath)
                 RunTSP.getSolution();
             else 

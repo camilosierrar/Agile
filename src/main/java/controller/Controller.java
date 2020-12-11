@@ -47,9 +47,7 @@ public class Controller {
     }
 
     public List<Segment> addRequest(Request request, Boolean recalculatePath) {
-        System.out.println("48 Clear");
         l.add(new AddRequestCommand(request, recalculatePath));
-        System.out.println("50 Clear");
         return RunTSP.getSegmentsSolution();
     }
 

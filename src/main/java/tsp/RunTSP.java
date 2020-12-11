@@ -11,6 +11,8 @@ import xml.XMLrequest;
 import java.util.*;
 
 public class RunTSP {
+
+    //TO USE MAIN, UNCOMMENT LINES 134 & 135
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         loadData();
@@ -37,8 +39,8 @@ public class RunTSP {
         while(loop) {
             System.out.println("Que faire ?");
             System.out.println("1 - Add Request");
-            System.out.println("2 - Remove Reques");
-            System.out.println("3 - Modify Order (after added new request)");
+            System.out.println("2 - Remove Request");
+            System.out.println("3 - Modify Order (after adding new request");
             System.out.println("4 - Undo");
             System.out.println("5 - Redo");
             System.out.println("q - quit");
