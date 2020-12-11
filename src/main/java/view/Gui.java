@@ -341,6 +341,7 @@ public class Gui extends JFrame {
                 System.out.println("Map Loaded");
                 mapContainer.validate();
                 mapContainer.repaint();
+                System.out.println("Gui 1.1");
             }
         });
 
