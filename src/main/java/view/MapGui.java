@@ -128,7 +128,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 int y1 = dim.height - (int) ((origin.getLatitude() - minLat) * ratioHeight);
                 int x2 = (int) ((destination.getLongitude() - minLong) * ratioWidth);
                 int y2 = dim.height - (int) ((destination.getLatitude() - minLat) * ratioHeight);
-                System.out.println(s.toString());
+                //System.out.println(s.toString());
                 g.drawLine(x1 + DOT_RADIUS, y1 + DOT_RADIUS -10, x2 + DOT_RADIUS, y2 + DOT_RADIUS -10);
 
             }
@@ -159,7 +159,7 @@ public class MapGui  extends JPanel implements MouseListener{
                         break;
                     }
                     else {
-                        System.out.println("Requests line 118 : " + r.toString());
+                        //System.out.println("Requests line 118 : " + r.toString());
                         int x = (int) ((r.getPickupAddress().getLongitude() - minLong) * ratioWidth);
                         int y = dim.height - (int) ((r.getPickupAddress().getLatitude() - minLat) * ratioHeight);
                         g.fillOval(x, y - 10, DOT_RADIUS * 2, DOT_RADIUS * 2);
@@ -172,7 +172,7 @@ public class MapGui  extends JPanel implements MouseListener{
                 //Delivery Marker
                 g.setColor(Color.green);
                 for (Request r : requests) {
-                    System.out.println(r.toString());
+                    //System.out.println(r.toString());
                     int x = (int) ((r.getDeliveryAddress().getLongitude() - minLong) * ratioWidth);
                     int y = dim.height - (int) ((r.getDeliveryAddress().getLatitude() - minLat) * ratioHeight);
                     g.fillOval(x, y-10, DOT_RADIUS * 2, DOT_RADIUS * 2);
@@ -206,35 +206,47 @@ public class MapGui  extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        for (Point point: points) {
-            if ((e.getPoint().x > point.x - 10 && e.getPoint().x < point.x + 10) && (e.getPoint().y > point.y - 10 && e.getPoint().y < point.y + 10)) {
-                String temp;
-                if (pickUpTable.containsKey(point)) {
-                    // It is a pickup point
-                    Intersection intersection = pickUpTable.get(point);
-                    temp = "Pick up point\n" + intersection.toString();
-                    System.out.println("Pick up point");
-                    System.out.println(intersection.toString());
-                } else if (deliveryTable.containsKey(point)) {
-                    // It is a delivery point
-                    Intersection intersection = deliveryTable.get(point);
-                    temp = "Delivery point\n" + intersection.toString();
-                    System.out.println("Delivery point");
-                    System.out.println(intersection.toString());
-                }
-                else if (allIntersections.containsKey(point)) {
-                    if (adding) {
-                        if ( counter == 2 ) {
-                            gui.addRequest(pickup, allIntersections.get(point));
-                            counter = 1;
-                        } else if (counter == 1) {
-                            pickup = allIntersections.get(point);
-                            counter++;
+        System.out.println("209 Clear");
+
+        if (e.getClickCount()==1) {
+            for (Point point: points) {
+                if ((e.getPoint().x > point.x - 10 && e.getPoint().x < point.x + 10) && (e.getPoint().y > point.y - 10 && e.getPoint().y < point.y + 10)) {
+                    System.out.println("212 Clear");
+                    String temp;
+                    if (pickUpTable.containsKey(point)) {
+                        // It is a pickup point
+                        Intersection intersection = pickUpTable.get(point);
+                        temp = "Pick up point\n" + intersection.toString();
+                        System.out.println("Pick up point");
+                        System.out.println(intersection.toString());
+                    } else if (deliveryTable.containsKey(point)) {
+                        // It is a delivery point
+                        Intersection intersection = deliveryTable.get(point);
+                        temp = "Delivery point\n" + intersection.toString();
+                        System.out.println("Delivery point");
+                        System.out.println(intersection.toString());
+                    } else if (allIntersections.containsKey(point)) {
+                        System.out.println("228 Clear");
+                        if (adding) {
+                            if (counter == 2) {
+                                System.out.println("231 Clear");
+                                gui.addRequest(pickup, allIntersections.get(point));
+                                System.out.println("233 Clear");
+                                counter = 1;
+                                break;
+                            } else if (counter == 1) {
+                                System.out.println("236 Clear");
+                                pickup = allIntersections.get(point);
+                                System.out.println("238 Clear");
+                                counter++;
+                                break;
+                            }
                         }
                     }
-                }
+                    System.out.println("239 Clear");
+                    //this.gui.setInfo(temp);
 
-                //this.gui.setInfo(temp);
+                }
             }
         }
 

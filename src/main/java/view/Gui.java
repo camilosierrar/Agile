@@ -63,6 +63,8 @@ public class Gui extends JFrame {
     JButton addStep;
     JButton recalculate;
     JButton getBestTour;
+    JButton undo;
+    JButton redo;
     JTextField mapPath;
     JTextField reqPath;
     JSlider zoomSlide;
@@ -179,6 +181,8 @@ public class Gui extends JFrame {
         deleteSel = new JButton("Delete selection");
         addStep = new JButton("Add a step");
         recalculate = new JButton("Recalculate itinerary");
+        undo = new JButton("Undo");
+        redo = new JButton("Redo");
 
         //Slider (Zoom)
         zoomSlide = new JSlider();
@@ -229,6 +233,8 @@ public class Gui extends JFrame {
 
         //Add to Toolbar
         toolbar.add(zoomSlide);
+        toolbar.add(undo);
+        toolbar.add(redo);
 
         //Scroll
         mapScroll = new JScrollPane(mapContainer, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -453,15 +459,40 @@ public class Gui extends JFrame {
 
         //Adding a couple of Delivery and pickup
         this.addStep.addActionListener(event -> {
-            JOptionPane.showMessageDialog(this,
+           /* JOptionPane.showMessageDialog(this,
                     "Please click where you want to pickup a package",
                     "Create Pick-up",
-                    JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.WARNING_MESSAGE);*/
             map.setAdding(true);
 
             //controller.addRequest(Request r = new Request(), false);
             System.out.println("Index 1 : "+ table.getSelectionModel().getMinSelectionIndex() + " Index 2 : "+ table.getSelectionModel().getMaxSelectionIndex());
+        });
 
+        undo.addActionListener(event -> {
+            controller.undo();
+
+            //Redraw Map
+            mapContainer.removeAll();
+            map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+            map.setBackground(Color.lightGray);
+            mapContainer.add(map,BorderLayout.CENTER);
+            System.out.println("Map Loaded");
+            mapContainer.validate();
+            mapContainer.repaint();
+        });
+
+        redo.addActionListener(event -> {
+            controller.redo();
+
+            //Redraw Map
+            mapContainer.removeAll();
+            map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+            map.setBackground(Color.lightGray);
+            mapContainer.add(map,BorderLayout.CENTER);
+            System.out.println("Map Loaded");
+            mapContainer.validate();
+            mapContainer.repaint();
         });
 
         //Add panels
@@ -481,12 +512,16 @@ public class Gui extends JFrame {
     }
 
     public void addRequest(Intersection pickup, Intersection delivery) {
+        System.out.println("483 Clear");
         Request req = controller.makeRequest(pickup,delivery);
-        Variable.tour = controller.addRequestToTour(req,Variable.tour);
-
+        System.out.println("485 Clear");
+        Tour tour = controller.addRequestToTour(req,Variable.tour);
+        System.out.println("487 Clear");
+        solution = controller.addRequest(req,false);
         //Add to Table
+        System.out.println("490 Clear");
         controlFlagSelectionEvent = false;
-        tableCont = new TableContent(solution, Variable.tour, controller);
+        tableCont = new TableContent(solution, tour, controller);
         // System.out.println("tableContent = "+tableContent);
         if (this.table == null){ this.table = new JTable(tableCont); }
         else{ this.table.setModel(tableCont); }
@@ -494,7 +529,15 @@ public class Gui extends JFrame {
         tableSection.repaint();
         controlFlagSelectionEvent = true;
         //Draw
+        mapContainer.removeAll();
+        map = new MapGui(this, Variable.cityPlan, tour, controller, solution,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
+        map.setBackground(Color.lightGray);
+        mapContainer.add(map,BorderLayout.CENTER);
+        System.out.println("Map Loaded");
+        mapContainer.validate();
+        mapContainer.repaint();
 
+        map.setAdding(false);
     }
 
 

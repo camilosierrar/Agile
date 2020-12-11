@@ -45,7 +45,9 @@ public class Controller {
     }
 
     public List<Segment> addRequest(Request request, Boolean recalculatePath) {
+        System.out.println("48 Clear");
         l.add(new AddRequestCommand(request, recalculatePath));
+        System.out.println("50 Clear");
         return RunTSP.getSegmentsSolution();
     }
 
@@ -86,7 +88,7 @@ public class Controller {
         // create a client
         var client = HttpClient.newHttpClient();
         String uri = "https://api-adresse.data.gouv.fr/reverse/?lon="+lng+"&lat="+lat;
-        System.out.println(uri);
+        //System.out.println(uri);
         // create a request
         var request = HttpRequest.newBuilder(
                 URI.create(uri))
@@ -112,7 +114,7 @@ public class Controller {
             return "-";
         }
         address = node.get("features").get(0).get("properties").get("label").asText();
-        System.out.println("The address: " + address);
+        //System.out.println("The address: " + address);
         return address;
     }
 
