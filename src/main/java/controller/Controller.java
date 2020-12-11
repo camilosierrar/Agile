@@ -12,7 +12,7 @@ import command.ListOfMementos;
 import command.AddRequestCommand;
 import command.ModifyOrderCommand;
 import command.RemoveRequestCommand;
-
+import config.Variable;
 import model.Request;
 import model.Segment;
 import model.TableContent;
@@ -83,6 +83,10 @@ public class Controller {
 
     public void deleteSelection(int indexMax, int indexMin, TableContent tableContent) { 
         tableContent.removeCouple(indexMax, indexMin);
+    }
+
+    public void stopAlgo() {
+        Variable.cutAlgo = true;
     }
 
     public String getAddress(double lat, double lng) {

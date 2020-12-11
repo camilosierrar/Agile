@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import config.Variable;
+
 public abstract class TemplateTSP implements TSP {
 	private Integer[] bestSol;
 	protected Graph g;
@@ -72,7 +74,8 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, int currentCost){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+		//if (System.currentTimeMillis() - startTime > timeLimit) return;
+		if (Variable.cutAlgo) return;
 	    if (unvisited.size() == 0){ 
 	    	if (g.isArc(currentVertex,0)){ 
 				//if all points were visited and current cost plus cost of the arc

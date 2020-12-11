@@ -2,12 +2,9 @@ package tsp;
 
 import config.Config;
 import config.Variable;
-import config.Config.Type_Request;
 import controller.Controller;
 import dijkstra.Dijkstra;
 import model.*;
-import xml.XMLmap;
-import xml.XMLrequest;
 
 import java.util.*;
 
@@ -169,6 +166,7 @@ public class RunTSP {
         long startTime = System.currentTimeMillis();
         Variable.tsp.searchSolution(Config.TIME_LIMIT, Variable.g);
         System.out.print("Solution found in " + (System.currentTimeMillis() - startTime)+"ms. \n");
+        Variable.cutAlgo = false;
         
         //Stores index and id given by tsp (solution for optimal tour)
         List<Integer> indexSolution = new LinkedList<>();

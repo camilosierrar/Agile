@@ -66,6 +66,7 @@ public class Gui extends JFrame {
     JButton undo;
     JButton redo;
     JButton stopAlgo;
+    JButton stopAlgoButton;
     JTextField mapPath;
     JTextField reqPath;
     JSlider zoomSlide;
@@ -188,7 +189,7 @@ public class Gui extends JFrame {
         //Buttons
         mapFile = new JButton("Load Map file");
         reqFile = new JButton("Load Requests file");
-
+        stopAlgoButton = new JButton("Stop loading");
         getBestTour = new JButton("Find Best Tour");
         getBestTour.setBackground(Color.GREEN);
         getBestTour.setBorder(null);
@@ -249,10 +250,10 @@ public class Gui extends JFrame {
         topBar.add(reqReadLabel);
         topBar.add(reqPath);
         topBar.add(reqFile);
+     
             //getBestTour
         topBar.add(getBestTour);
-        topBar.add(stopAlgo);
-
+        topBar.add(stopAlgoButton);
 
         //Add to info
         info.setText(temp);
@@ -409,6 +410,11 @@ public class Gui extends JFrame {
             tableSection.validate();
             tableSection.repaint();
             controlFlagSelectionEvent = true;
+        });
+        
+        //Stop the loading of best tour finder and give a solution
+        stopAlgoButton.addActionListener(event -> {
+            controller.stopAlgo();
         });
         //Changing Zoom listenner
         zoomSlide.addChangeListener( changeEvent -> {

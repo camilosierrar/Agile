@@ -46,6 +46,11 @@ public class Variable {
      * Instance of TSP
      */
     public static TSP tsp;
+    /**
+     * True when user wants to stop algorithm
+     */
+    public static Boolean cutAlgo = false;
+
 
     /**
      * @param id
