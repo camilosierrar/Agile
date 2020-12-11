@@ -468,7 +468,7 @@ public class Gui extends JFrame {
         });
 
         undo.addActionListener(event -> {
-            controller.undo();
+            solution = controller.undo();
 
             //Redraw Map
             mapContainer.removeAll();
@@ -478,10 +478,19 @@ public class Gui extends JFrame {
             System.out.println("Map Loaded");
             mapContainer.validate();
             mapContainer.repaint();
+
+            controlFlagSelectionEvent = false;
+            tableCont = new TableContent(solution, Variable.tour, controller);
+            // System.out.println("tableContent = "+tableContent);
+            if (this.table == null){ this.table = new JTable(tableCont); }
+            else{ this.table.setModel(tableCont); }
+            tableSection.validate();
+            tableSection.repaint();
+            controlFlagSelectionEvent = true;
         });
 
         redo.addActionListener(event -> {
-            controller.redo();
+            solution = controller.redo();
 
             //Redraw Map
             mapContainer.removeAll();
@@ -491,6 +500,15 @@ public class Gui extends JFrame {
             System.out.println("Map Loaded");
             mapContainer.validate();
             mapContainer.repaint();
+
+            controlFlagSelectionEvent = false;
+            tableCont = new TableContent(solution, Variable.tour, controller);
+            // System.out.println("tableContent = "+tableContent);
+            if (this.table == null){ this.table = new JTable(tableCont); }
+            else{ this.table.setModel(tableCont); }
+            tableSection.validate();
+            tableSection.repaint();
+            controlFlagSelectionEvent = true;
         });
 
         //Add panels
