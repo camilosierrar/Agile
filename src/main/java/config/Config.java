@@ -2,6 +2,7 @@ package config;
 
 public class Config {
     public static final int SPEED = 15;
+    public static final int DURATION = 300;
     public enum Type_Request{
         PICK_UP,
         DELIVERY,

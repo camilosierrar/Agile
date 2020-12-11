@@ -2,6 +2,8 @@ package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import config.Config;
+import model.*;
 import model.Plan;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,9 @@ public class Controller {
     }
 
     public List<Segment> addRequest(Request request, Boolean recalculatePath) {
+        System.out.println("48 Clear");
         l.add(new AddRequestCommand(request, recalculatePath));
+        System.out.println("50 Clear");
         return RunTSP.getSegmentsSolution();
     }
 
@@ -84,7 +88,7 @@ public class Controller {
         // create a client
         var client = HttpClient.newHttpClient();
         String uri = "https://api-adresse.data.gouv.fr/reverse/?lon="+lng+"&lat="+lat;
-        System.out.println(uri);
+        //System.out.println(uri);
         // create a request
         var request = HttpRequest.newBuilder(
                 URI.create(uri))
@@ -110,7 +114,20 @@ public class Controller {
             return "-";
         }
         address = node.get("features").get(0).get("properties").get("label").asText();
-        System.out.println("The address: " + address);
+        //System.out.println("The address: " + address);
         return address;
+    }
+
+    public Request makeRequest (Intersection pickup, Intersection delivery) {
+        Request req = new Request(pickup, delivery, Config.DURATION,Config.DURATION);
+        return req;
+    }
+
+    public Tour addRequestToTour(Request req, Tour tour) {
+        return tour.addRequest(req);
+    }
+
+    public Tour remRequest(Tour tour, long id) {
+        return tour.removeRequest(id);
     }
 }

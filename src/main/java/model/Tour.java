@@ -21,6 +21,20 @@ public class Tour {
         this.requests = newTour.requests;
     }
 
+    public Tour addRequest(Request req) {
+        requests.add(req);
+        return this;
+    }
+
+    public Tour removeRequest(long id) {
+        for( Request r : requests) {
+            if (r.getDeliveryAddress().getId() == id || r.getPickupAddress().getId() == id) {
+                requests.remove(r);
+            }
+        }
+        return this;
+    }
+
     public Intersection getAddressDeparture() {
         return addressDeparture;
     }
