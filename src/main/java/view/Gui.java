@@ -65,6 +65,7 @@ public class Gui extends JFrame {
     JButton getBestTour;
     JButton undo;
     JButton redo;
+    JButton stopAlgo;
     JTextField mapPath;
     JTextField reqPath;
     JSlider zoomSlide;
@@ -193,6 +194,7 @@ public class Gui extends JFrame {
         recalculate = new JButton("Recalculate itinerary");
         undo = new JButton("Undo");
         redo = new JButton("Redo");
+        stopAlgo = new JButton("Stop loading");
 
         //Slider (Zoom)
         zoomSlide = new JSlider();
@@ -236,6 +238,7 @@ public class Gui extends JFrame {
         topBar.add(reqFile);
             //getBestTour
         topBar.add(getBestTour);
+        topBar.add(stopAlgo);
 
         //Add to info
         info.setText(temp);
@@ -406,6 +409,11 @@ public class Gui extends JFrame {
                 mapContainer.validate();
                 mapContainer.repaint();
             }
+        });
+
+        //Stop the algorithm loading
+        stopAlgo.addChangeListener( changeEvent -> {
+            //controller.stopAlgo();
         });
 
         //Selection sur Liste des Trajets
