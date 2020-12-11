@@ -318,6 +318,7 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
+                selId2 = selId1 = 0;
                 mapContainer.removeAll();
                 map = new MapGui(this, Variable.cityPlan, Variable.tour, controller,null, 1,mapScroll.getViewport().getSize(), selId1, selId2);
                 map.setBackground(Color.lightGray);
@@ -377,6 +378,7 @@ public class Gui extends JFrame {
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             } else {
+                selId2 = selId1 = 0;
                 mapContainer.removeAll();
                 map = new MapGui(this, Variable.cityPlan, Variable.tour, controller, null,zoom,mapScroll.getViewport().getSize(), selId1, selId2);
                 map.setBackground(Color.lightGray);
