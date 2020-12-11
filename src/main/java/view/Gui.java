@@ -241,6 +241,7 @@ public class Gui extends JFrame {
         info.setText(temp);
         tableSection.setMaximumSize(new Dimension(Integer.MAX_VALUE,300));
         table.setBackground(Color.GRAY);
+        table.getColumnModel().getColumn(0).setPreferredWidth(300);
 
         //Add to Toolbar
         toolbar.add(zoomSlide);
@@ -385,6 +386,7 @@ public class Gui extends JFrame {
             // System.out.println("tableContent = "+tableContent);
             if (this.table == null){ this.table = new JTable(tableCont); }
             else{ this.table.setModel(tableCont); }
+            table.getColumnModel().getColumn(0).setPreferredWidth(300);
             tableSection.validate();
             tableSection.repaint();
             controlFlagSelectionEvent = true;
