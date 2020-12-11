@@ -23,7 +23,7 @@ public class ListOfMementos {
             c.execute();
             Memento after = c.takeSnapshot();
             //System.out.print(before.dijkstras+ "\n\n");
-            System.out.print(after.dijkstras);
+            //System.out.print(after.dijkstras);
             undos.push(new BeforeAfter(before, after));
             redos.clear();
         }
@@ -33,7 +33,7 @@ public class ListOfMementos {
         BeforeAfter latestMemento = undos.pollFirst();
         if(latestMemento != null) {
             Memento latestBefore = latestMemento.before;
-            //System.out.print(latestBefore.sPathOfPointsInterests+ "-----");
+            System.out.print(latestBefore.sPathOfPointsInterests+ "-----");
             latestBefore.restore();
             System.out.print(Variable.sPathOfPointsInterests);
             redos.push(latestMemento);
@@ -45,6 +45,7 @@ public class ListOfMementos {
         if(latestMemento != null) {
             Memento latestAfter = latestMemento.after;
             latestAfter.restore();
+            System.out.println(Variable.sPathOfPointsInterests);
             undos.push(latestMemento);
         }
     }
