@@ -36,12 +36,14 @@ public class Controller {
         l = new ListOfMementos();
     }
     
-    public void undo() {
+    public List<Segment> undo() {
         l.undo();
+        return RunTSP.getSegmentsSolution();
     }
 
-    public void redo() {
+    public List<Segment> redo() {
         l.redo();
+        return RunTSP.getSegmentsSolution();
     }
 
     public List<Segment> addRequest(Request request, Boolean recalculatePath) {
