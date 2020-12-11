@@ -1,5 +1,7 @@
 package model;
 
+import config.Config;
+import config.Variable;
 import controller.Controller;
 
 import javax.swing.table.AbstractTableModel;
@@ -14,7 +16,7 @@ public class TableContent extends AbstractTableModel {
     private Date totalDuration;
 
     public TableContent(){
-
+        fireTableDataChanged ();
     }
 
     public TableContent(List<Segment> tableContent, Tour tour, Controller controller){
@@ -38,7 +40,7 @@ public class TableContent extends AbstractTableModel {
                     }
                 }
             }
-            totalDuration = addSecondsToDate(totalDuration, (int)(s.length));
+            totalDuration = addSecondsToDate(totalDuration, (int)(s.length*3.6)/Config.SPEED);
         }
         data.add(new Step(tableContent.get(0).getOrigin().getId(),controller.getAddress(tableContent.get(0).getOrigin().getLatitude(),tableContent.get(0).getOrigin().getLongitude()), totalDuration, "Depot arrival",tableContent.get(0).getOrigin().getId()));
 
