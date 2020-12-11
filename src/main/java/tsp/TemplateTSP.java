@@ -74,8 +74,8 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, int currentCost){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
-		if(Variable.cutAlgo) return;
+		//if (System.currentTimeMillis() - startTime > timeLimit) return;
+		if (Variable.cutAlgo) return;
 	    if (unvisited.size() == 0){ 
 	    	if (g.isArc(currentVertex,0)){ 
 				//if all points were visited and current cost plus cost of the arc
