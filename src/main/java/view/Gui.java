@@ -188,13 +188,26 @@ public class Gui extends JFrame {
         //Buttons
         mapFile = new JButton("Load Map file");
         reqFile = new JButton("Load Requests file");
+
         getBestTour = new JButton("Find Best Tour");
+        getBestTour.setBackground(Color.GREEN);
+        getBestTour.setBorder(null);
+
         deleteSel = new JButton("Delete selection");
         addStep = new JButton("Add a step");
         recalculate = new JButton("Recalculate itinerary");
+
         undo = new JButton("Undo");
+        undo.setBackground(Color.RED);
+        undo.setBorder(null);
+
         redo = new JButton("Redo");
+        redo.setBackground(Color.GREEN);
+        redo.setBorder(null);
+
         stopAlgo = new JButton("Stop loading");
+        stopAlgo.setBackground(Color.RED);
+        stopAlgo.setBorder(null);
 
         //Slider (Zoom)
         zoomSlide = new JSlider();
@@ -239,6 +252,7 @@ public class Gui extends JFrame {
             //getBestTour
         topBar.add(getBestTour);
         topBar.add(stopAlgo);
+
 
         //Add to info
         info.setText(temp);
