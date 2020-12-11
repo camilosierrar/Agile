@@ -74,8 +74,22 @@ public class XMLrequest {
                 cal.set(Calendar.MINUTE, minutes);
                 cal.set(Calendar.SECOND, seconds);
                 Date departureDate = cal.getTime();
-
-                Variable.tour = new Tour(departureIntersection, departureDate, requestsList);
+                boolean doesMatchWithMap = true;
+                for(Request request: requestsList){
+                    if(request.getPickupAddress() == null){
+                        doesMatchWithMap = false;
+                        System.out.println("XMLreq 1.1 Clear");
+                    }
+                    if(request.getPickupAddress() == null){
+                        doesMatchWithMap = false;
+                        System.out.println("XMLreq 1.2 Clear");
+                    }
+                }
+                if(departureIntersection == null){
+                    doesMatchWithMap = false;
+                    System.out.println("XMLreq 1.3 Clear");
+                }
+                Variable.tour = doesMatchWithMap? new Tour(departureIntersection, departureDate, requestsList): null;
             }
 
         } catch (Exception e) {
