@@ -10,12 +10,12 @@ import tsp.RunTSP;
 
 public class ListOfMementos {
 
-    LinkedList<BeforeAfter> undos;
-	LinkedList<BeforeAfter> redos;
+    ArrayDeque<BeforeAfter> undos;
+	ArrayDeque<BeforeAfter> redos;
 
     public ListOfMementos() {
-        undos= new LinkedList<BeforeAfter>();
-		redos= new LinkedList<BeforeAfter>();
+        undos= new ArrayDeque<BeforeAfter>();
+		redos= new ArrayDeque<BeforeAfter>();
     }
 
     public void add(MementoableCommand c) {
@@ -31,18 +31,18 @@ public class ListOfMementos {
     public void undo() {
         BeforeAfter latestMemento = undos.pollFirst();
         if(latestMemento != null) {
+            redos.push(latestMemento);
             Memento latestBefore = latestMemento.before;
             latestBefore.restore();
-            redos.push(latestMemento);
         }
     }
 
     public void redo() {
         BeforeAfter latestMemento = redos.pollFirst();
         if(latestMemento != null) {
+            undos.push(latestMemento);
             Memento latestAfter = latestMemento.after;
             latestAfter.restore();
-            undos.push(latestMemento);
         }
     }
 
@@ -57,8 +57,8 @@ class BeforeAfter {
     final Memento before;
     final Memento after;
 
-    public BeforeAfter(Memento before, Memento after) {
-        this.before = before;
-        this.after = after;
+    public BeforeAfter(Memento pBefore, Memento pAfter) {
+        this.before = pBefore;
+        this.after = pAfter;
     }
 }
