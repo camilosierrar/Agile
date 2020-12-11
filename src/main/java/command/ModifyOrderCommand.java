@@ -19,13 +19,13 @@ public class ModifyOrderCommand implements MementoableCommand {
      */
     @Override
     public void execute() {
-        Variable.sPathOfPointsInterests = newPath;
+        Variable.sPathOfPointsInterests = this.newPath;
         RunTSP.computeFullShortestPath();
     }
 
     @Override
     public Memento takeSnapshot() {
-        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.shortestPath, Variable.sPathOfPointsInterests,
+        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.sPathOfPointsInterests,
                            Variable.dijkstras, Variable.graph, Variable.pointsInterestId, Variable.g );
     }
 }

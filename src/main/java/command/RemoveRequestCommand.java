@@ -39,7 +39,6 @@ public class RemoveRequestCommand implements MementoableCommand{
             Variable.pointsInterestId.remove(deliveryId);
             Variable.removeNodeFromDijktrasById(pickupNode.getId());
             Variable.removeNodeFromDijktrasById(deliveryNode.getId());
-            System.out.print("ICI-----\n"+Variable.dijkstras+ "\n\n");
             Variable.sPathOfPointsInterests.remove(pickupId);
             Variable.sPathOfPointsInterests.remove(deliveryId);
             for (Map.Entry<Node, Dijkstra> entry : Variable.dijkstras.entrySet()) 
@@ -58,7 +57,7 @@ public class RemoveRequestCommand implements MementoableCommand{
 
     @Override
     public Memento takeSnapshot() {
-        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.shortestPath, Variable.sPathOfPointsInterests,
+        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.sPathOfPointsInterests,
                            Variable.dijkstras, Variable.graph, Variable.pointsInterestId, Variable.g );
     }
 }

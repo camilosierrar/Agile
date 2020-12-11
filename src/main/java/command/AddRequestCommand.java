@@ -70,7 +70,7 @@ public class AddRequestCommand implements MementoableCommand {
 
     @Override
     public Memento takeSnapshot() {
-        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.shortestPath, Variable.sPathOfPointsInterests,
+        return new Memento(Variable.pickUpDeliveryCouplesId, Variable.sPathOfPointsInterests,
                            Variable.dijkstras, Variable.graph, Variable.pointsInterestId, Variable.g );
     }
 
