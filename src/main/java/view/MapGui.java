@@ -11,37 +11,107 @@ import java.util.HashMap;
 import javax.swing.*;
 import java.util.List;
 
-
+/**
+ * This class takes care of the map part of our UI
+ */
 public class MapGui  extends JPanel implements MouseListener{
 
     private boolean adding = false;
-
+    /**
+     * The hashmap regrouping all of our intersections
+     */
     private HashMap<Long, Intersection> intersections;
+    /**
+     * The list of all the segments composing the map
+     */
     private List<Segment> segments;
-    private Dimension dim; //Dimesion of whole Map
-    private Dimension screenSize; //Dimension of the part of the map that can be seen
+    /**
+     *Dimension of whole Map
+     */
+    private Dimension dim; //
+    /**
+     * Dimension of the part of the map that can be seen
+     */
+    private Dimension screenSize; //
+    /**
+     * List of requests
+     */
     private List<Request> requests;
+    /**
+     * Departure address
+     */
     private Intersection departureAddress;
+    /**
+     * Departure point
+     */
     private Point departurePoint;
+    /**
+     * Pickup table
+     */
     private HashMap<Point, Intersection> pickUpTable;
+    /**
+     * Delivery table
+     */
     private HashMap<Point, Intersection> deliveryTable;
+    /**
+     * Hashmap containing all of the intersections
+     */
     private HashMap<Point, Intersection> allIntersections;
+    /**
+     * Pickup intersection
+     */
     private Intersection pickup;
+    /**
+     * The counter
+     */
     private int counter=1;
-
+    /**
+     * The gui that prints our UI
+     */
     private Gui gui;
+    /**
+     * ids
+     */
     private long id1, id2;
-
+    /**
+     * Ratios that allow us to transforms latitudes into the map
+     */
     private double ratioHeight, ratioWidth;
-
+    /**
+     * The width of our dots
+     */
     private final int DOT_RADIUS = 5;
 
+    /**
+     * List of important points
+     */
     private List<Point> points;
+    /**
+     * The controller that commands everything
+     */
     private Controller controller;
+    /**
+     * The list of solutions from our algorithm
+     */
     private List<Segment> solution = null;
+    /**
+     * The zoom value
+     */
     private double zoom;
 
+    /**
+     * Initiates the Map that will be seen on the GUI
+     * @param gui the UI
+     * @param plan the plan
+     * @param tour the current tour
+     * @param controller the controller
+     * @param solution The list of segments that compose the best solution found by the algorithm
+     * @param zoom the level of zoom
+     * @param screenSize the screen size
+     * @param id1 the first id
+     * @param id2 the second id
 
+     */
     public MapGui(Gui gui, Plan plan, Tour tour, Controller controller, List<Segment> solution, int zoom, Dimension screenSize, long id1, long id2) {
         //this.plan = plan;
         this.gui = gui;
@@ -67,7 +137,10 @@ public class MapGui  extends JPanel implements MouseListener{
         this.screenSize = screenSize;
     }
 
-
+    /**
+     * Main function that paints the window
+     * @param g is the graphic we will configure
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.intersections != null && this.segments!=null) {
@@ -184,18 +257,26 @@ public class MapGui  extends JPanel implements MouseListener{
             }
         }
     }
-
+    /**
+     * Returns the dimension of the window
+     */
     public Dimension getDim() {
         return dim;
     }
-
+    /**
+     * Returns the new dimension that is modified by the zoom
+     * @param zoom the percentage of zooming in the window
+     */
     public Dimension getNewDim(int zoom) {
         Dimension tmp = screenSize;
         //System.out.println("this.getSize() : " + tmp);
         tmp.setSize(tmp.getWidth()*(1+(zoom/10)), tmp.getHeight()*(1+(zoom/10)));
         return tmp;
     }
-
+    /**
+     * The event listener that manages the actions made when the mouse is clicked
+     * @param e the mouse event, the click
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println("209 Clear");

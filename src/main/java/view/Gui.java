@@ -27,27 +27,38 @@ import javax.xml.parsers.ParserConfigurationException;
 
 //import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 
-
+/**
+ * The class GUI represents the window for the UI and uses the mapGui
+ */
 public class Gui extends JFrame {
 
-    //Util
-    Boolean mapFromFile;
-    Boolean reqFromFile;
+    /**
+     *
+     */
+
     boolean controlFlagSelectionEvent = true;
     boolean  isPickup = false;
-
+    /**
+     * The zoom percentage
+     */
     int zoom;
 
-    //Selected intersections
+    /**
+     * Selected intersections
+     */
     long selId1, selId2;
 
-    //Solution
+    /**
+     * The list of segments representing the solution
+     */
     List<Segment> solution;
 
-    //Graphic Elements
+    /**
+     * All the graphic elements that allow us to build the window,
+     * JPanels, JTextAreas, JButtons etc
+     */
     JPanel base;
     JTextArea info;
-    //JPanel info;
     JTable table;
     JPanel leftSection;
     JPanel leftButtonBar;
@@ -70,19 +81,29 @@ public class Gui extends JFrame {
     JTextField mapPath;
     JTextField reqPath;
     JSlider zoomSlide;
-
+    /**
+     * The table content, representing all the Pickup and deliveries
+     */
     TableContent tableCont;
-
+    /**
+     *  The controller with all the commands
+     */
     Controller controller;
 
-    //Constructor
+    /**
+     * The constructor for the Gui
+     * @param controller the controller
+     */
     public Gui(Controller controller) {
         //window name
         super("Delivelov");
         this.controller = controller;
         setGui();
     }
-
+    /**
+     * This function allows us to modify the informations regarding the window
+     * @param info the string of informations that describes the window
+     */
     public void setInfo(String info) {
         this.info.setText(info);
         this.info.setForeground(Color.white);
@@ -90,7 +111,10 @@ public class Gui extends JFrame {
         this.info.validate();
         this.info.repaint();
     }
-
+    /**
+     * This function allows us to select a pick-up delivery couple on the list
+     * @param id the id of the couple pickup delivery
+     */
     public void setSelection(long id) {
         int index = tableCont.getIndexbyId(id);
         controlFlagSelectionEvent = false;
@@ -100,7 +124,12 @@ public class Gui extends JFrame {
         table.validate();
         table.repaint();
     }
-
+    /**
+     * This function builds the Gui, putting all graphical components together
+     * This is where we add the buttons and JPanels where they belong,
+     * and organize the space on the window
+     * We will also implement the action listeners for the buttons here
+     */
     private void setGui() {
         zoom = 0;
         solution = null;
@@ -227,7 +256,7 @@ public class Gui extends JFrame {
 
         //Load map action listenner
         mapFile.addActionListener(event -> {
-            this.mapFromFile = true;
+
 
             final JFileChooser fc = new JFileChooser("resources/");
             FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "Map");
@@ -287,7 +316,7 @@ public class Gui extends JFrame {
 
         //Load Requests Action Listenner
         reqFile.addActionListener(event -> {
-            this.reqFromFile = true;
+
 
             final JFileChooser fc = new JFileChooser("resources/");
             FileFilter filter1 = new Utils.ExtensionFileFilter("XML", new String[] { "XML" }, "requests");
@@ -527,6 +556,11 @@ public class Gui extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * This function takes two intersections to create a new request and add it on the list
+     * @param pickup the pickup intersection
+     * @param delivery the delivery intersection
+     */
     public void addRequest(Intersection pickup, Intersection delivery) {
         System.out.println("483 Clear");
         Request req = controller.makeRequest(pickup,delivery);
