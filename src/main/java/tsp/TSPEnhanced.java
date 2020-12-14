@@ -15,16 +15,16 @@ public class TSPEnhanced extends TSP1 {
             }
         }
         // Sum of li's for each unvisited nodes
-        double s = 0; 
+        double somme = 0; 
         for (int i : unvisited) {
             //li is lowest cost's arc going out of current evaluation node to another unvisited node or source
             double li = g.getCost(i, 0);
             for (int j : unvisited) 
                 if (i != j) 
                     li = Double.min(li, g.getCost(i, j));
-            s += li;
+            somme += li;
         }
-        return (int)l + s;
+        return (int)l + somme;
     }
 
     @Override

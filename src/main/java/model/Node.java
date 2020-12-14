@@ -79,7 +79,7 @@ public class Node implements Serializable {
             " id='" + getId() + "'" +
             ", distance='" + getDistance() + "'" +
             //", adjacentNodes='" + printAdjacentNodes()  + "'" +
-            //", typeOfNode='" + getTypeOfNode() + "'" +
+            ", typeOfNode='" + getTypeOfNode() + "'" +
             "}";
     }
 

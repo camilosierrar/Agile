@@ -34,8 +34,8 @@ public class SeqIterEnhanced extends SeqIter {
 		}
 
 		@Override
-		public int compare(Integer o1, Integer o2) {
-			return (int)(unvisitedGraph.getCost(currentVertex, o1) - unvisitedGraph.getCost(currentVertex, o2));
+		public int compare(Integer v1, Integer v2) {
+			return (int)(unvisitedGraph.getCost(currentVertex, v1) - unvisitedGraph.getCost(currentVertex, v2));
 		}
 
 	}

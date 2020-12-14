@@ -20,6 +20,15 @@ public class Memento {
     public final Set<Long> pointsInterestId;
     public final Graph g;
 
+    /**
+     * Create a memento of current state of the system : save values of important variables 
+     * @param pPickUpDeliveryCouplesId
+     * @param pSPathOfPointsInterests
+     * @param pDijkstras
+     * @param pGraph
+     * @param pPointsInterestId
+     * @param pG
+     */
     public Memento(Map<Long,Long> pPickUpDeliveryCouplesId,
                    LinkedList<Long> pSPathOfPointsInterests, Map<Node, Dijkstra> pDijkstras, Set<Node> pGraph, 
                    Set<Long> pPointsInterestId, Graph pG) {
@@ -31,6 +40,9 @@ public class Memento {
         this.g = SerializationUtils.clone(pG);
     }
 
+    /**
+     * Restore the system to a previous state
+     */
 	void restore() {
         Variable.pickUpDeliveryCouplesId = SerializationUtils.clone((HashMap<Long,Long>) this.pickUpDeliveryCouplesId);
         Variable.sPathOfPointsInterests = SerializationUtils.clone(this.sPathOfPointsInterests);

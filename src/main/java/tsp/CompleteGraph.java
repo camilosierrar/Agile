@@ -72,7 +72,8 @@ public class CompleteGraph implements Graph {
 	}
 
     /**
-     * TODO
+     * Add the two new nodes of a request to complete graph 
+	 * Updates cost table
      * @param shortestPathsAddedRequest
      * @param addedNodes
      */
@@ -102,7 +103,7 @@ public class CompleteGraph implements Graph {
 	}
 	
 	/**
-     * TODO
+     * Remove two nodes of a request of the complete graph
      * @param shortestPathsAddedRequest
      * @param addedNodes
      */

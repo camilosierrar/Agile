@@ -32,6 +32,9 @@ public class Controller {
 
     private ListOfMementos l;
 
+    /**
+     * Initialises Controller and List of undos and redos to empty queue
+     */
     public Controller() {
         l = new ListOfMementos();
     }

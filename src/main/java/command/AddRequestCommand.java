@@ -16,10 +16,14 @@ public class AddRequestCommand implements MementoableCommand {
     private Request request;
     private Boolean recalculatePath;
     
+    /**
+     * Constructs the command for adding a request
+     * @param pRequest
+     * @param pRecalculatePath
+     */
     public AddRequestCommand(Request pRequest, Boolean pRecalculatePath) {
         this.request = pRequest;
         this.recalculatePath = pRecalculatePath;
-        //Variable.tour.getRequests().add(pRequest) ;  
     }
 
     /**

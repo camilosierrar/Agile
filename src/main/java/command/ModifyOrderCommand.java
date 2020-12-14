@@ -8,13 +8,17 @@ import tsp.RunTSP;
 public class ModifyOrderCommand implements MementoableCommand {
 
     private LinkedList<Long> newPath;
-    
+
+    /**
+    * Constructs the command for modifying order of points of interest
+    * @param pNewPath
+    */ 
     public ModifyOrderCommand(LinkedList<Long> pNewPath) {
         this.newPath = pNewPath;
     }
 
     /**
-     * Modify the tour with provided
+     * Modify the tour with one provided
      * @param newPath
      */
     @Override

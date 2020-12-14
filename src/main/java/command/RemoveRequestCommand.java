@@ -14,10 +14,14 @@ public class RemoveRequestCommand implements MementoableCommand{
     private Request request;
     private Boolean recalculatePath;
     
+    /**
+     * Constructs the command for removing a request
+     * @param pRequest
+     * @param pRecalculatePath
+     */
     public RemoveRequestCommand(Request pRequest, Boolean pRecalculatePath) {
         this.request = pRequest;
         this.recalculatePath = pRecalculatePath; 
-        //Variable.tour.getRequests().remove(pRequest);
     }
 
     /**
