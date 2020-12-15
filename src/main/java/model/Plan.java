@@ -3,7 +3,12 @@ package model;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The plan of our map
+ */
+
 public class Plan {
+
     private HashMap<Long, Intersection> intersections;
     private List<Segment> segments;
     public static Plan plan;

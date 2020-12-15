@@ -3,7 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * The class Tour that will be modified when we use the algorithms to find the best tour
+ */
 public class Tour {
     private Intersection addressDeparture;
     private Date timeDeparture;

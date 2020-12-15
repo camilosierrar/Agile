@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * The class managing the storage of requests and segments, that will be
+ * modified by the remove, undo, redo etc functions
+ */
 public class TableContent extends AbstractTableModel {
     private static final List<Step> data = new ArrayList<>();
     private final String[] header = {"Name", "Type", "Date"};

@@ -1,5 +1,7 @@
 package model;
-
+/**
+ * The class representing a segment
+ */
 public class Segment {
     private Intersection origin;
     private Intersection destination;

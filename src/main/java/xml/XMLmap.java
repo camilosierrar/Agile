@@ -16,6 +16,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * The class that will allow us to extract all the informations from the XML File
+ * to add data to our map
+ * and checking that the file is correct
+ */
 public class XMLmap {
 
     public static void readData(String fileName) {

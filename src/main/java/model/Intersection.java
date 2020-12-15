@@ -1,8 +1,19 @@
 package model;
-
+/**
+ * The intersection class
+ */
 public class Intersection {
+    /**
+     * The id
+     */
     private long id;
+    /**
+     * The longitude
+     */
     private double longitude;
+    /**
+     * The latitude
+     */
     private double latitude;
 
     public Intersection() {
@@ -19,15 +30,25 @@ public class Intersection {
         this.id = pId;
     }
 
+    /**
+     * the getId() function
+     * @return the id of the intersection
+     */
 	public long getId() {
         return id;
     }
-
+    /**
+     * the getLongitude() function
+     * @return the longitude of the intersection
+     */
     public double getLongitude() {
         return longitude;
     }
 
-
+    /**
+     * the getLatitude() function
+     * @return the latitude of the intersection
+     */
     public double getLatitude() {
         return latitude;
     }
