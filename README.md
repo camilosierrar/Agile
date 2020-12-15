@@ -42,5 +42,5 @@ $ mvn exec:java
 - GIRARD Andrieu
 - KERMANI Benjamin
 
-##License
+## License
 [INSA Lyon](https://www.insa-lyon.fr/)
