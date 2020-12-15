@@ -5,7 +5,7 @@ PD AGILE (4IF - 2020) is an application finding best tour given lists of pickups
 - Java JDK 13
 - Maven
 
-##Setup the project / Installation
+## Setup the project / Installation
 First you have to clone the project to your local repository :
 ```
 $ git init
@@ -17,7 +17,7 @@ Then you have to build and run the project with the following commands :
 $ mvn clean install
 $ mvn exec:java
 ```
-##Project architecture
+## Project architecture
 - **src/main** : Contains .java files organised in packages.
     - **main/java/**
         - **command** : Classes concerning memento pattern
