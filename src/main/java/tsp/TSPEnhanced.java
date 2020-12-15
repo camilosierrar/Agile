@@ -2,7 +2,9 @@ package tsp;
 
 import java.util.Collection;
 import java.util.Iterator;
-
+/**
+ * The TSP enhanced class
+ */
 public class TSPEnhanced extends TSP1 {
 
     @Override

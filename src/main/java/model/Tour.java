@@ -7,8 +7,17 @@ import java.util.List;
  * The class Tour that will be modified when we use the algorithms to find the best tour
  */
 public class Tour {
+    /**
+     * The departure address
+     */
     private Intersection addressDeparture;
+    /**
+     * The time departure
+     */
     private Date timeDeparture;
+    /**
+     * The list of requests
+     */
     private List<Request> requests;
 
     public Tour(Intersection addressDeparture, Date timeDeparture, List<Request> requests) {
@@ -49,7 +58,11 @@ public class Tour {
         return requests;
     }
 
-
+    /**
+     * Find a request from its intersection
+     * @param intersection
+     * @return  request
+     */
     public Request getRequestbyIntersection(Intersection intersection) {
         for (Request request: requests) {
             if (intersection.equals(request.getDeliveryAddress()) || intersection.equals(request.getPickupAddress())) {
@@ -59,7 +72,11 @@ public class Tour {
         return null;
     }
 
-
+    /**
+     * Removes a request
+     * @param request
+     * @return  the tour
+     */
     public Tour removeRequest(Request request) {
         List<Request> newRequests = new ArrayList<>();
         for (Request req: requests) {

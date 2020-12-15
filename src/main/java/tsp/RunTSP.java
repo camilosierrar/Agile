@@ -9,7 +9,9 @@ import xml.XMLmap;
 import xml.XMLrequest;
 
 import java.util.*;
-
+/**
+ * The run TSP class
+ */
 public class RunTSP {
 
     //TO USE MAIN, UNCOMMENT LINES 134 & 135

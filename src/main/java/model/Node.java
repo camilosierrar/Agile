@@ -10,9 +10,21 @@ import config.Config.Type_Request;
  * Encapsulates model information (intersections, segments,...) in a data structure adapted to graphs (complete graph, Dijkstra)
  */
 public class Node implements Serializable {
+    /**
+     * The id
+     */
     private long id;
+    /**
+     * The distance
+     */
     private Double distance = Double.MAX_VALUE;
+    /**
+     * The adjacent nodes
+     */
     private Map<Node, Double> adjacentNodes = new HashMap<>();
+    /**
+     * The type of node
+     */
     private Type_Request typeOfNode;
 
     public Node(long id){
@@ -63,7 +75,10 @@ public class Node implements Serializable {
         Node n = (Node) obj;
         return n.id == this.id;
     }
-
+    /**
+     * Printing adjacent nodes
+     * @return a string
+     */
     public String printAdjacentNodes() {
         String msg ="{";
         for (Map.Entry<Node, Double> node : this.getAdjacentNodes().entrySet()) {

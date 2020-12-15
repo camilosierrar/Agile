@@ -3,9 +3,21 @@ package model;
  * The class representing a segment
  */
 public class Segment {
+    /**
+     * The origin of the segment
+     */
     private Intersection origin;
+    /**
+     * The destination of the segment
+     */
     private Intersection destination;
+    /**
+     * The name of the segment
+     */
     private String name;
+    /**
+     * The length of the segment
+     */
     double length;
 
     public Segment(Intersection origin, Intersection destination, String name, double length) {

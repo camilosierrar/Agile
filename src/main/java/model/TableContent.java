@@ -14,8 +14,17 @@ import java.util.List;
  * modified by the remove, undo, redo etc functions
  */
 public class TableContent extends AbstractTableModel {
+    /**
+     * The data inside the table content which is a list of steps
+     */
     private static final List<Step> data = new ArrayList<>();
+    /**
+     * The header of our table
+     */
     private final String[] header = {"Name", "Type", "Date"};
+    /**
+     * The total duration of our table
+     */
     private Date totalDuration;
 
     public TableContent(){
@@ -50,7 +59,12 @@ public class TableContent extends AbstractTableModel {
         //data.add(new Step(tableContent.get(0).getOrigin().getId(),tableContent.get(0).getName(), totalDuration, "Depot arrival",tableContent.get(0).getOrigin().getId()));
         fireTableDataChanged ();
     }
-
+    /**
+     * This function adds seconds to the date
+     * @param date the date
+     * @param secondsToAdd the amount of seconds to add
+     * @return the updated date
+     */
     private Date addSecondsToDate(Date date, int secondsToAdd){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -67,13 +81,22 @@ public class TableContent extends AbstractTableModel {
         return header[col];
     }
 
+    /**
+     * Removes a couple
+     * @param firstIndex
+     * @param lastIndex
+     */
     public void removeCouple(int lastIndex, int firstIndex) {
         data.remove(lastIndex);
         data.remove(firstIndex);
         fireTableRowsDeleted(lastIndex, lastIndex);
         fireTableRowsDeleted(firstIndex, firstIndex);
     }
-
+    /**
+     * Returns the value at an index
+     * @param columnIndex
+     * @param rowIndex
+     */
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch(columnIndex){
             case 0:
@@ -94,11 +117,19 @@ public class TableContent extends AbstractTableModel {
                 return null;
         }
     }
-
+    /**
+     * Returns an id by index
+     * @param index
+     * @return long
+     */
     public long getIDbyIndex(int index) {
         return data.get(index).getId();
     }
-
+    /**
+     * Returns an index by id
+     * @param id
+     * @return int
+     */
     public int getIndexbyId(long id) {
         int index = -1;
         for(Step step: data){
@@ -108,7 +139,11 @@ public class TableContent extends AbstractTableModel {
         }
         return index;
     }
-
+    /**
+     * Returns a couple by index
+     * @param index
+     * @return int
+     */
     public static int getCoupleIndex(int index){
         System.out.println("Index getCoupleIndex : " +index);
         long coupleId = data.get(index).getCouple();
