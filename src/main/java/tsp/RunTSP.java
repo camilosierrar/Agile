@@ -253,6 +253,7 @@ public class RunTSP {
     private static double getDistanceOfShortestPath() {
         double fullDistance = 0.0;
         List<Segment> segmentsSolution = getSegmentsSolution();
+        System.out.println("NB Segments : " + segmentsSolution.size());
         for (Segment segment : segmentsSolution) {
             fullDistance += segment.getLength();
         }
@@ -263,7 +264,7 @@ public class RunTSP {
      * From a Plan and a Tour object, it stores all informations as nodes
      * Fills graphPlan, pickup/delivery couples and points of interest (static Variables)
      */
-    private static void fillGraph(){
+    public static void fillGraph(){
         Variable.graph.clear();
         Variable.pointsInterestId.clear();
         //Stores all intersections in graphPlan
@@ -272,7 +273,6 @@ public class RunTSP {
             Node originNode = new Node(intersection.getId());
             Variable.graph.add(originNode);
         }
-
         //Set adjacent Nodes for each segments
         for(Map.Entry<Long,Intersection> entry: Variable.cityPlan.getIntersections().entrySet()){
             Intersection intersection = entry.getValue();

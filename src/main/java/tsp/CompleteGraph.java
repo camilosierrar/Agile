@@ -74,7 +74,6 @@ public class CompleteGraph implements Graph {
     /**
      * Add the two new nodes of a request to complete graph 
 	 * Updates cost table
-     * @param shortestPathsAddedRequest
      * @param addedNodes
      */
     public void addRequest(List<Node> addedNodes) {
