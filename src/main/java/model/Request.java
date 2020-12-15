@@ -1,6 +1,8 @@
 package model;
 
-
+/**
+ * The class representing a request
+ */
 public class Request {
     private Intersection pickupAddress;
     private Intersection deliveryAddress;

@@ -1,5 +1,7 @@
 package config;
-
+/**
+ * The class that saves our configuration parameters
+ */
 public class Config {
     public static final int SPEED = 15;
     public static final int DURATION = 300;

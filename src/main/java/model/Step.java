@@ -1,7 +1,9 @@
 package model;
 
 import java.util.Date;
-
+/**
+ * The class representing a step
+ */
 public class Step {
     private String name;
     private Date date;

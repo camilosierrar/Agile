@@ -17,7 +17,11 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-
+/**
+ * The class that will allow us to extract all the informations from the XML File
+ * to add data to our requests list
+ * and checking that the file is correct
+ */
 public class XMLrequest {
 
     public static void readData(String filename) {
