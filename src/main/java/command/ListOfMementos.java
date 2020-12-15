@@ -88,6 +88,7 @@ public class ListOfMementos {
             System.out.println("After  "+ i++ +" : " + bf.after.sPathOfPointsInterests);
         }
     }
+
 }
 
 //Source : https://blog.zenika.com/2014/12/15/pattern-command-undo-variations-compensation-replay-memento2/
