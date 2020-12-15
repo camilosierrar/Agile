@@ -103,8 +103,7 @@ public class CompleteGraph implements Graph {
 	
 	/**
      * Remove two nodes of a request of the complete graph
-     * @param shortestPathsAddedRequest
-     * @param addedNodes
+     * @param nodesRemoved
      */
     public void removeRequest(List<Node> nodesRemoved) {
         //Updates vertices
