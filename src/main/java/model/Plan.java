@@ -8,9 +8,17 @@ import java.util.List;
  */
 
 public class Plan {
-
+    /**
+     * The hashmap of intersections
+     */
     private HashMap<Long, Intersection> intersections;
+    /**
+     * The list of segments
+     */
     private List<Segment> segments;
+    /**
+     * The plan
+     */
     public static Plan plan;
 
 

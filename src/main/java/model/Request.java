@@ -4,9 +4,21 @@ package model;
  * The class representing a request
  */
 public class Request {
+    /**
+     * The pickup address
+     */
     private Intersection pickupAddress;
+    /**
+     * The delivery address
+     */
     private Intersection deliveryAddress;
+    /**
+     * The pickup duration
+     */
     private int pickupDuration;
+    /**
+     * The delivery duration
+     */
     private int deliveryDuration;
 
     public Request(Intersection pickupAddress, Intersection deliveryAddress, int pickupDuration, int deliveryDuration) {

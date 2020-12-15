@@ -5,10 +5,25 @@ import java.util.Date;
  * The class representing a step
  */
 public class Step {
+    /**
+     * The name
+     */
     private String name;
+    /**
+     * The date
+     */
     private Date date;
+    /**
+     * The type
+     */
     private String type;
+    /**
+     * The couple
+     */
     private long couple;
+    /**
+     * The id
+     */
     private long id;
 
     public Step(long id, String name, Date date, String type, long couple) {
