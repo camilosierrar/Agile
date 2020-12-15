@@ -133,4 +133,77 @@ public class TestTSP {
         List<Long> orderedSolution = Variable.sPathOfPointsInterests;
         Assert.assertEquals(expectedSolution, orderedSolution);
     }
+
+    /**
+     * Computes best tour, add a request and undo
+     * Compares if solutions are equal
+     */
+    @Test
+    public void testUndo(){
+        XMLmap.readData("smallMap.xml");
+        XMLrequest.readData("requestsSmall2.xml");
+        Variable.pickUpDeliveryCouplesId.clear();
+        for (Request request : Variable.tour.getRequests()){
+            Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
+        }
+        RunTSP.fillGraph();
+        RunTSP.computeDijkstra();
+        Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.dijkstras);
+        RunTSP.getSolution();
+        Controller c = new Controller();
+        Request request = new Request(
+                Variable.cityPlan.getIntersectionById(26086127),
+                Variable.cityPlan.getIntersectionById(26086128),
+                20,
+                40);
+        c.addRequest(request, true);
+        c.undo();
+        List<Long> orderedSolution = Variable.sPathOfPointsInterests;
+        List<Long> expectedSolution =  new LinkedList<>();
+        expectedSolution.add(2835339774L);
+        expectedSolution.add((long) 208769120);
+        expectedSolution.add((long) 1679901320);
+        expectedSolution.add((long) 208769457);
+        expectedSolution.add((long) 25336179);
+        expectedSolution.add(2835339774L);
+        Assert.assertEquals(expectedSolution, orderedSolution);
+    }
+
+    /**
+     * Computes best tour, add a request,undo and redo
+     * Compares if solutions are equal
+     */
+    @Test
+    public void testRedo(){
+        XMLmap.readData("smallMap.xml");
+        XMLrequest.readData("requestsSmall2.xml");
+        Variable.pickUpDeliveryCouplesId.clear();
+        for (Request request : Variable.tour.getRequests()){
+            Variable.pickUpDeliveryCouplesId.put(request.getPickupAddress().getId(), request.getDeliveryAddress().getId());
+        }
+        RunTSP.fillGraph();
+        RunTSP.computeDijkstra();
+        Variable.g = new CompleteGraph(Variable.pointsInterestId.size(), Variable.dijkstras);
+        RunTSP.getSolution();
+        Controller c = new Controller();
+        Request request = new Request(
+                Variable.cityPlan.getIntersectionById(26086127),
+                Variable.cityPlan.getIntersectionById(26086128),
+                20,
+                40);
+        c.addRequest(request, true);
+        c.undo();
+        c.redo();
+        List<Long> orderedSolution = Variable.sPathOfPointsInterests;
+        List<Long> expectedSolution =  new LinkedList<>();
+        expectedSolution.add(2835339774L);
+        expectedSolution.add((long) 26086127);
+        expectedSolution.add((long) 26086128);
+        expectedSolution.add((long) 208769120);
+        expectedSolution.add((long) 1679901320);
+        expectedSolution.add((long) 208769457);
+        expectedSolution.add((long) 25336179);
+        expectedSolution.add(2835339774L);
+        Assert.assertEquals(expectedSolution, orderedSolution);
+    }
 }
